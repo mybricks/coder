@@ -39,5 +39,7 @@
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
-  }
+  },
+  "repository": "https://github.com/mybricks/coder.git",
+  "homepage": "https://github.com/mybricks/coder"
 }
