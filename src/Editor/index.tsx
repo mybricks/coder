@@ -263,4 +263,4 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   );
 });
 
-export { Coder, Monaco, editor, Theme };
+export { Coder, editor, Theme };
