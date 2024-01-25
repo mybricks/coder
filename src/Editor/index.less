@@ -1,0 +1,55 @@
+.jsx-editor {
+  --string-color: #e37a11;
+  --language-keyword-color: #619ac3;
+  --global-variable-color: #fae56e;
+  --local-variable-color: #fae56e;
+  --unused-opacity: 0.5;
+  --grammar-color: #369b99;
+  --jsx-tag-color: #4595ce;
+  --jsx-attribute-color: #afd5f1;
+  --jsx-text-color: #efeeee;
+  --jsx-tag-angle-bracket: #888;
+  p {
+    color: var(--string-color) !important;
+  }
+
+  .mtk1 {
+    color: var(--local-variable-color);
+  }
+
+  .mtk5 {
+    color: var(--string-color);
+  }
+
+  .mtk8 {
+    color: var(--language-keyword-color);
+  }
+
+  .mtk9 {
+    color: var(--grammar-color);
+  }
+
+  .mtk22 {
+    color: var(--global-variable-color);
+  }
+
+  .monaco-editor.showUnused .squiggly-inline-unnecessary {
+    opacity: var(--unused-opacity);
+  }
+
+  .jsx-tag-angle-bracket {
+    color: var(--jsx-tag-angle-bracket);
+  }
+
+  .jsx-tag-name {
+    color: var(--jsx-tag-color);
+  }
+
+  .jsx-tag-attribute-key {
+    color: var(--jsx-attribute-color);
+  }
+
+  .jsx-text {
+    color: var(--jsx-text-color);
+  }
+}

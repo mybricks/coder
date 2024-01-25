@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "strict": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "jsx": "react",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "baseUrl": "./"
+  },
+  "compileOnSave": true
+}

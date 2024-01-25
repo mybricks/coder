@@ -1,0 +1,43 @@
+{
+  "name": "@mybricks/coder",
+  "version": "0.0.1",
+  "description": "coder base on monaco-editor",
+  "main": "dist/umd/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "dev": "father dev",
+    "build": "father build",
+    "build:deps": "father prebundle",
+    "prepublishOnly": "father doctor && npm run build"
+  },
+  "keywords": [
+    "monaco-editor",
+    "code-editor",
+    "mybricks"
+  ],
+  "authors": [
+    "1302947749@qq.com"
+  ],
+  "license": "ISC",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/babel__standalone": "^7.1.7",
+    "@types/react": "^18.2.48",
+    "father": "^4.3.8",
+    "monaco-types": "^0.1.0",
+    "react": "^18.2.0"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.6.0",
+    "monaco-jsx-syntax-highlight": "^1.2.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  }
+}

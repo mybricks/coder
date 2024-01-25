@@ -1,0 +1,7 @@
+.toolbar {
+  padding: 12px;
+}
+.workspace {
+  height: calc(100% - 44px);
+  display: flex;
+}
