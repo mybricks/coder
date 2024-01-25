@@ -1,4 +1,4 @@
-import { editor } from "monaco-types";
+import type { editor } from "monaco-types";
 type EditorEvent = {
   name: string;
   callback: (e: Event) => void;

@@ -26,7 +26,7 @@ import { LegacyLib } from "./legacyLib";
 import { merge, getLinter, getBabel } from "../util";
 import { TransformOptions } from "@babel/core";
 import { registerEvents, Handle } from "./registerEvents";
-import { editor } from "monaco-types";
+import type { editor } from "monaco-types";
 import { JsxTheme, Theme } from "./jsxTheme";
 import "./index.less";
 
