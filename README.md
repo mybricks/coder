@@ -1,4 +1,4 @@
-# @mybricks/basic-coder
+# @mybricks/coder
 
 [![NPM version](https://img.shields.io/npm/v/@mybricks/coder.svg?style=flat)](https://npmjs.org/package/@mybricks/coder)
 [![NPM downloads](http://img.shields.io/npm/dm/@mybricks/coder.svg?style=flat)](https://npmjs.org/package/@mybricks/coder)
