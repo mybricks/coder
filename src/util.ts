@@ -85,7 +85,7 @@ export const getBabel = async (babel: string) => {
 export const getLinter = async (eslint: string | undefined) => {
   if (!eslint) return;
   if (!window.eslint) {
-    console.info("%c[eslint loading...]", "color: #619ac3");
+    console.info("%c[eslint ready!]", "color: #619ac3");
     await loadScript(eslint);
   }
   const { Linter } = window.eslint;

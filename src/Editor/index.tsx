@@ -246,7 +246,11 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   );
 
   return (
-    <div style={{ width, height }} ref={containerRef}>
+    <div
+      style={{ width, height }}
+      ref={containerRef}
+      className={_props.className}
+    >
       <Editor
         {..._props}
         width={"100%"}
