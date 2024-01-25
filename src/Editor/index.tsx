@@ -72,7 +72,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   const lang = language ?? defaultLanguage;
 
   const [isMounted, setMounted] = useState<boolean>(false);
-  const editorRef = useRef<any>();
+  const editorRef = useRef<editor>();
   const eventListenRef = useRef<Array<Handle>>([]);
   const monaco = useMonaco();
   const linterRef = useRef<any>();
@@ -147,8 +147,8 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     const goal = containerRef.current!.querySelector(
       ".jsx-editor"
     ) as HTMLElement;
-    if (!goal) return;
     const themeVariable = JsxTheme[theme as Theme];
+    if (!goal || !themeVariable) return;
     for (const [key, value] of Object.entries(themeVariable)) {
       goal.style.setProperty(key, value as string);
     }
@@ -263,4 +263,4 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   );
 });
 
-export { Coder };
+export { Coder, Monaco, editor, Theme };
