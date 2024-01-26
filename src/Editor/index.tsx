@@ -14,17 +14,12 @@ import {
   Monaco,
   useMonaco,
 } from "@monaco-editor/react";
-import {
-  getConfigSetter,
-  Language,
-  getTransformOptions,
-  BabelStandalone,
-} from "./config";
+import { getConfigSetter, Language, getTransformOptions } from "./config";
 import { setJsxHighlight } from "./highlighter";
 import { DefaultCoderOptions } from "./options";
 import { LegacyLib } from "./legacyLib";
 import { merge, getLinter, getBabel } from "../util";
-import { TransformOptions } from "@babel/core";
+import type { TransformOptions } from "@babel/core";
 import { registerEvents, Handle } from "./registerEvents";
 import type { editor } from "monaco-types";
 import { JsxTheme, Theme } from "./jsxTheme";
@@ -41,6 +36,10 @@ export interface CoderProps extends EditorProps {
   eslint?: {
     src?: string;
     config?: Record<string, any>;
+  };
+  babel?: {
+    standalone?: string;
+    options?: TransformOptions;
   };
   onBlur?: (editor: editor) => void;
   onFocus?: (editor: editor) => void;
@@ -68,6 +67,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     loaderConfig,
     eslint,
     theme,
+    babel,
   } = _props;
   const lang = language ?? defaultLanguage;
 
@@ -95,17 +95,20 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
         )
           return value;
         try {
-          const babel = await getBabel(BabelStandalone);
+          const babelIns = await getBabel(babel?.standalone);
           const getDefaultOptions = getTransformOptions(lang as Language);
           const defaultOptions = getDefaultOptions(isTsx);
-          const { code } = babel.transform(value, options ?? defaultOptions);
+          const { code } = babelIns.transform(
+            value,
+            babel?.options ?? options ?? defaultOptions
+          );
           return code;
         } catch (error) {
           throw error;
         }
       },
     }),
-    [monaco, lang, isTsx, isMounted]
+    [monaco, lang, isTsx, babel, isMounted]
   );
 
   useLayoutEffect(() => {

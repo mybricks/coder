@@ -179,6 +179,10 @@ interface CoderProps extends EditorProps {
     src?: string;
     config?: Record<string, any>;
   };
+  babel?: {
+    standalone?: string;
+    options?: TransformOptions;
+  };
   onBlur?: (editor: editor) => void;
   onFocus?: (editor: editor) => void;
 }

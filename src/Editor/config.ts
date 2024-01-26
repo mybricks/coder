@@ -76,6 +76,3 @@ const TransformOptions = {
 export const getTransformOptions = (language: Language) => {
   return TransformOptions[language] ?? (() => {});
 };
-
-export const BabelStandalone =
-  "https://unpkg.com/@babel/standalone/babel.min.js";

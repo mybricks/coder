@@ -70,7 +70,9 @@ export function loadScript(src: string) {
 
 export const isFunction = (target: any) => typeof target === "function";
 
-export const getBabel = async (babel: string) => {
+const BabelStandalone = "https://unpkg.com/@babel/standalone/babel.min.js";
+
+export const getBabel = async (babel: string = BabelStandalone) => {
   if (!window.Babel) {
     console.info(
       "%c[Babel was not found in global,loading babel...]",
