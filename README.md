@@ -179,6 +179,10 @@ interface CoderProps extends EditorProps {
     src?: string;
     config?: Record<string, any>;
   };
+  /**
+   * babel-standalone
+   * @default "https://unpkg.com/@babel/standalone/babel.min.js"
+   */
   babel?: {
     standalone?: string;
     options?: TransformOptions;
