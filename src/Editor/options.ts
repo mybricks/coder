@@ -16,7 +16,7 @@ const DefaultEditorOptions = {
 export const DefaultCoderOptions = {
   theme: "vs-dark",
   width: "100%",
-  height: "100%",
+  height: 500,
   path: "file:///index.tsx",
   options: DefaultEditorOptions,
   loaderConfig: {
