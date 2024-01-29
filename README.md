@@ -13,7 +13,8 @@ $ yarn add @mybricks/coder
 
 ```jsx
 import React, { useCallback, useRef, useState } from "react";
-import { Editor, HandlerType } from "@mybricks/coder";
+import Editor from "@mybricks/coder";
+import type { EditorProps, HandlerType } from "@mybricks/coder"
 export default () => {
   const coder = useRef<HandlerType>();
   const [value, setValue] = useState<string | undefined>(`const Test = () => {
@@ -36,6 +37,17 @@ export default () => {
     console.log(code);
   }, [value]);
 
+  const modal = {
+    title: "编辑代码",
+    width: 1000,
+    onOpen() {
+      console.log('modal opened')
+    },
+    onClose() {
+      console.log('modal closed')
+    }
+  }
+
   return (
     <div>
       <button onClick={handleFormat}>format</button>
@@ -47,6 +59,7 @@ export default () => {
           language="typescript"
           isTsx={true}
           path={"index.tsx"}
+          modal={modal}
         />
       </div>
     </div>
