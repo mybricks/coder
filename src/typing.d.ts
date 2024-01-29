@@ -6,3 +6,7 @@ declare interface Window {
     [k: string]: any;
   };
 }
+declare module "*.less" {
+  const className: { [key: string]: any };
+  export default className;
+}

@@ -1,0 +1,53 @@
+.modal-root {
+  .modal-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+  }
+  .modal-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    overflow: auto;
+    outline: 0;
+    .modal {
+      position: relative;
+      top: 100px;
+      padding: 20px 24px;
+      background-color: #fff;
+      border-radius: 6px;
+      margin: 0 auto;
+      cursor: pointer;
+      .modal-header {
+        font-size: 16px;
+        font-weight: 500;
+        user-select: none;
+        line-height: 1.5;
+        margin-bottom: 12px;
+        word-wrap: break-word;
+      }
+      .modal-content {
+        border-radius: 2px;
+      }
+    }
+  }
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    svg {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      line-height: 1;
+      &:hover {
+        path {
+          fill: #ff000092;
+        }
+      }
+    }
+  }
+}

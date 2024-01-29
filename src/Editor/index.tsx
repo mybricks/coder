@@ -62,8 +62,6 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     language,
     defaultLanguage,
     isTsx,
-    width,
-    height,
     loaderConfig,
     eslint,
     theme,
@@ -76,7 +74,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   const eventListenRef = useRef<Array<Handle>>([]);
   const monaco = useMonaco();
   const linterRef = useRef<any>();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const themeTagRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(
     ref,
@@ -147,7 +145,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   }, [monaco, isTsx, isMounted]);
 
   useEffect(() => {
-    const goal = containerRef.current!.querySelector(
+    const goal = themeTagRef.current!.nextElementSibling!.querySelector(
       ".jsx-editor"
     ) as HTMLElement;
     const themeVariable = JsxTheme[theme as Theme];
@@ -249,20 +247,15 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   );
 
   return (
-    <div
-      style={{ width, height }}
-      ref={containerRef}
-      className={_props.className}
-    >
+    <>
+      <div data-element-type="themeTag" ref={themeTagRef} />
       <Editor
         {..._props}
-        width={"100%"}
-        height={"100%"}
         onMount={onMount}
         onChange={onChange}
-        className={isTsx ? "jsx-editor" : ""}
+        className={`${_props.className ?? ""} ${isTsx ? "jsx-editor" : ""}`}
       />
-    </div>
+    </>
   );
 });
 

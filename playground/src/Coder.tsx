@@ -1,6 +1,6 @@
 import { forwardRef, useReducer } from "react";
 import { Tabs } from "antd";
-import { Coder as Editor } from "../../src/Editor";
+import Editor from "../../src/EditorWrap";
 
 const items = [
   {
@@ -88,13 +88,20 @@ export default forwardRef(({ theme = "vs-dark" }, ref) => {
       destroyInactiveTabPane
     >
       {state.items.map(({ label, key, ...rest }) => (
-        <Tabs.TabPane tab={label} key={key} style={{ height: 800 }}>
+        <Tabs.TabPane tab={label} key={key} style={{height: 800}}>
           <Editor
             key={key}
             ref={ref}
             {...rest}
             onChange={onChange}
+            height={800}
             theme={theme}
+            onBlur={() => {console.log('blur')}}
+            modal={{onClose: () => {
+              console.log('------close------')
+            }, onOpen: () => {
+              console.log('-------open------')
+            }}}
           />
         </Tabs.TabPane>
       ))}

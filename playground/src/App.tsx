@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { Space, Button, Switch } from "antd";
-import "./App.css";
+import styles from "./App.less";
 import Editor from "./Coder";
 import Preview from "./Preview";
 
@@ -8,7 +8,6 @@ function App() {
   const [code, setCode] = useState<string>();
   const [theme, setTheme] = useState<"light" | "vs-dark">("vs-dark");
   const ref = useRef();
-
   const onSwitch = (checked: boolean) => {
     if (checked) {
       setTheme("light");
@@ -29,7 +28,7 @@ function App() {
 
   return (
     <>
-      <Space className="toolbar">
+      <Space className={styles.toolbar}>
         <Switch
           checkedChildren="light"
           unCheckedChildren="dark"
@@ -40,7 +39,7 @@ function App() {
           preview
         </Button>
       </Space>
-      <div className="workspace">
+      <div className={styles.workspace}>
         <Editor ref={ref} theme={theme} />
         <Preview code={code} />
       </div>

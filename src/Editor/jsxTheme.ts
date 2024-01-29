@@ -17,7 +17,7 @@ export const JsxTheme = {
     "--jsx-tag-angle-bracket": "#888",
   },
   [Theme.Light]: {
-    "--string-color": "#e37a11",
+    "--string-color": "#c96705",
     "--language-keyword-color": "#619ac3",
     "--global-variable-color": "#934d08",
     "--local-variable-color": "#934d08",

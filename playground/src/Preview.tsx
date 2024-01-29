@@ -6,7 +6,7 @@ export default ({ code }: { code: string | undefined }) => {
     [code]
   );
   return (
-    <div style={{ padding: "0 20px" }}>
+    <div style={{ padding: "0 20px", flex: 1 }}>
       {Component ? <Component /> : "preview"}
     </div>
   );
