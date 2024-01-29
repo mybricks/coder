@@ -1,6 +1,6 @@
 import { forwardRef, useReducer } from "react";
 import { Tabs } from "antd";
-import Editor from "../../src/EditorWrap";
+import Editor from "../../src";
 
 const items = [
   {
@@ -73,11 +73,17 @@ export default forwardRef(({ theme = "vs-dark" }, ref) => {
   const [state, dispatch] = useReducer(reducer, { items, tab: "ts" });
 
   const onChange = (value: string | undefined, e: any) => {
+    console.log("----onChange------");
     dispatch({ type: "onChange", value });
   };
 
   const onTabChange = (activeKey: string) => {
     dispatch({ type: "onTabChange", value: activeKey });
+  };
+
+  const onBlur = (editor) => {
+    console.log("blur");
+    dispatch({ type: "onChange", value: editor.getValue() });
   };
 
   return (
@@ -88,20 +94,16 @@ export default forwardRef(({ theme = "vs-dark" }, ref) => {
       destroyInactiveTabPane
     >
       {state.items.map(({ label, key, ...rest }) => (
-        <Tabs.TabPane tab={label} key={key} style={{height: 800}}>
+        <Tabs.TabPane tab={label} key={key} style={{ height: 800 }}>
           <Editor
             key={key}
             ref={ref}
             {...rest}
-            onChange={onChange}
+            // onChange={onChange}
             height={800}
             theme={theme}
-            onBlur={() => {console.log('blur')}}
-            modal={{onClose: () => {
-              console.log('------close------')
-            }, onOpen: () => {
-              console.log('-------open------')
-            }}}
+            onBlur={onBlur}
+            modal={{}}
           />
         </Tabs.TabPane>
       ))}

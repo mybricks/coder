@@ -5,7 +5,7 @@ import { Coder, CoderProps, HandlerType } from "../Editor";
 import styles from "./index.less";
 
 export type EditorProps = CoderProps & {
-  modal?: Pick<ModalProps, "width" | "title" | "onClose"> & { onOpen(): void };
+  modal?: Pick<ModalProps, "width" | "title" | "onClose"> & { onOpen?(): void };
 };
 
 const EditorWrap = forwardRef<HandlerType, EditorProps>((props, ref) => {
@@ -17,7 +17,7 @@ const EditorWrap = forwardRef<HandlerType, EditorProps>((props, ref) => {
   );
 
   const handleOpen = useCallback(() => {
-    typeof modal?.onClose === "function" && modal.onOpen();
+    typeof modal?.onOpen === "function" && modal.onOpen();
     setOpen(true);
   }, [modal?.onOpen]);
 
