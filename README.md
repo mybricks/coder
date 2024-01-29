@@ -36,7 +36,9 @@ export default () => {
     const code = await coder.current.compile(value);
     console.log(code);
   }, [value]);
-
+  /**
+   * modal edit
+   */
   const modal = {
     title: "编辑代码",
     width: 1000,

@@ -33,7 +33,7 @@ const EditorWrap = forwardRef<HandlerType, EditorProps>((props, ref) => {
   ) : (
     <div className={styles.wrap}>
       {Editor}
-      <Toolbar onPlus={handleOpen} />
+      {modal && <Toolbar onPlus={handleOpen} />}
     </div>
   );
 });
