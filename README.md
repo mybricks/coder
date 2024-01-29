@@ -60,8 +60,10 @@ export default () => {
           value={value}
           language="typescript"
           isTsx={true}
+          height={800}
           path={"index.tsx"}
           modal={modal}
+          onChange={(value) => setValue(value)}
         />
       </div>
     </div>

@@ -23,7 +23,7 @@ import type { TransformOptions } from "@babel/core";
 import { registerEvents, Handle } from "./registerEvents";
 import type { editor } from "monaco-types";
 import { JsxTheme, Theme } from "./jsxTheme";
-import "./index.less";
+import "./index.css";
 
 export interface CoderProps extends EditorProps {
   extraLib?: string;
