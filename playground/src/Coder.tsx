@@ -102,7 +102,7 @@ export default forwardRef(({ theme = "vs-dark" }, ref) => {
             // onChange={onChange}
             height={800}
             theme={theme}
-            onBlur={onBlur}
+            // onBlur={onBlur}
             modal={{}}
           />
         </Tabs.TabPane>

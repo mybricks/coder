@@ -93,3 +93,7 @@ export const getLinter = async (eslint: string | undefined) => {
   const { Linter } = window.eslint;
   return new Linter();
 };
+
+export const executeChain = (fns: Array<() => void>) => {
+  fns.reduce((chain, fn) => chain.then(fn), Promise.resolve());
+};
