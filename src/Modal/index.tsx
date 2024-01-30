@@ -1,6 +1,6 @@
 import React from "react";
 import Icon from "../Icon";
-import styles from "./index.less";
+import styles from "./index.module.less";
 
 type CalStyle = number | string;
 

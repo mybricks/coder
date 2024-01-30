@@ -3,7 +3,7 @@ import Modal, { ModalProps } from "../Modal";
 import Toolbar from "../Toolbar";
 import { Coder, CoderProps, HandlerType } from "../Editor";
 import { executeChain } from "../util";
-import styles from "./index.less";
+import styles from "./index.module.less";
 
 export type EditorProps = CoderProps & {
   modal?: Pick<ModalProps, "width" | "title" | "onClose"> & { onOpen?(): void };
