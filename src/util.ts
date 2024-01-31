@@ -29,9 +29,8 @@ export const copy = (target: Record<string, any>, hash = new WeakMap()) => {
 };
 
 export function merge<T extends Object>(target: T, source: T): T {
-  if (!isObject(target) || !isObject(source)) {
-    return source;
-  }
+  if (!isObject(target)) return source;
+  if (!isObject(source)) return target;
   const targetObject = copy(target);
   const sourceObject = copy(source);
   Object.keys(sourceObject).forEach((key) => {
@@ -42,7 +41,7 @@ export function merge<T extends Object>(target: T, source: T): T {
     } else if (isObject(targetValue) && isObject(sourceValue)) {
       targetObject[key] = merge(targetValue, sourceValue);
     } else {
-      targetObject[key] = sourceValue;
+      targetObject[key] = sourceValue ?? targetObject[key];
     }
   });
   return targetObject;

@@ -1,15 +1,14 @@
 import React from "react";
-import Icon from "../Icon";
 import styles from "./index.module.less";
 
 export interface ToolbarProps {
-  onPlus?(): void;
+  children?: React.ReactNode
 }
 
-const Toolbar = (props: ToolbarProps) => {
+const Toolbar = ({ children }: ToolbarProps) => {
   return (
     <div className={styles.toolbar}>
-      <Icon name="plus" onClick={props.onPlus} />
+      {children}
     </div>
   );
 };

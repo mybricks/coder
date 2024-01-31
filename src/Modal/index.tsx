@@ -9,6 +9,7 @@ export interface ModalProps {
   title?: React.ReactNode | string;
   width?: CalStyle;
   children?: React.ReactNode;
+  footer?: React.ReactNode;
   onClose?: () => void;
 }
 
@@ -17,6 +18,7 @@ const Modal = ({
   title = "Coding",
   width = 1024,
   children,
+  footer,
   onClose,
 }: ModalProps) => {
   return open ? (
@@ -27,6 +29,7 @@ const Modal = ({
           <div className={styles["modal-header"]}>{title}</div>
           <div className={styles["modal-content"]}>{children}</div>
           <Icon name="close" className={styles.close} onClick={onClose} />
+          <div className={styles["modal-footer"]}>{footer}</div>
         </div>
       </div>
     </div>

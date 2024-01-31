@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { Space, Button, Switch } from "antd";
-import styles from "./App.less";
+import styles from "./App.module.less";
 import Editor from "./Coder";
 import Preview from "./Preview";
 
