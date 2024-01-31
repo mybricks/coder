@@ -206,6 +206,28 @@ interface CoderProps extends EditorProps {
   };
   onBlur?: (editor: editor) => void;
   onFocus?: (editor: editor) => void;
+  /**
+   * enable modal editor
+   */
+  modal?: {
+    title?: string;
+    /**
+     * Modal width
+     * @default 1024
+     */
+    width?: number;
+    onOpen?: () => void;
+    onClose?: () => void
+  };
+  format?: boolean;
+  comment?: {
+    /**
+     * Comment Editor height
+     * @default 300
+     */
+    height?: number;
+    value?: string;
+  };
 }
 ```
 

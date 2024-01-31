@@ -32,6 +32,7 @@ const EditorWrap = forwardRef<HandlerType, EditorProps>((props, ref: any) => {
         options={{ readOnly: true, lineNumbers: "off" }}
         theme={codeProps.theme}
         height={comment.height ?? 300}
+        path="comment.ts"
       />
     ) : null;
   }, [comment, codeProps.theme]);
