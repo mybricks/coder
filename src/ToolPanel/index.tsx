@@ -1,16 +1,12 @@
 import React from "react";
 import styles from "./index.module.less";
 
-export interface ToolbarProps {
-  children?: React.ReactNode
+export interface ToolPanelProps {
+  children?: React.ReactNode;
 }
 
-const Toolbar = ({ children }: ToolbarProps) => {
-  return (
-    <div className={styles.toolbar}>
-      {children}
-    </div>
-  );
+const ToolPanel = ({ children }: ToolPanelProps) => {
+  return <div className={styles.toolbar}>{children}</div>;
 };
 
-export default Toolbar;
+export default ToolPanel;
