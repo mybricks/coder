@@ -10,7 +10,10 @@ import styles from "./index.module.less";
 export type EditorProps = CoderProps & {
   modal?: Pick<ModalProps, "width" | "title" | "onClose"> & { onOpen?(): void };
   format?: boolean;
-  comment?: string;
+  comment?: {
+    height?: number;
+    value?: string;
+  };
 };
 
 const EditorWrap = forwardRef<HandlerType, EditorProps>((props, ref: any) => {
@@ -25,10 +28,10 @@ const EditorWrap = forwardRef<HandlerType, EditorProps>((props, ref: any) => {
   const Comment = useMemo(() => {
     return comment ? (
       <Coder
-        value={comment}
+        value={comment.value}
         options={{ readOnly: true, lineNumbers: "off" }}
         theme={codeProps.theme}
-        height={300}
+        height={comment.height ?? 300}
       />
     ) : null;
   }, [comment, codeProps.theme]);
