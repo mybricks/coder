@@ -17,7 +17,6 @@ import {
 import { getConfigSetter, Language, getTransformOptions } from "./config";
 import { setJsxHighlight } from "./highlighter";
 import { DefaultCoderOptions } from "./options";
-import { LegacyLib } from "./legacyLib";
 import { merge, getLinter, getBabel } from "../util";
 import type { TransformOptions } from "@babel/core";
 import { registerEvents, Handle } from "./registerEvents";
@@ -124,10 +123,6 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     const setCompilerOptions = getConfigSetter(lang as Language);
     setCompilerOptions(monaco);
     const libUri = "ts:filename/facts.d.ts";
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      LegacyLib,
-      libUri
-    );
     if (extraLib) {
       monaco.languages.typescript.typescriptDefaults.addExtraLib(
         extraLib,
