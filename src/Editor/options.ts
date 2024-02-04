@@ -9,7 +9,7 @@ const DefaultEditorOptions = {
   minimap: {
     enabled: false,
   },
-  fontSize: 16,
+  fontSize: 14,
   tabSize: 2,
 };
 
