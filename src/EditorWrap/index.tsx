@@ -1,8 +1,13 @@
-import React, { forwardRef, useCallback, useMemo, useState } from "react";
+import React, {
+  forwardRef,
+  useCallback,
+  useMemo,
+  useState,
+  Children,
+} from "react";
 import Modal, { ModalProps } from "../Modal";
 import ToolPanel from "../ToolPanel";
 import Icon from "../Icon";
-import type { IconType } from "../Icon";
 import { Coder, CoderProps, HandlerType } from "../Editor";
 import { executeChain } from "../util";
 import styles from "./index.module.less";
@@ -14,11 +19,12 @@ export type EditorProps = CoderProps & {
     height?: number;
     value?: string;
   };
+  toolbar?: React.ReactElement;
 };
 
-const EditorWrap = forwardRef<HandlerType, EditorProps>((props, ref: any) => {
-  const [open, setOpen] = useState<boolean>(false);
-  const { value, modal, format, comment, ...codeProps } = props;
+const EditorWrap = (props: EditorProps, ref: any) => {
+  const { value, modal, format, comment, toolbar, ...codeProps } = props;
+  const [open, setOpen] = useState<boolean>();
   const [nextValue, setValue] = useState<string | undefined>(value);
   const Editor = useMemo(
     () => <Coder {...codeProps} value={nextValue} ref={ref} />,
@@ -60,8 +66,8 @@ const EditorWrap = forwardRef<HandlerType, EditorProps>((props, ref: any) => {
     }
   }, []);
 
-  const toolbar = useMemo(() => {
-    const tools = [];
+  const Toolbar = useMemo(() => {
+    const tools = [...Children.toArray(toolbar)];
     if (format) {
       tools.push(<Icon name="format" onClick={handleFormat} />);
     }
@@ -69,19 +75,19 @@ const EditorWrap = forwardRef<HandlerType, EditorProps>((props, ref: any) => {
       tools.push(<Icon name="plus" onClick={handleOpen} />);
     }
     return <ToolPanel>{tools}</ToolPanel>;
-  }, [format, modal, open]);
+  }, [format, modal, open, toolbar]);
 
   return open ? (
     <Modal {...modal} open={open} footer={Comment} onClose={handleClose}>
       {Editor}
-      {toolbar}
+      {Toolbar}
     </Modal>
   ) : (
     <div className={styles.wrap}>
       {Editor}
-      {toolbar}
+      {Toolbar}
     </div>
   );
-});
+};
 
-export default EditorWrap;
+export default forwardRef<HandlerType, EditorProps>(EditorWrap);

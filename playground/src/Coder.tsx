@@ -1,6 +1,6 @@
-import { forwardRef, useReducer } from "react";
-import { Tabs } from "antd";
-import Editor from "../../src";
+import { forwardRef, useReducer, useState } from "react";
+import { Button, Tabs } from "antd";
+import Editor, { Icon } from "../../src";
 
 const items = [
   {
@@ -86,6 +86,8 @@ export default forwardRef(({ theme = "vs-dark" }, ref) => {
     dispatch({ type: "onChange", value: editor.getValue() });
   };
 
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
     <Tabs
       style={{ width: "50%" }}
@@ -96,17 +98,25 @@ export default forwardRef(({ theme = "vs-dark" }, ref) => {
       {state.items.map(({ label, key, ...rest }) => (
         <Tabs.TabPane tab={label} key={key} style={{ height: 800 }}>
           <Editor
-            key={key}
-            ref={ref}
-            {...rest}
-            // onChange={onChange}
-            // height={800}
-            theme={theme}
-            // onBlur={onBlur}
-            modal={{}}
-            format={true}
-            comment={{
-              value: `/**
+              key={key}
+              ref={ref}
+              {...rest}
+              // onChange={onChange}
+              // height={800}
+              theme={theme}
+              onBlur={onBlur}
+              modal={{ }}
+              format={true}
+              toolbar={
+                <Icon
+                  name="preview"
+                  onClick={() => {
+                    console.log("preview");
+                  }}
+                />
+              }
+              comment={{
+                value: `/**
               * @parma inputs: any[] 输入项
               * @parma outputs: any[] 输出项
               *
@@ -125,9 +135,9 @@ export default forwardRef(({ theme = "vs-dark" }, ref) => {
               *   // 向输出项（output2）输出输入项1的值
               *   // output2(inputValue1); 
               * }
-              */`
-            }}
-          />
+              */`,
+              }}
+            />
         </Tabs.TabPane>
       ))}
     </Tabs>
