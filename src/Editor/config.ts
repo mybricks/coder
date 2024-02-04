@@ -18,9 +18,9 @@ const ConfigMap = {
       strict: true,
     });
   },
-  [Language.Typescript]: (monaco: Monaco) => {
+  [Language.Typescript]: (monaco: Monaco, isTsx?: boolean) => {
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: true,
+      noSemanticValidation: !!isTsx || false,
       noSyntaxValidation: false,
     });
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({

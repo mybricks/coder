@@ -14,7 +14,6 @@ import styles from "./index.module.less";
 
 export type EditorProps = CoderProps & {
   modal?: Pick<ModalProps, "width" | "title" | "onClose"> & { onOpen?(): void };
-  format?: boolean;
   comment?: {
     height?: number;
     value?: string;
@@ -23,7 +22,7 @@ export type EditorProps = CoderProps & {
 };
 
 const EditorWrap = (props: EditorProps, ref: any) => {
-  const { value, modal, format, comment, toolbar, ...codeProps } = props;
+  const { value, modal, comment, toolbar, ...codeProps } = props;
   const [open, setOpen] = useState<boolean>();
   const [nextValue, setValue] = useState<string | undefined>(value);
   const Editor = useMemo(
@@ -60,22 +59,13 @@ const EditorWrap = (props: EditorProps, ref: any) => {
     typeof modal?.onClose === "function" && modal.onClose();
   }, [modal?.onClose]);
 
-  const handleFormat = useCallback(() => {
-    if (ref!.current.format) {
-      ref!.current.format();
-    }
-  }, []);
-
   const Toolbar = useMemo(() => {
     const tools = [...Children.toArray(toolbar)];
-    if (format) {
-      tools.push(<Icon name="format" onClick={handleFormat} />);
-    }
     if (modal && !open) {
       tools.push(<Icon name="plus" onClick={handleOpen} />);
     }
     return <ToolPanel>{tools}</ToolPanel>;
-  }, [format, modal, open, toolbar]);
+  }, [modal, open, toolbar]);
 
   return open ? (
     <Modal {...modal} open={open} footer={Comment} onClose={handleClose}>

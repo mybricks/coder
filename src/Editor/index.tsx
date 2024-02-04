@@ -121,7 +121,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     )
       return;
     const setCompilerOptions = getConfigSetter(lang as Language);
-    setCompilerOptions(monaco);
+    setCompilerOptions(monaco, isTsx);
     const libUri = "ts:filename/facts.d.ts";
     if (extraLib) {
       monaco.languages.typescript.typescriptDefaults.addExtraLib(
@@ -129,7 +129,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
         libUri
       );
     }
-  }, [monaco, extraLib, lang]);
+  }, [monaco, extraLib, lang, isTsx]);
 
   useEffect(() => {
     if (!monaco || !isMounted || !isTsx) return;

@@ -10,7 +10,7 @@
   .modal-wrap {
     position: fixed;
     inset: 0;
-    z-index: 1000;
+    z-index: 1001;
     overflow: auto;
     outline: 0;
     .modal {
@@ -33,9 +33,14 @@
         border-radius: 2px;
         position: relative;
       }
-      .modal-footer{
-        margin-top: 10px;
+      .modal-footer {
         border-radius: 2px;
+        &::before {
+          display: block;
+          content: "";
+          border-top: 1px dashed #cfcdcd92;
+          margin: 12px -24px;
+        }
       }
     }
   }

@@ -3,7 +3,11 @@ const DefaultEditorOptions = {
   detectIndentation: false,
   formatOnType: false,
   lineNumbers: "on",
-  scrollbar: { horizontal: "hidden", verticalScrollbarSize: 4 },
+  scrollbar: {
+    horizontal: "hidden",
+    vertical: "hidden",
+    verticalScrollbarSize: 0,
+  },
   lineNumbersMinChars: 3,
   lineDecorationsWidth: 0,
   minimap: {
