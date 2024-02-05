@@ -29,7 +29,7 @@ const Modal = ({
           <div className={styles["modal-header"]}>{title}</div>
           <div className={styles["modal-content"]}>{children}</div>
           <Icon name="close" className={styles.close} onClick={onClose} />
-          <div className={styles["modal-footer"]}>{footer}</div>
+          {footer && <div className={styles["modal-footer"]}>{footer}</div>}
         </div>
       </div>
     </div>

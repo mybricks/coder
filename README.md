@@ -145,7 +145,7 @@ type EditorProps = {
   width?: number | string;
   /**
    * Height of the editor wrapper
-   * @default "100%"
+   * @default 500
    */
   height?: number | string;
   /**
@@ -210,6 +210,12 @@ interface CoderProps extends EditorProps {
    * enable modal editor
    */
   modal?: {
+    /**
+     * control modal open
+     * use with custom rendering
+     * @default false
+     */
+    open?: boolean;
     title?: string;
     /**
      * Modal width
@@ -219,7 +225,6 @@ interface CoderProps extends EditorProps {
     onOpen?: () => void;
     onClose?: () => void
   };
-  format?: boolean;
   comment?: {
     /**
      * Comment Editor height
@@ -228,6 +233,14 @@ interface CoderProps extends EditorProps {
     height?: number;
     value?: string;
   };
+  /**
+   * custom toolbar
+   */
+  toolbar?: React.ReactElement;
+  /**
+   * custom render children
+   */
+  children?: React.ReactElement;
 }
 ```
 

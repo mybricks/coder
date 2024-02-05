@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useMemo,
   useState,
+  useEffect,
   Children,
 } from "react";
 import Modal, { ModalProps } from "../Modal";
@@ -13,25 +14,33 @@ import { executeChain } from "../util";
 import styles from "./index.module.less";
 
 export type EditorProps = CoderProps & {
-  modal?: Pick<ModalProps, "width" | "title" | "onClose"> & { onOpen?(): void };
+  modal?: Pick<ModalProps, "open" | "width" | "title" | "onClose"> & {
+    onOpen?(): void;
+  };
   comment?: {
     height?: number;
     value?: string;
   };
   toolbar?: React.ReactElement;
+  children?: React.ReactElement;
 };
 
 const EditorWrap = (props: EditorProps, ref: any) => {
-  const { value, modal, comment, toolbar, ...codeProps } = props;
-  const [open, setOpen] = useState<boolean>();
+  const { value, modal, comment, toolbar, children, ...codeProps } = props;
+  const [open, setOpen] = useState<boolean>(!!modal?.open);
   const [nextValue, setValue] = useState<string | undefined>(value);
+
+  useEffect(() => {
+    setOpen(!!modal?.open);
+  }, [modal?.open]);
+
   const Editor = useMemo(
     () => <Coder {...codeProps} value={nextValue} ref={ref} />,
     [codeProps, nextValue, ref]
   );
 
-  const Comment = useMemo(() => {
-    return comment ? (
+  const Comment = useMemo(() => {   
+    return comment?.value ? (
       <Coder
         value={comment.value}
         options={{ readOnly: true, lineNumbers: "off" }}
@@ -74,8 +83,14 @@ const EditorWrap = (props: EditorProps, ref: any) => {
     </Modal>
   ) : (
     <div className={styles.wrap}>
-      {Editor}
-      {Toolbar}
+      {children ? (
+        children
+      ) : (
+        <>
+          {Editor}
+          {Toolbar}
+        </>
+      )}
     </div>
   );
 };
