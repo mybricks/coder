@@ -10,10 +10,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@astii/dialog@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@astii/dialog/-/dialog-0.0.2.tgz#36d01ebae840b40164b8fdb87d8e0f6ca342bc60"
-  integrity sha512-c5/WK9hvcfaPzGcgDlL+e0az6TPGZrZGkGkBeCg3N5MUULE482qKQQR/qYyUuBoPPEzk174RZ39ZM7gpTkkSeQ==
+"@astii/dialog@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@astii/dialog/-/dialog-0.0.3.tgz#4c169446ca75a3011bcd5bf4019e07286acb85bb"
+  integrity sha512-54KSBnRDqT9L1Kzv8ZshFsm32TZn4V/4IDZnmjNW52FfDOomqaFbPZOS8wSRZDJLodU3urfek9RTSh2CoFhnRA==
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.16.7", "@babel/code-frame@^7.22.13", "@babel/code-frame@^7.23.5":
   version "7.23.5"

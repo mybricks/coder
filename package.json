@@ -34,7 +34,7 @@
     "react": "^18.2.0"
   },
   "dependencies": {
-    "@astii/dialog": "^0.0.2",
+    "@astii/dialog": "0.0.3",
     "@monaco-editor/react": "^4.6.0",
     "monaco-jsx-syntax-highlight": "^1.2.0"
   },

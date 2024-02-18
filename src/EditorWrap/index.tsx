@@ -44,7 +44,7 @@ const EditorWrap = (props: EditorProps, ref: any) => {
     return comment?.value ? (
       <Coder
         value={comment.value}
-        options={{ readOnly: true, lineNumbers: "off" }}
+        options={{ readOnly: true, lineNumbers: "off", fontSize: codeProps.options.fontSize }}
         theme={codeProps.theme}
         height={comment.height ?? 300}
         path="comment.ts"
