@@ -6,15 +6,14 @@ import React, {
   useEffect,
   Children,
 } from "react";
-import Modal, { ModalProps } from "../Modal";
+import Dialog, { DialogProps } from "@astii/dialog";
 import ToolPanel from "../ToolPanel";
-import Icon from "../Icon";
 import { Coder, CoderProps, HandlerType } from "../Editor";
 import { executeChain } from "../util";
 import styles from "./index.module.less";
 
 export type EditorProps = CoderProps & {
-  modal?: Pick<ModalProps, "open" | "width" | "title" | "onClose"> & {
+  modal?: Omit<DialogProps, "children" | "footer"> & {
     onOpen?(): void;
   };
   comment?: {
@@ -24,6 +23,8 @@ export type EditorProps = CoderProps & {
   toolbar?: React.ReactElement;
   children?: React.ReactElement;
 };
+
+const Icon = Dialog.Icon;
 
 const EditorWrap = (props: EditorProps, ref: any) => {
   const { value, modal, comment, toolbar, children, ...codeProps } = props;
@@ -39,7 +40,7 @@ const EditorWrap = (props: EditorProps, ref: any) => {
     [codeProps, nextValue, ref]
   );
 
-  const Comment = useMemo(() => {   
+  const Comment = useMemo(() => {
     return comment?.value ? (
       <Coder
         value={comment.value}
@@ -77,10 +78,16 @@ const EditorWrap = (props: EditorProps, ref: any) => {
   }, [modal, open, toolbar]);
 
   return open ? (
-    <Modal {...modal} open={open} footer={Comment} onClose={handleClose}>
+    <Dialog
+      draggable={true}
+      {...modal}
+      open={open}
+      footer={Comment}
+      onClose={handleClose}
+    >
       {Editor}
       {Toolbar}
-    </Modal>
+    </Dialog>
   ) : (
     <div className={styles.wrap}>
       {children ? (

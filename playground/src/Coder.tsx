@@ -105,7 +105,9 @@ export default forwardRef(({ theme = "vs-dark" }, ref) => {
               // height={800}
               theme={theme}
               onBlur={onBlur}
-              modal={{ }}
+              modal={{ 
+                inside: true
+              }}
               format={true}
               toolbar={
                 <Icon

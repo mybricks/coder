@@ -222,8 +222,18 @@ interface CoderProps extends EditorProps {
      * @default 1024
      */
     width?: number;
+    /**
+     * dialog can be drag with handler
+     * @default false
+     */
+    draggable?: boolean;
+    /**
+     * dialog can be drag within area
+     * @default true
+     */
+    inside?: boolean;
     onOpen?: () => void;
-    onClose?: () => void
+    onClose?: () => void;
   };
   comment?: {
     /**
