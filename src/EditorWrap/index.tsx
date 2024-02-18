@@ -44,7 +44,11 @@ const EditorWrap = (props: EditorProps, ref: any) => {
     return comment?.value ? (
       <Coder
         value={comment.value}
-        options={{ readOnly: true, lineNumbers: "off", fontSize: codeProps.options.fontSize }}
+        options={{
+          readOnly: true,
+          lineNumbers: "off",
+          fontSize: codeProps.options?.fontSize,
+        }}
         theme={codeProps.theme}
         height={comment.height ?? 300}
         path="comment.ts"
@@ -77,20 +81,20 @@ const EditorWrap = (props: EditorProps, ref: any) => {
     return <ToolPanel>{tools}</ToolPanel>;
   }, [modal, open, toolbar]);
 
-  return open ? (
-    <Dialog
-      draggable={true}
-      {...modal}
-      open={open}
-      footer={Comment}
-      onClose={handleClose}
-    >
-      {Editor}
-      {Toolbar}
-    </Dialog>
-  ) : (
-    <div className={styles.wrap}>
-      {children ? (
+  return (
+    <div className={styles.wrap} style={{ height: codeProps.height ?? 500 }}>
+      {open ? (
+        <Dialog
+          draggable={true}
+          {...modal}
+          open={open}
+          footer={Comment}
+          onClose={handleClose}
+        >
+          {Editor}
+          {Toolbar}
+        </Dialog>
+      ) : children ? (
         children
       ) : (
         <>
