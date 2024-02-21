@@ -5,7 +5,7 @@ import React, {
   useState,
   useEffect,
   Children,
-  isValidElement
+  isValidElement,
 } from "react";
 import Dialog, { DialogProps } from "@astii/dialog";
 import ToolPanel from "../ToolPanel";
@@ -83,15 +83,15 @@ const EditorWrap = (props: EditorProps, ref: any) => {
   }, [modal, open, toolbar]);
 
   const initHeight = useMemo(() => {
-    if(isValidElement(children)) {
-      return 'fit-content'
+    if (isValidElement(children)) {
+      return "fit-content";
     }
-    return codeProps.height ?? 500
-  }, [children, codeProps.height])
+    return codeProps.height ?? 500;
+  }, [children, codeProps.height]);
 
   return (
     <div className={styles.wrap} style={{ height: initHeight }}>
-      {open ? (
+      {open && (
         <Dialog
           draggable={true}
           {...modal}
@@ -102,9 +102,9 @@ const EditorWrap = (props: EditorProps, ref: any) => {
           {Editor}
           {Toolbar}
         </Dialog>
-      ) : children ? (
-        children
-      ) : (
+      )}
+      {children}
+      {!open && !children && (
         <>
           {Editor}
           {Toolbar}

@@ -78,7 +78,6 @@ export const getBabel = async (babel: string = BabelStandalone) => {
       "color: orange"
     );
     await loadScript(babel);
-    console.info("%c[Babel is ready!]", "color: #00FF00");
   }
   return window.Babel;
 };
@@ -86,7 +85,6 @@ export const getBabel = async (babel: string = BabelStandalone) => {
 export const getLinter = async (eslint: string | undefined) => {
   if (!eslint) return;
   if (!window.eslint) {
-    console.info("%c[eslint ready!]", "color: #619ac3");
     await loadScript(eslint);
   }
   const { Linter } = window.eslint;
