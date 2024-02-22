@@ -42,20 +42,21 @@ const EditorWrap = (props: EditorProps, ref: any) => {
   );
 
   const Comment = useMemo(() => {
+    const random = Math.floor(Math.random() * 10);
     return comment?.value ? (
       <Coder
+        {...codeProps}
         value={comment.value}
         options={{
           readOnly: true,
           lineNumbers: "off",
           fontSize: codeProps.options?.fontSize,
         }}
-        theme={codeProps.theme}
-        height={comment.height ?? 300}
-        path="comment.ts"
+        height={comment.height ?? codeProps.height}
+        path={`${random}_comment.ts`}
       />
     ) : null;
-  }, [comment, codeProps.theme]);
+  }, [codeProps, comment, codeProps.theme]);
 
   const setNextValue = useCallback(() => {
     if (ref!.current.editor) {
