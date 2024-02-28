@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { Space, Button, Switch } from "antd";
+import { Switch } from "antd";
 import styles from "./App.module.less";
 import Editor from "./Coder";
 import Preview from "./Preview";
@@ -16,10 +16,6 @@ function App() {
     }
   };
 
-  const onFormat = () => {
-    ref.current?.format();
-  };
-
   const onCompile = useCallback(async () => {
     const value = ref.current.editor.getValue();
     const code = await ref.current?.compile(value);
@@ -27,23 +23,17 @@ function App() {
   }, []);
 
   return (
-    <>
-      <Space className={styles.toolbar}>
-        <Switch
-          checkedChildren="light"
-          unCheckedChildren="dark"
-          onChange={onSwitch}
-        />
-        <Button onClick={onFormat}>format</Button>
-        <Button onClick={onCompile} type="primary">
-          preview
-        </Button>
-      </Space>
+    <div style={{padding: 12}}>
+      <Switch
+        checkedChildren="light"
+        unCheckedChildren="dark"
+        onChange={onSwitch}
+      />
       <div className={styles.workspace}>
-        <Editor ref={ref} theme={theme} />
+        <Editor ref={ref} theme={theme} onPreview={onCompile} />
         <Preview code={code} />
       </div>
-    </>
+    </div>
   );
 }
 

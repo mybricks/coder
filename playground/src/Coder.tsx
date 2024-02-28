@@ -1,5 +1,5 @@
 import { forwardRef, useReducer, useState } from "react";
-import { Button, Tabs } from "antd";
+import { Tabs } from "antd";
 import Editor, { Icon } from "../../src";
 
 const items = [
@@ -8,7 +8,7 @@ const items = [
     key: "ts",
     language: "typescript",
     path: "index.ts",
-    value: `({ outputs, inputs }: IO) => {
+    value: `({ outputs, inputs }) => {
         const [ inputValue0 ] = inputs;
         const [ output0 ] = outputs;
         output0(inputValue0);
@@ -69,7 +69,7 @@ const reducer = (state: any, action: { type: string; value: any }) => {
   }
 };
 
-export default forwardRef(({ theme = "vs-dark" }, ref) => {
+export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
   const [state, dispatch] = useReducer(reducer, { items, tab: "ts" });
 
   const onChange = (value: string | undefined, e: any) => {
@@ -98,27 +98,37 @@ export default forwardRef(({ theme = "vs-dark" }, ref) => {
       {state.items.map(({ label, key, ...rest }) => (
         <Tabs.TabPane tab={label} key={key} style={{ height: 800 }}>
           <Editor
-              key={key}
-              ref={ref}
-              {...rest}
-              // onChange={onChange}
-              // height={800}
-              theme={theme}
-              onBlur={onBlur}
-              modal={{ 
-                inside: true
-              }}
-              format={true}
-              toolbar={
+            key={key}
+            ref={ref}
+            {...rest}
+            // onChange={onChange}
+            // height={800}
+            theme={theme}
+            onBlur={onBlur}
+            modal={{
+              inside: true,
+            }}
+            format={true}
+            toolbar={
+              <>
                 <Icon
-                  name="preview"
+                  name="format"
                   onClick={() => {
-                    console.log("preview");
+                    ref.current.format();
                   }}
                 />
-              }
-              comment={{
-                value: `/**
+                {rest.isTsx && (
+                  <Icon
+                    name="preview"
+                    onClick={() => {
+                      onPreview()
+                    }}
+                  />
+                )}
+              </>
+            }
+            comment={{
+              value: `/**
               * @parma inputs: any[] 输入项
               * @parma outputs: any[] 输出项
               *
@@ -138,8 +148,8 @@ export default forwardRef(({ theme = "vs-dark" }, ref) => {
               *   // output2(inputValue1); 
               * }
               */`,
-              }}
-            />
+            }}
+          />
         </Tabs.TabPane>
       ))}
     </Tabs>

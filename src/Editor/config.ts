@@ -26,7 +26,7 @@ const ConfigMap = {
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
       target: monaco.languages.typescript.ScriptTarget.ES6,
       allowNonTsExtensions: true,
-      noImplicitAny: true,
+      noImplicitAny: false,
       strict: true,
       jsx: monaco.languages.typescript.JsxEmit.ReactJsx,
       esModuleInterop: true,
