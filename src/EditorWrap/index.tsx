@@ -92,8 +92,7 @@ const EditorWrap = (props: EditorProps, ref: any) => {
     if (isValidElement(children)) {
       return "fit-content";
     }
-    const height = codeProps.height ?? 500;
-    return parseFloat(height + "") + 12;
+    return codeProps.height ?? 500;
   }, [children, codeProps.height]);
 
   return (
