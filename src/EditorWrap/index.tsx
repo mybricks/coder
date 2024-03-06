@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useMemo,
   useState,
-  useEffect,
   Children,
   isValidElement,
 } from "react";
@@ -11,6 +10,7 @@ import Dialog, { DialogProps } from "@astii/dialog";
 import ToolPanel from "../ToolPanel";
 import { Coder, CoderProps, HandlerType } from "../Editor";
 import { executeChain } from "../util";
+import { useUpdate } from "./useUpdate";
 import styles from "./index.module.less";
 
 export type EditorProps = CoderProps & {
@@ -30,11 +30,15 @@ const Icon = Dialog.Icon;
 const EditorWrap = (props: EditorProps, ref: any) => {
   const { value, modal, comment, toolbar, children, ...codeProps } = props;
   const [open, setOpen] = useState<boolean>(!!modal?.open);
-  const [nextValue, setValue] = useState<string | undefined>(value);
+  const [nextValue, setValue] = useState<string | undefined>(() => value);
 
-  useEffect(() => {
+  useUpdate(() => {
     setOpen(!!modal?.open);
   }, [modal?.open]);
+
+  useUpdate(() => {
+    setValue(value);
+  }, [value]);
 
   const Editor = useMemo(
     () => <Coder {...codeProps} value={nextValue} ref={ref} />,
@@ -76,6 +80,7 @@ const EditorWrap = (props: EditorProps, ref: any) => {
   }, [modal?.onClose]);
 
   const Toolbar = useMemo(() => {
+    if (!toolbar) return null;
     const tools = [...Children.toArray(toolbar)];
     if (modal && !open) {
       tools.push(<Icon name="plus" onClick={handleOpen} />);
@@ -87,7 +92,8 @@ const EditorWrap = (props: EditorProps, ref: any) => {
     if (isValidElement(children)) {
       return "fit-content";
     }
-    return codeProps.height ?? 500;
+    const height = codeProps.height ?? 500;
+    return parseFloat(height + "") + 12;
   }, [children, codeProps.height]);
 
   return (
