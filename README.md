@@ -246,7 +246,7 @@ interface CoderProps extends EditorProps {
   /**
    * custom toolbar
    */
-  toolbar?: React.ReactElement;
+  toolbar?: React.ReactElement | boolean;
   /**
    * custom render children
    */

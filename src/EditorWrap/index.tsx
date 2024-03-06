@@ -21,7 +21,7 @@ export type EditorProps = CoderProps & {
     height?: number;
     value?: string;
   };
-  toolbar?: React.ReactElement;
+  toolbar?: React.ReactElement | boolean;
   children?: React.ReactElement;
 };
 
