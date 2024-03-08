@@ -1,3 +1,4 @@
+import pkg from "../package.json";
 export function isObject(val: any) {
   return Object.prototype.toString.call(val) === "[object Object]";
 }
@@ -49,6 +50,11 @@ export function merge<T extends Object>(target: T, source: T): T {
 
 const removeInjectAMD = () => {
   if ("function" === typeof window.define && window.define.amd) {
+    console.log(
+      `%c${pkg.name}`,
+      "background: #FA6400;color: #fff;padding: 2px 6px;border-radius: 4px;",
+      `@${pkg.version}`
+    );
     Reflect.deleteProperty(window.define, "amd");
   }
 };
