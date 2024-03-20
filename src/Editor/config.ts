@@ -29,7 +29,7 @@ const ConfigMap = {
       noImplicitAny: false,
       strict: false,
       jsx: monaco.languages.typescript.JsxEmit.ReactJsx,
-      lib: ["es2020", "DOM", "DOM.Iterable"],
+      lib: ["es2020", "dom", "DOM.Iterable"],
       module: "ESNext",
       skipLibCheck: true,
       esModuleInterop: true,

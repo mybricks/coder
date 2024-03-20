@@ -52,7 +52,7 @@ const removeInjectAMD = () => {
     console.log(
       `%c${'@mybricks/coder'}`,
       "background: #FA6400;color: #fff;padding: 2px 6px;border-radius: 4px;",
-      `@0.0.33`
+      `@0.0.34`
     );
     Reflect.deleteProperty(window.define, "amd");
   }

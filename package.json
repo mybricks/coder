@@ -1,6 +1,6 @@
 {
   "name": "@mybricks/coder",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "description": "coder base on monaco-editor",
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
