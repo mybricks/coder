@@ -56,7 +56,7 @@ const EditorWrap = (props: EditorProps, ref: any) => {
           lineNumbers: "off",
           fontSize: codeProps.options?.fontSize,
         }}
-        height={comment.height ?? codeProps.height}
+        height={comment.height ?? codeProps.height ?? 300}
         path={`${random}_comment.ts`}
       />
     ) : null;
@@ -100,6 +100,7 @@ const EditorWrap = (props: EditorProps, ref: any) => {
       {open && (
         <Dialog
           draggable={true}
+          contentClassName={styles['dialog-content']}
           {...modal}
           open={open}
           footer={Comment}

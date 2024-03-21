@@ -107,6 +107,7 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
             onBlur={onBlur}
             modal={{
               inside: true,
+              maskClosable: true
             }}
             format={true}
             toolbar={
