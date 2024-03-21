@@ -144,8 +144,8 @@ type EditorProps = {
    */
   width?: number | string;
   /**
-   * Height of the editor wrapper
-   * @default 500
+   * Height of the editor wrapper, must set the height of parentNode
+   * @default "100%"
    */
   height?: number | string;
   /**
@@ -232,6 +232,16 @@ interface CoderProps extends EditorProps {
      * @default true
      */
     inside?: boolean;
+    /**
+     * dialog can be close when click mask
+     * @default false
+     */
+    maskClosable?: boolean;
+    /**
+     * @default height: 500px;
+     */
+    contentClassName?: string;
+    closeable?: boolean;
     onOpen?: () => void;
     onClose?: () => void;
   };
