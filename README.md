@@ -16,7 +16,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Editor from "@mybricks/coder";
 import type { EditorProps, HandlerType } from "@mybricks/coder"
 export default () => {
-  const coder = useRef<HandlerType>();
+  const codeIns = useRef<HandlerType>();
   const [value, setValue] = useState<string | undefined>(`const Test = () => {
     const num: number = 123
     return (
@@ -29,11 +29,11 @@ export default () => {
   `);
 
   const handleFormat = () => {
-    coder.current?.format();
+    codeIns.current?.format();
   };
 
   const handleCompile = useCallback(async () => {
-    const code = await coder.current.compile(value);
+    const code = await codeIns.current.compile(value);
     console.log(code);
   }, [value]);
   /**
@@ -56,7 +56,7 @@ export default () => {
       <button onClick={handleCompile}>compile</button>
       <div style={{height: 300}}>
         <Editor
-          ref={coder}
+          ref={codeIns}
           value={value}
           language="typescript"
           isTsx={true}
@@ -188,71 +188,70 @@ interface CoderProps extends EditorProps {
   extraLib?: string;
   isTsx?: boolean;
   loaderConfig?: {
-    paths?: {
-      vs?: string;
+    paths: {
+      vs: string;
     };
   };
-  eslint?: {
-    src?: string;
-    config?: Record<string, any>;
-  };
+  eslint?: Partial<{
+    src: string;
+    config: Record<string, any>;
+  }>;
   /**
    * babel-standalone
    * @default "https://unpkg.com/@babel/standalone/babel.min.js"
    */
-  babel?: {
-    standalone?: string;
-    options?: TransformOptions;
-  };
+  babel?: Partial<{
+    standalone: string;
+    options: TransformOptions;
+  }>;
   onBlur?: (editor: editor) => void;
   onFocus?: (editor: editor) => void;
   /**
    * enable modal editor
    */
-  modal?: {
+  modal?: Partial<{
     /**
      * control modal open
-     * use with custom rendering
+     * used with controlled case
      * @default false
      */
-    open?: boolean;
-    title?: string;
+    open: boolean;
+    title: string;
     /**
-     * Modal width
+     * dialog width
      * @default 1024
      */
-    width?: number;
+    width: number;
     /**
      * dialog can be drag with handler
      * @default false
      */
-    draggable?: boolean;
+    draggable: boolean;
     /**
      * dialog can be drag within area
      * @default true
      */
-    inside?: boolean;
+    inside: boolean;
     /**
      * dialog can be close when click mask
      * @default false
      */
-    maskClosable?: boolean;
+    maskClosable: boolean;
     /**
      * @default height: 500px;
      */
-    contentClassName?: string;
-    closeable?: boolean;
-    onOpen?: () => void;
-    onClose?: () => void;
-  };
-  comment?: {
+    contentClassName: string;
+    onOpen: () => void;
+    onClose: () => void;
+  }>;
+  comment?: Partial<{
     /**
      * Comment Editor height
      * @default 300
      */
-    height?: number;
-    value?: string;
-  };
+    height: number;
+    value: string;
+  }>;
   /**
    * custom toolbar
    */
