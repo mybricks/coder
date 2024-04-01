@@ -33,7 +33,7 @@ const ConfigMap = {
       module: "ESNext",
       skipLibCheck: true,
       esModuleInterop: true,
-      noEmit: true,
+      noEmit: false,
       jsxFactory: "React.createElement",
       reactNamespace: "React",
     });

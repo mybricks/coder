@@ -1,4 +1,4 @@
-import { forwardRef, useReducer, useState } from "react";
+import { forwardRef, useEffect, useReducer, useState } from "react";
 import { Tabs } from "antd";
 import Editor, { Icon } from "../../src";
 
@@ -88,6 +88,24 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
 
   const [open, setOpen] = useState<boolean>(false);
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (ref!.current!.monaco) {
+        const model = ref.current.editor.getModel("index.ts");
+        const uri = model.uri.toString()
+        const worker =
+          ref!.current!.monaco.languages.typescript.getTypeScriptWorker;
+        worker(uri).then((serviceWorker) => {
+          serviceWorker().then((res) => {
+            res.getEmitOutput(uri).then((code) => {
+              console.log(code);
+            });
+          });
+        });
+      }
+    }, 100);
+  }, []);
+
   return (
     <Tabs
       style={{ width: "50%" }}
@@ -107,7 +125,7 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
             onBlur={onBlur}
             modal={{
               inside: true,
-              maskClosable: true
+              maskClosable: true,
             }}
             format={true}
             toolbar={
@@ -122,7 +140,7 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
                   <Icon
                     name="preview"
                     onClick={() => {
-                      onPreview()
+                      onPreview();
                     }}
                   />
                 )}
