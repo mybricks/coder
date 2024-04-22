@@ -26,7 +26,7 @@ export type EditorProps = CoderProps & {
   toolbar?: React.ReactElement | boolean;
   children?: React.ReactElement;
   resizable?: boolean;
-  className?: string;
+  wrapperClassName?: string;
 };
 
 const Icon = Dialog.Icon;
@@ -38,7 +38,7 @@ const EditorWrap = (props: EditorProps, ref: any) => {
     comment,
     toolbar,
     resizable,
-    className,
+    wrapperClassName,
     children,
     ...codeProps
   } = props;
@@ -109,7 +109,7 @@ const EditorWrap = (props: EditorProps, ref: any) => {
   }, [children, codeProps.height]);
 
   return (
-    <ResizableEditor height={initHeight} resizable={resizable}>
+    <ResizableEditor height={initHeight} resizable={resizable} className={wrapperClassName}>
       {open && (
         <Dialog
           draggable={true}
