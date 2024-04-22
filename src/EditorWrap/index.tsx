@@ -117,6 +117,7 @@ const EditorWrap = (props: EditorProps, ref: any) => {
           {...modal}
           open={open}
           footer={Comment}
+          collapseControl={true}
           onClose={handleClose}
         >
           {Editor}

@@ -112,8 +112,9 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     if (loaderConfig) {
       loader.config(loaderConfig);
     }
-    versionLog()
   }, [loaderConfig]);
+
+  versionLog();
 
   useEffect(() => {
     if (
