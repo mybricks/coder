@@ -15,6 +15,11 @@
   resolved "https://registry.yarnpkg.com/@astii/dialog/-/dialog-0.0.6.tgz#d39ecfad2b9ef8c7afeae36dbef9b8506c135641"
   integrity sha512-QLKO53ItIrY3d4ws/M/ujAr5/+HxETFFau1GM/zJz5jgtn4BzmcZoa3eyjUySSGufJy1ek44DH8uQitC45Xt6w==
 
+"@astii/resizable@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@astii/resizable/-/resizable-0.0.5.tgz#33c9be4ea2fe28798f94861682a30cf832529633"
+  integrity sha512-7BSH4QXfhJ540HL7ndCHg9ncCbhpJAfSdFPEXOSdM1Gy6e29xf9kY0og7+8hKTm9l04JScZ3UgrSLmlpjCQuOQ==
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.16.7", "@babel/code-frame@^7.22.13", "@babel/code-frame@^7.23.5":
   version "7.23.5"
   resolved "https://npm.corp.kuaishou.com/@babel/code-frame/-/code-frame-7.23.5.tgz#9009b69a8c602293476ad598ff53e4562e15c244"

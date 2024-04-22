@@ -17,7 +17,7 @@ import {
 import { getConfigSetter, Language, getTransformOptions } from "./config";
 import { setJsxHighlight } from "./highlighter";
 import { DefaultCoderOptions } from "./options";
-import { merge, getLinter, getBabel } from "../util";
+import { merge, getLinter, getBabel, versionLog } from "../util";
 import type { TransformOptions } from "@babel/core";
 import { registerEvents, Handle } from "./registerEvents";
 import type { editor } from "monaco-types";
@@ -112,6 +112,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     if (loaderConfig) {
       loader.config(loaderConfig);
     }
+    versionLog()
   }, [loaderConfig]);
 
   useEffect(() => {

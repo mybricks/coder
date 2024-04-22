@@ -5,8 +5,10 @@ import React, {
   useState,
   Children,
   isValidElement,
+  CSSProperties,
 } from "react";
 import Dialog, { DialogProps } from "@astii/dialog";
+import Resizable from "@astii/resizable";
 import ToolPanel from "../ToolPanel";
 import { Coder, CoderProps, HandlerType } from "../Editor";
 import { executeChain } from "../util";
@@ -23,12 +25,23 @@ export type EditorProps = CoderProps & {
   };
   toolbar?: React.ReactElement | boolean;
   children?: React.ReactElement;
+  resizable?: boolean;
+  className?: string;
 };
 
 const Icon = Dialog.Icon;
 
 const EditorWrap = (props: EditorProps, ref: any) => {
-  const { value, modal, comment, toolbar, children, ...codeProps } = props;
+  const {
+    value,
+    modal,
+    comment,
+    toolbar,
+    resizable,
+    className,
+    children,
+    ...codeProps
+  } = props;
   const [open, setOpen] = useState<boolean>(!!modal?.open);
   const [nextValue, setValue] = useState<string | undefined>(() => value);
 
@@ -96,11 +109,11 @@ const EditorWrap = (props: EditorProps, ref: any) => {
   }, [children, codeProps.height]);
 
   return (
-    <div className={styles.wrap} style={{ height: initHeight }}>
+    <ResizableEditor height={initHeight} resizable={resizable}>
       {open && (
         <Dialog
           draggable={true}
-          contentClassName={styles['dialog-content']}
+          contentClassName={styles["dialog-content"]}
           {...modal}
           open={open}
           footer={Comment}
@@ -117,7 +130,42 @@ const EditorWrap = (props: EditorProps, ref: any) => {
           {Toolbar}
         </>
       )}
-    </div>
+    </ResizableEditor>
+  );
+};
+
+const ResizableEditor = ({
+  height,
+  resizable,
+  className,
+  children,
+}: {
+  height: CSSProperties["height"];
+  resizable?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}) => {
+  const [size, setSize] = useState<CSSProperties["height"]>(height);
+  const wrap = useMemo(
+    () => (
+      <div
+        className={`${styles.wrap} ${className ?? ""}`}
+        style={{ height: size }}
+      >
+        {children}
+      </div>
+    ),
+    [size, children, className]
+  );
+  const onResize = ({ height }: { height: CSSProperties["height"] }) => {
+    setSize(height);
+  };
+  return !!resizable ? (
+    <Resizable axis="y" onResize={onResize}>
+      {wrap}
+    </Resizable>
+  ) : (
+    wrap
   );
 };
 
