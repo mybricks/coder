@@ -65,6 +65,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     eslint,
     theme,
     babel,
+    path,
   } = _props;
   const lang = language ?? defaultLanguage;
 
@@ -104,8 +105,21 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
           throw error;
         }
       },
+      async transform() {
+        if (lang !== "javascript" && lang !== "typescript")
+          return editorRef.current.getValue();
+        const model = editorRef.current.getModel(path);
+        const uri = model.uri.toString();
+        const worker =
+          lang === "javascript"
+            ? monaco.languages.javascript.getJavaScriptWorker
+            : monaco.languages.typescript.getTypeScriptWorker;
+        const serviceWorker = await worker(uri);
+        const output = await serviceWorker();
+        return (await output.getEmitOutput(uri)).outputFiles;
+      },
     }),
-    [monaco, lang, isTsx, babel, isMounted]
+    [monaco, lang, isTsx, babel, isMounted, path]
   );
 
   useLayoutEffect(() => {

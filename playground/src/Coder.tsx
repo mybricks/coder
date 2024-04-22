@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useReducer, useState } from "react";
-import { Tabs } from "antd";
+import { Button, Tabs } from "antd";
 import Editor, { Icon } from "../../src";
 
 const items = [
@@ -89,25 +89,33 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    setTimeout(() => {
+    setTimeout(async () => {
       if (ref!.current!.monaco) {
-        const model = ref.current.editor.getModel("index.ts");
-        const uri = model.uri.toString()
-        const worker =
-          ref!.current!.monaco.languages.typescript.getTypeScriptWorker;
-        worker(uri).then((serviceWorker) => {
-          serviceWorker().then((res) => {
-            res.getEmitOutput(uri).then((code) => {
-              console.log(code);
-            });
-          });
-        });
+        const ret = await ref.current.transform()
+        console.log(ret)
+        // const model = ref.current.editor.getModel("index.ts");
+        // const uri = model.uri.toString()
+        // const worker =
+        //   ref!.current!.monaco.languages.typescript.getTypeScriptWorker;
+        // worker(uri).then((serviceWorker) => {
+        //   serviceWorker().then((res) => {
+        //     res.getEmitOutput(uri).then((code) => {
+        //       console.log(code);
+        //     });
+        //   });
+        // });
       }
     }, 100);
   }, []);
 
+  const transform = async () => {
+    const ret = await ref.current.transform()
+    console.log(ret)
+  }
+
   return (
-    <Tabs
+    <>
+       <Tabs
       style={{ width: "50%" }}
       tabPosition="left"
       onChange={onTabChange}
@@ -128,6 +136,7 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
               maskClosable: true,
             }}
             format={true}
+            
             toolbar={
               <>
                 <Icon
@@ -172,5 +181,7 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
         </Tabs.TabPane>
       ))}
     </Tabs>
+    <Button onClick={transform}>transform</Button>
+    </>
   );
 });
