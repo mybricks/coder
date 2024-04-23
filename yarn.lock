@@ -10,15 +10,15 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@astii/dialog@0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@astii/dialog/-/dialog-0.0.11.tgz#674a8b959f00f572c271ff1ff6f41065e7864f99"
-  integrity sha512-eoXhtw9Xhl3tpgVuhlFv7+ne2/zTQ00vd9/xbTgos8c9Qab+dLAeQOzlnDVTk1KNKkVqoxbY5DBEgkldsjVQaw==
+"@astii/dialog@0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@astii/dialog/-/dialog-0.0.12.tgz#80abe8e90b1d211e7817a393f65f4a1840ef015d"
+  integrity sha512-zg5XwAhfrXUILWNUtm89F9Ey/BAZ2QQP4qmsvrUhVTpiDHaJ2PIRDmMLq1vJ7D0t33T2nmqQUMXMvS3sHfj/7Q==
 
-"@astii/resizable@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@astii/resizable/-/resizable-0.0.5.tgz#33c9be4ea2fe28798f94861682a30cf832529633"
-  integrity sha512-7BSH4QXfhJ540HL7ndCHg9ncCbhpJAfSdFPEXOSdM1Gy6e29xf9kY0og7+8hKTm9l04JScZ3UgrSLmlpjCQuOQ==
+"@astii/resizable@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@astii/resizable/-/resizable-0.0.7.tgz#e92a1bda91c6ad4c05cce19d1bf84839c0217305"
+  integrity sha512-WLsLdTA8S20JHp6MXwbtyHWv8I5Kgvz79GHOp3DOifX2WThEFcHzxbp/IU5L3ajPHFwBUGSEE64srrcIV12zBw==
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.16.7", "@babel/code-frame@^7.22.13", "@babel/code-frame@^7.23.5":
   version "7.23.5"

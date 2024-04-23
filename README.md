@@ -249,12 +249,12 @@ interface CoderProps extends EditorProps {
     onClose: () => void;
   }>;
   comment?: Partial<{
-    /**
-     * Comment Editor height
-     * @default 300
-     */
-    height: number;
     value: string;
+     /**
+     * Comment Editor height
+     * @default 100%
+     */
+    className: string;
   }>;
   /**
    * custom toolbar
@@ -264,6 +264,7 @@ interface CoderProps extends EditorProps {
    * custom render children
    */
   children?: React.ReactElement;
+  wrapperClassName?: string;
 }
 ```
 
