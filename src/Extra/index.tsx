@@ -13,6 +13,7 @@ export interface Extra extends CoderProps {
 const Extra = (props: Extra) => {
   const { comment, ...codeProps } = props;
   const path = useRef(`${Math.floor(Math.random() * 10)}_comment.ts`);
+  const none = () => {};
   return (
     <div className={styles.extra}>
       {comment?.value && (
@@ -20,6 +21,9 @@ const Extra = (props: Extra) => {
           content={
             <Coder
               {...codeProps}
+              onBlur={none}
+              onChange={none}
+              onFocus={none}
               value={comment.value}
               options={{
                 readOnly: true,
