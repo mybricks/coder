@@ -1,6 +1,6 @@
 {
   "name": "@mybricks/coder",
-  "version": "0.0.45",
+  "version": "0.0.46",
   "description": "coder base on monaco-editor",
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
@@ -34,7 +34,7 @@
     "react": "^18.2.0"
   },
   "dependencies": {
-    "@astii/dialog": "0.0.12",
+    "@astii/dialog": "0.0.14",
     "@astii/resizable": "0.0.7",
     "@monaco-editor/react": "^4.6.0",
     "monaco-jsx-syntax-highlight": "^1.2.0"

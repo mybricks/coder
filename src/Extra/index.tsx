@@ -8,14 +8,18 @@ export interface ExtraProp extends CoderProps {
     value: string;
     className: string;
   }>;
+  children?: React.ReactNode;
 }
 
+const Icon = Dialog.Icon;
+
 const Extra = (props: ExtraProp) => {
-  const { comment, ...codeProps } = props;
+  const { comment, children, ...codeProps } = props;
   const path = useRef(`${Math.floor(Math.random() * 10)}_comment.ts`);
   const noop = useCallback(() => {}, []);
   return (
     <div className={styles.extra}>
+      <div>{children}</div>
       {comment?.value && (
         <Dialog.Popover
           content={
@@ -35,7 +39,7 @@ const Extra = (props: ExtraProp) => {
           }
           className={comment.className}
         >
-          <span className={styles.doc}>文档</span>
+          <Icon name="doc" data-mybricks-tip="文档" />
         </Dialog.Popover>
       )}
     </div>

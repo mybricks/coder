@@ -10,10 +10,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@astii/dialog@0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@astii/dialog/-/dialog-0.0.12.tgz#80abe8e90b1d211e7817a393f65f4a1840ef015d"
-  integrity sha512-zg5XwAhfrXUILWNUtm89F9Ey/BAZ2QQP4qmsvrUhVTpiDHaJ2PIRDmMLq1vJ7D0t33T2nmqQUMXMvS3sHfj/7Q==
+"@astii/dialog@0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@astii/dialog/-/dialog-0.0.14.tgz#9ecf8332e89f681fc92a8c2f2755bf8332d14a40"
+  integrity sha512-IMZK101uYVr47GYYuG6mQQhO/oBpcK8CWkZiWu2li+cguoAcqDGFsconvY1IZG8on1b1IAyglL5FnSvHlwD9UA==
 
 "@astii/resizable@0.0.7":
   version "0.0.7"

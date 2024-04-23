@@ -101,7 +101,11 @@ const EditorWrap = (props: EditorProps, ref: any) => {
           contentClassName={styles["dialog-content"]}
           {...modal}
           open={open}
-          extra={<Extra comment={comment} {...codeProps} />}
+          extra={
+            <Extra comment={comment} {...codeProps}>
+              {modal?.extra}
+            </Extra>
+          }
           onClose={handleClose}
         >
           {Editor}
