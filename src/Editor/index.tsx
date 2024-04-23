@@ -89,7 +89,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
       async compile(value: string, options?: TransformOptions) {
         if (
           !value ||
-          ![Language.Javascript, Language.Typescript].includes(lang as Language)
+          ![Language.Javascript, Language.Typescript].includes(lang as Language) || !!_props.options.readOnly
         )
           return value;
         try {
@@ -119,7 +119,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
         return (await output.getEmitOutput(uri)).outputFiles;
       },
     }),
-    [monaco, lang, isTsx, babel, isMounted, path]
+    [monaco, lang, isMounted, _props]
   );
 
   useLayoutEffect(() => {

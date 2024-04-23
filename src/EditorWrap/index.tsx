@@ -13,6 +13,7 @@ import ToolPanel from "../ToolPanel";
 import { Coder, CoderProps, HandlerType } from "../Editor";
 import { executeChain } from "../util";
 import { useUpdate } from "./useUpdate";
+import Extra from "../Extra";
 import styles from "./index.module.less";
 
 export type EditorProps = CoderProps & {
@@ -58,23 +59,6 @@ const EditorWrap = (props: EditorProps, ref: any) => {
     [codeProps, nextValue, ref]
   );
 
-  const Comment = useMemo(() => {
-    const random = Math.floor(Math.random() * 10);
-    return comment?.value ? (
-      <Coder
-        {...codeProps}
-        value={comment.value}
-        options={{
-          readOnly: true,
-          lineNumbers: "off",
-          fontSize: codeProps.options?.fontSize,
-        }}
-        height={comment.height ?? codeProps.height ?? 300}
-        path={`${random}_comment.ts`}
-      />
-    ) : null;
-  }, [codeProps, comment, codeProps.theme]);
-
   const setNextValue = useCallback(() => {
     if (ref!.current.editor) {
       const nextValue = ref!.current.editor.getValue();
@@ -109,15 +93,18 @@ const EditorWrap = (props: EditorProps, ref: any) => {
   }, [children, codeProps.height]);
 
   return (
-    <ResizableEditor height={initHeight} resizable={resizable} className={wrapperClassName}>
+    <ResizableEditor
+      height={initHeight}
+      resizable={resizable}
+      className={wrapperClassName}
+    >
       {open && (
         <Dialog
-          draggable={true}
+          draggable={false}
           contentClassName={styles["dialog-content"]}
           {...modal}
           open={open}
-          footer={Comment}
-          collapseControl={true}
+          extra={<Extra comment={comment} {...codeProps} />}
           onClose={handleClose}
         >
           {Editor}
