@@ -52,7 +52,7 @@ export var versionLog = () => {
     console.log(
       `%c${"@mybricks/coder"}`,
       "background: #FA6400;color: #fff;padding: 2px 6px;border-radius: 4px;",
-      `${JSON.parse(VERSION)}`
+      VERSION
     );
     versionLog = () => {};
   }
