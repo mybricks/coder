@@ -241,6 +241,10 @@ interface CoderProps extends EditorProps {
      * @default height: 500px;
      */
     contentClassName: string;
+    /**
+     * extra tools
+     */
+    extra: React.ReactNode;
     onOpen: () => void;
     onClose: () => void;
   }>;

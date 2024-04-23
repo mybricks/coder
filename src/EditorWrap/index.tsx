@@ -13,17 +13,14 @@ import ToolPanel from "../ToolPanel";
 import { Coder, CoderProps, HandlerType } from "../Editor";
 import { executeChain } from "../util";
 import { useUpdate } from "./useUpdate";
-import Extra from "../Extra";
+import Extra, { ExtraProp } from "../Extra";
 import styles from "./index.module.less";
 
 export type EditorProps = CoderProps & {
   modal?: Omit<DialogProps, "children" | "footer"> & {
     onOpen?(): void;
   };
-  comment?: {
-    height?: number;
-    value?: string;
-  };
+  comment?: ExtraProp["comment"];
   toolbar?: React.ReactElement | boolean;
   children?: React.ReactElement;
   resizable?: boolean;

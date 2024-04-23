@@ -3,14 +3,14 @@ import { Coder, CoderProps } from "../Editor";
 import Dialog from "@astii/dialog";
 import styles from "./index.module.less";
 
-export interface Extra extends CoderProps {
+export interface ExtraProp extends CoderProps {
   comment?: {
     height?: number;
     value?: string;
   };
 }
 
-const Extra = (props: Extra) => {
+const Extra = (props: ExtraProp) => {
   const { comment, ...codeProps } = props;
   const path = useRef(`${Math.floor(Math.random() * 10)}_comment.ts`);
   const none = () => {};
@@ -34,6 +34,7 @@ const Extra = (props: Extra) => {
               path={path.current}
             />
           }
+          className={styles.popover}
         >
           <span className={styles.doc}>文档</span>
         </Dialog.Popover>
