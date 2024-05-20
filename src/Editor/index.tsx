@@ -53,7 +53,7 @@ export type HandlerType = {
     options?: TransformOptions
   ): Promise<string>;
   transform(): Promise<
-    [{ name: string; writeByteOrderMark: boolean; text: string }]
+    Array<{ name: string; writeByteOrderMark: boolean; text: string }>
   >;
 };
 

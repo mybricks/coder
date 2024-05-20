@@ -28,14 +28,18 @@ const ConfigMap = {
       allowNonTsExtensions: true,
       noImplicitAny: false,
       strict: false,
-      jsx: monaco.languages.typescript.JsxEmit.ReactJsx,
+      noLib: false,
+      jsx: isTsx
+        ? monaco.languages.typescript.JsxEmit.ReactJsx
+        : monaco.languages.typescript.JsxEmit.None,
       lib: ["es2020", "dom", "DOM.Iterable"],
-      module: "ESNext",
+      module: monaco.languages.typescript.ModuleKind.ESNext,
       skipLibCheck: true,
       esModuleInterop: true,
       noEmit: false,
       jsxFactory: "React.createElement",
       reactNamespace: "React",
+      declaration: true,
     });
   },
 };

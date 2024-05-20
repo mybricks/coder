@@ -9,11 +9,15 @@ const items = [
     key: "ts",
     language: "typescript",
     path: "index.ts",
-    value: `({ outputs, inputs }) => {
-        const [ inputValue0 ] = inputs;
-        const [ output0 ] = outputs;
-        output0(inputValue0);
-      }
+    value: `type IO = {
+      inputs: Array<Function>
+      outputs: Array<Function>
+    }
+    ({ outputs, inputs }: IO) => {
+      const [ inputValue0 ] = inputs;
+      const [ output0 ] = outputs;
+      output0(inputValue0);
+    }
     `,
   },
   {
