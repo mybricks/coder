@@ -52,6 +52,9 @@ export type HandlerType = {
     value: string | undefined,
     options?: TransformOptions
   ): Promise<string>;
+  transform(): Promise<
+    [{ name: string; writeByteOrderMark: boolean; text: string }]
+  >;
 };
 
 const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
@@ -89,7 +92,10 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
       async compile(value: string, options?: TransformOptions) {
         if (
           !value ||
-          ![Language.Javascript, Language.Typescript].includes(lang as Language) || !!_props.options.readOnly
+          ![Language.Javascript, Language.Typescript].includes(
+            lang as Language
+          ) ||
+          !!_props.options.readOnly
         )
           return value;
         try {

@@ -62,6 +62,16 @@
     resize-observer-polyfill "^1.5.1"
     throttle-debounce "^5.0.0"
 
+"@astii/dialog@0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@astii/dialog/-/dialog-0.0.14.tgz#9ecf8332e89f681fc92a8c2f2755bf8332d14a40"
+  integrity sha512-IMZK101uYVr47GYYuG6mQQhO/oBpcK8CWkZiWu2li+cguoAcqDGFsconvY1IZG8on1b1IAyglL5FnSvHlwD9UA==
+
+"@astii/resizable@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@astii/resizable/-/resizable-0.0.7.tgz#e92a1bda91c6ad4c05cce19d1bf84839c0217305"
+  integrity sha512-WLsLdTA8S20JHp6MXwbtyHWv8I5Kgvz79GHOp3DOifX2WThEFcHzxbp/IU5L3ajPHFwBUGSEE64srrcIV12zBw==
+
 "@babel/code-frame@^7.22.13", "@babel/code-frame@^7.23.5":
   version "7.23.5"
   resolved "https://npm.corp.kuaishou.com/@babel/code-frame/-/code-frame-7.23.5.tgz#9009b69a8c602293476ad598ff53e4562e15c244"
@@ -479,6 +489,30 @@
   dependencies:
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
+
+"@monaco-editor/loader@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@monaco-editor/loader/-/loader-1.4.0.tgz#f08227057331ec890fa1e903912a5b711a2ad558"
+  integrity sha512-00ioBig0x642hytVspPl7DbQyaSWRaolYie/UFNjoTdvoKPzo6xrXLhTk9ixgIKcLH5b5vDOjVNiGyY+uDCUlg==
+  dependencies:
+    state-local "^1.0.6"
+
+"@monaco-editor/react@^4.6.0":
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@monaco-editor/react/-/react-4.6.0.tgz#bcc68671e358a21c3814566b865a54b191e24119"
+  integrity sha512-RFkU9/i7cN2bsq/iTkurMWOEErmYcY6JiQI3Jn+WeR/FGISH8JbHERjpS9oRuSOPvDMJI0Z8nJeKkbOs9sBYQw==
+  dependencies:
+    "@monaco-editor/loader" "^1.4.0"
+
+"@mybricks/coder@^0.0.46":
+  version "0.0.46"
+  resolved "https://registry.yarnpkg.com/@mybricks/coder/-/coder-0.0.46.tgz#108e43e7bb9b838da6a0dcbad2c6703133eea56d"
+  integrity sha512-up2uJ6l9QsC4AynD/hfhuPtXZGs7t3/wxrdW2T7NHhOzec+Qhee/9CVVvovnJnSp8YW5Zceb2IRBsdrwHKSYaA==
+  dependencies:
+    "@astii/dialog" "0.0.14"
+    "@astii/resizable" "0.0.7"
+    "@monaco-editor/react" "^4.6.0"
+    monaco-jsx-syntax-highlight "^1.2.0"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1621,6 +1655,11 @@ minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   dependencies:
     brace-expansion "^1.1.7"
 
+monaco-jsx-syntax-highlight@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/monaco-jsx-syntax-highlight/-/monaco-jsx-syntax-highlight-1.2.0.tgz#cc2e69fa9918693a4f1ceb18b972f662a51c454b"
+  integrity sha512-sKzfmNMxLp3Dcwndz0F/EdP3rqe+Z6FbDPazj+/ByNbqoXWkzgb/ocat8h3vpiTwPPiDtSHidT0BFMvLkMtG8A==
+
 ms@2.1.2:
   version "2.1.2"
   resolved "https://npm.corp.kuaishou.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
@@ -2260,6 +2299,11 @@ source-map@~0.6.0:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
+
+state-local@^1.0.6:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/state-local/-/state-local-1.0.7.tgz#da50211d07f05748d53009bee46307a37db386d5"
+  integrity sha512-HTEHMNieakEnoe33shBYcZ7NX83ACUjCu8c40iOGEZsngj9zRnkqS9j1pqQPXwobB0ZcVTk27REb7COQ0UR59w==
 
 string-convert@^0.2.0:
   version "0.2.1"

@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useReducer, useState } from "react";
 import { Button, Tabs } from "antd";
 import Editor, { Icon } from "../../src";
+import css from "./App.module.less";
 
 const items = [
   {
@@ -91,8 +92,8 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
   useEffect(() => {
     setTimeout(async () => {
       if (ref!.current!.monaco) {
-        const ret = await ref.current.transform()
-        console.log(ret)
+        const ret = await ref.current.transform();
+        console.log(ret);
         // const model = ref.current.editor.getModel("index.ts");
         // const uri = model.uri.toString()
         // const worker =
@@ -109,54 +110,53 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
   }, []);
 
   const transform = async () => {
-    const ret = await ref.current.transform()
-    console.log(ret)
-  }
+    const ret = await ref.current.transform();
+    console.log(ret);
+  };
 
   return (
     <>
-       <Tabs
-      style={{ width: "50%" }}
-      tabPosition="left"
-      onChange={onTabChange}
-      destroyInactiveTabPane
-    >
-      {state.items.map(({ label, key, ...rest }) => (
-        <Tabs.TabPane tab={label} key={key} style={{ height: 800 }}>
-          <Editor
-            key={key}
-            ref={ref}
-            {...rest}
-            // onChange={onChange}
-            // height={800}
-            theme={theme}
-            onBlur={onBlur}
-            modal={{
-              inside: true,
-              maskClosable: true,
-            }}
-            format={true}
-            
-            toolbar={
-              <>
-                <Icon
-                  name="format"
-                  onClick={() => {
-                    ref.current.format();
-                  }}
-                />
-                {rest.isTsx && (
+      <Tabs
+        style={{ width: "50%" }}
+        tabPosition="left"
+        onChange={onTabChange}
+        destroyInactiveTabPane
+      >
+        {state.items.map(({ label, key, ...rest }) => (
+          <Tabs.TabPane tab={label} key={key} style={{ height: 800 }}>
+            <Editor
+              key={key}
+              ref={ref}
+              {...rest}
+              // onChange={onChange}
+              // height={800}
+              theme={theme}
+              onBlur={onBlur}
+              modal={{
+                inside: true,
+                maskClosable: true,
+              }}
+              format={true}
+              toolbar={
+                <>
                   <Icon
-                    name="preview"
+                    name="format"
                     onClick={() => {
-                      onPreview();
+                      ref.current.format();
                     }}
                   />
-                )}
-              </>
-            }
-            comment={{
-              value: `/**
+                  {rest.isTsx && (
+                    <Icon
+                      name="preview"
+                      onClick={() => {
+                        onPreview();
+                      }}
+                    />
+                  )}
+                </>
+              }
+              comment={{
+                value: `/**
               * @parma inputs: any[] 输入项
               * @parma outputs: any[] 输出项
               *
@@ -176,12 +176,13 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
               *   // output2(inputValue1); 
               * }
               */`,
-            }}
-          />
-        </Tabs.TabPane>
-      ))}
-    </Tabs>
-    <Button onClick={transform}>transform</Button>
+                className: css.comment,
+              }}
+            />
+          </Tabs.TabPane>
+        ))}
+      </Tabs>
+      <Button onClick={transform}>transform</Button>
     </>
   );
 });
