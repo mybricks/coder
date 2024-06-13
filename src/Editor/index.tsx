@@ -174,6 +174,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
 
   const onMount = (editor: editor, monaco: Monaco) => {
     setMounted(true);
+    editorRef.current = editor;
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
       const value = editor.getValue();
       onChange(value, null);
@@ -197,7 +198,6 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
       eventListenRef.current
     );
     typeof _props.onMount === "function" && _props.onMount(editor, monaco);
-    editorRef.current = editor;
     queueMicrotask(() => {
       getLinter(eslint?.src).then((linter) => {
         linterRef.current = linter;
