@@ -85,9 +85,8 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
       monaco,
       editor: editorRef.current,
       format() {
-        if (editorRef.current) {
-          editorRef.current._actions.get("editor.action.formatDocument")._run();
-        }
+        if (!editorRef.current) return;
+        editorRef.current._actions.get("editor.action.formatDocument")._run();
       },
       async compile(value: string, options?: TransformOptions) {
         if (
@@ -112,6 +111,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
         }
       },
       async transform() {
+        if (!editorRef.current) return [];
         if (lang !== "javascript" && lang !== "typescript")
           return editorRef.current.getValue();
         const model = editorRef.current.getModel(path);
@@ -125,7 +125,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
         return (await output.getEmitOutput(uri)).outputFiles;
       },
     }),
-    [monaco, lang, isMounted, _props]
+    [monaco, lang, isMounted, _props, editorRef.current]
   );
 
   useLayoutEffect(() => {
