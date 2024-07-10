@@ -114,9 +114,19 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
   }, []);
 
   const transform = async () => {
-    const ret = await ref.current.transform();
-    console.log(ret);
+    try {
+      const ret = await ref.current.transform({semantic: true});
+      console.log(ret);
+    } catch (error) {
+      console.log(error)
+    }
   };
+
+  const babel = async () => {
+    if(!ref?.current) return;
+    const ret = await ref.current.compile();
+    console.log(ret)
+  }
 
   return (
     <>
@@ -187,6 +197,7 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
         ))}
       </Tabs>
       <Button onClick={transform}>transform</Button>
+      <Button onClick={babel}>babel</Button>
     </>
   );
 });

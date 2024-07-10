@@ -27,7 +27,13 @@ const ConfigMap = {
       target: monaco.languages.typescript.ScriptTarget.ES6,
       allowNonTsExtensions: true,
       noImplicitAny: false,
+      noImplicitThis: false,
       strict: false,
+      alwaysStrict: false,
+      strictNullChecks: false,
+      noUnusedLocals: false,
+      noUnusedParameters: false,
+      noImplicitReturns: false,
       noLib: false,
       jsx: isTsx
         ? monaco.languages.typescript.JsxEmit.ReactJsx

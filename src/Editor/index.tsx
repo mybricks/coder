@@ -55,6 +55,14 @@ export type HandlerType = {
   transform(): Promise<
     Array<{ name: string; writeByteOrderMark: boolean; text: string }>
   >;
+  getSemanticDiagnostics(): Promise<
+    Array<{
+      category: number;
+      messageText: string;
+      code: number;
+      start: number;
+    }>
+  >;
 };
 
 const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
@@ -88,7 +96,8 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
         if (!editorRef.current) return;
         editorRef.current._actions.get("editor.action.formatDocument")._run();
       },
-      async compile(value: string, options?: TransformOptions) {
+      async compile(value?: string, options?: TransformOptions) {
+        value = value ?? editorRef.current.getValue();
         if (
           !value ||
           ![Language.Javascript, Language.Typescript].includes(
@@ -110,23 +119,49 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
           throw error;
         }
       },
-      async transform() {
+      async transform(
+        options?: Partial<{ ignores: string[]; semantic: boolean }>
+      ) {
         if (!editorRef.current) return [];
         if (lang !== "javascript" && lang !== "typescript")
           return editorRef.current.getValue();
+        const { ignores = [], semantic } = options ?? {};
         const model = editorRef.current.getModel(path);
         const uri = model.uri.toString();
-        const worker =
-          lang === "javascript"
-            ? monaco.languages.javascript.getJavaScriptWorker
-            : monaco.languages.typescript.getTypeScriptWorker;
-        const serviceWorker = await worker(uri);
-        const output = await serviceWorker();
-        return (await output.getEmitOutput(uri)).outputFiles;
+        const client = await getWorkerService();
+        if (semantic) {
+          const semantics = (await client.getSemanticDiagnostics(uri)).filter(
+            (it: any) => !ignores.some((key) => it.messageText.includes(key))
+          );
+          if (semantics.length) {
+            return Promise.reject(semantics);
+          }
+        }
+        return (await client.getEmitOutput(uri)).outputFiles;
+      },
+      async getSemanticDiagnostics() {
+        if (!editorRef.current) return [];
+        const client = await getWorkerService();
+        const model = editorRef.current.getModel(path);
+        const uri = model.uri.toString();
+        const semantics = await client.getSemanticDiagnostics(uri);
+        return semantics;
       },
     }),
     [monaco, lang, isMounted, _props, editorRef.current]
   );
+
+  const getWorkerService = useCallback(async () => {
+    const model = editorRef.current.getModel(path);
+    const uri = model.uri.toString();
+    const worker =
+      lang === "javascript"
+        ? monaco.languages.javascript.getJavaScriptWorker
+        : monaco.languages.typescript.getTypeScriptWorker;
+    const serviceWorker = await worker(uri);
+    const client = await serviceWorker();
+    return client;
+  }, [lang, isMounted, editorRef.current]);
 
   useLayoutEffect(() => {
     if (loaderConfig) {
