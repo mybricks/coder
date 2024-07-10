@@ -48,11 +48,10 @@ export type HandlerType = {
   monaco: Monaco;
   editor: editor;
   format(): void;
-  compile(
-    value: string | undefined,
-    options?: TransformOptions
-  ): Promise<string>;
-  transform(): Promise<
+  compile(value?: string, options?: TransformOptions): Promise<string>;
+  transform(
+    options?: Partial<{ ignores: string[]; semantic: boolean }>
+  ): Promise<
     Array<{ name: string; writeByteOrderMark: boolean; text: string }>
   >;
   getSemanticDiagnostics(): Promise<
