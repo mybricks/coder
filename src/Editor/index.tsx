@@ -121,7 +121,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
       async transform(
         options?: Partial<{ ignores: string[]; semantic: boolean }>
       ) {
-        if (!editorRef.current) return [];
+        if (!editorRef.current || !monaco) return [];
         if (lang !== "javascript" && lang !== "typescript")
           return editorRef.current.getValue();
         const { ignores = [], semantic } = options ?? {};
@@ -139,7 +139,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
         return (await client.getEmitOutput(uri)).outputFiles;
       },
       async getSemanticDiagnostics() {
-        if (!editorRef.current) return [];
+        if (!editorRef.current || !monaco) return [];
         const client = await getWorkerService();
         const model = editorRef.current.getModel(path);
         const uri = model.uri.toString();
@@ -160,7 +160,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     const serviceWorker = await worker(uri);
     const client = await serviceWorker();
     return client;
-  }, [lang, isMounted, editorRef.current]);
+  }, [monaco, lang, editorRef.current]);
 
   useLayoutEffect(() => {
     if (loaderConfig) {
