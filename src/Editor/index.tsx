@@ -20,9 +20,14 @@ import { DefaultCoderOptions } from "./options";
 import { merge, getLinter, getBabel, versionLog } from "../util";
 import type { TransformOptions } from "@babel/core";
 import { registerEvents, Handle } from "./registerEvents";
-import type { editor } from "monaco-types";
+import type {
+  StandaloneCodeEditor,
+  ModelContentChangedEvent,
+  editor,
+} from "../types";
 import { JsxTheme, Theme } from "./jsxTheme";
 import "./index.css";
+import { registerCopilot } from "./copilot";
 
 export interface CoderProps extends EditorProps {
   extraLib?: string;
@@ -40,13 +45,13 @@ export interface CoderProps extends EditorProps {
     standalone?: string;
     options?: TransformOptions;
   };
-  onBlur?: (editor: editor) => void;
-  onFocus?: (editor: editor) => void;
+  onBlur?: (editor: StandaloneCodeEditor) => void;
+  onFocus?: (editor: StandaloneCodeEditor) => void;
 }
 
 export type HandlerType = {
   monaco: Monaco;
-  editor: editor;
+  editor: StandaloneCodeEditor;
   format(): void;
   compile(value?: string, options?: TransformOptions): Promise<string>;
   transform(
@@ -80,7 +85,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   const lang = language ?? defaultLanguage;
 
   const [isMounted, setMounted] = useState<boolean>(false);
-  const editorRef = useRef<editor>();
+  const editorRef = useRef<StandaloneCodeEditor>();
   const eventListenRef = useRef<Array<Handle>>([]);
   const monaco = useMonaco();
   const linterRef = useRef<any>();
@@ -170,6 +175,14 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
 
   versionLog();
 
+  // useEffect(() => {
+  //   if (!monaco || !editorRef.current) return;
+  //   const dispose = registerCopilot(monaco, editorRef.current, { language: lang });
+  //   return () => {
+  //     dispose();
+  //   };
+  // }, [monaco, editorRef.current, lang]);
+
   useEffect(() => {
     if (
       ![Language.Javascript, Language.Typescript].includes(lang as Language) ||
@@ -206,7 +219,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     }
   }, [theme]);
 
-  const onMount = (editor: editor, monaco: Monaco) => {
+  const onMount = (editor: StandaloneCodeEditor, monaco: Monaco) => {
     setMounted(true);
     editorRef.current = editor;
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
@@ -276,21 +289,21 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   );
 
   const onDidFocusEditorText = useCallback(
-    (editor: editor) => {
+    (editor: StandaloneCodeEditor) => {
       typeof _props.onFocus === "function" && _props.onFocus(editor);
     },
     [_props.onFocus]
   );
 
   const onDidBlurEditorText = useCallback(
-    (editor: editor) => {
+    (editor: StandaloneCodeEditor) => {
       typeof _props.onBlur === "function" && _props.onBlur(editor);
     },
     [_props.onBlur]
   );
 
   const onChange = useCallback(
-    (value: string | undefined, e: editor.IModelContentChangedEvent) => {
+    (value: string | undefined, e: ModelContentChangedEvent) => {
       markerEditor(value);
       typeof _props.onChange === "function" && _props.onChange(value, e);
     },
@@ -310,4 +323,4 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   );
 });
 
-export { Coder, editor, Theme };
+export { Coder, type editor, Theme };
