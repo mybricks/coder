@@ -1,7 +1,7 @@
 import type { StandaloneCodeEditor } from "../types";
 type EditorEvent = {
-  name: string;
-  callback: (e: Event) => void;
+  name: "onDidFocusEditorText" | "onDidBlurEditorText";
+  callback: () => void;
 };
 export type Handle = {
   dispose(): void;

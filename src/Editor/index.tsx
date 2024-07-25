@@ -7,13 +7,7 @@ import React, {
   useLayoutEffect,
   useState,
 } from "react";
-import {
-  loader,
-  Editor,
-  EditorProps,
-  Monaco,
-  useMonaco,
-} from "@monaco-editor/react";
+import { loader, Editor, EditorProps, useMonaco } from "@monaco-editor/react";
 import { getConfigSetter, Language, getTransformOptions } from "./config";
 import { setJsxHighlight } from "./highlighter";
 import { DefaultCoderOptions } from "./options";
@@ -23,7 +17,9 @@ import { registerEvents, Handle } from "./registerEvents";
 import type {
   StandaloneCodeEditor,
   ModelContentChangedEvent,
-  editor,
+  Diagnostic,
+  Monaco,
+  EmitOutput,
 } from "../types";
 import { JsxTheme, Theme } from "./jsxTheme";
 import "./index.css";
@@ -50,26 +46,18 @@ export interface CoderProps extends EditorProps {
 }
 
 export type HandlerType = {
-  monaco: Monaco;
+  monaco: Monaco | null;
   editor: StandaloneCodeEditor;
   format(): void;
   compile(value?: string, options?: TransformOptions): Promise<string>;
   transform(
     options?: Partial<{ ignores: string[]; semantic: boolean }>
-  ): Promise<
-    Array<{ name: string; writeByteOrderMark: boolean; text: string }>
-  >;
-  getSemanticDiagnostics(): Promise<
-    Array<{
-      category: number;
-      messageText: string;
-      code: number;
-      start: number;
-    }>
-  >;
+  ): Promise<EmitOutput["outputFiles"] | Diagnostic[]>;
+  getSemanticDiagnostics(): Promise<Diagnostic[]>;
 };
 
 const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
+  //@ts-ignore
   const _props = merge<CoderProps>(DefaultCoderOptions, props);
   const {
     extraLib,
@@ -95,19 +83,18 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     ref,
     () => ({
       monaco,
-      editor: editorRef.current,
+      editor: editorRef.current!,
       format() {
-        if (!editorRef.current) return;
-        editorRef.current._actions.get("editor.action.formatDocument")._run();
+        editorRef.current!.getAction("editor.action.formatDocument")!.run();
       },
       async compile(value?: string, options?: TransformOptions) {
-        value = value ?? editorRef.current.getValue();
+        value = value ?? editorRef.current!.getValue();
         if (
           !value ||
           ![Language.Javascript, Language.Typescript].includes(
             lang as Language
           ) ||
-          !!_props.options.readOnly
+          !!_props.options!.readOnly
         )
           return value;
         try {
@@ -126,12 +113,15 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
       async transform(
         options?: Partial<{ ignores: string[]; semantic: boolean }>
       ) {
-        if (!editorRef.current || !monaco) return [];
-        if (lang !== "javascript" && lang !== "typescript")
-          return editorRef.current.getValue();
+        if (
+          !editorRef.current ||
+          !monaco ||
+          (lang !== "javascript" && lang !== "typescript")
+        )
+          return [];
         const { ignores = [], semantic } = options ?? {};
-        const model = editorRef.current.getModel(path);
-        const uri = model.uri.toString();
+        const model = editorRef.current.getModel();
+        const uri = model!.uri.toString();
         const client = await getWorkerService();
         if (semantic) {
           const semantics = (await client.getSemanticDiagnostics(uri)).filter(
@@ -146,8 +136,8 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
       async getSemanticDiagnostics() {
         if (!editorRef.current || !monaco) return [];
         const client = await getWorkerService();
-        const model = editorRef.current.getModel(path);
-        const uri = model.uri.toString();
+        const model = editorRef.current.getModel();
+        const uri = model!.uri.toString();
         const semantics = await client.getSemanticDiagnostics(uri);
         return semantics;
       },
@@ -156,13 +146,8 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   );
 
   const getWorkerService = useCallback(async () => {
-    const model = editorRef.current.getModel(path);
-    const uri = model.uri.toString();
-    const worker =
-      lang === "javascript"
-        ? monaco.languages.javascript.getJavaScriptWorker
-        : monaco.languages.typescript.getTypeScriptWorker;
-    const serviceWorker = await worker(uri);
+    const worker = monaco!.languages.typescript.getTypeScriptWorker;
+    const serviceWorker = await worker();
     const client = await serviceWorker();
     return client;
   }, [monaco, lang, editorRef.current]);
@@ -202,7 +187,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
 
   useEffect(() => {
     if (!monaco || !isMounted || !isTsx) return;
-    const highLightHandler = setJsxHighlight(editorRef.current, monaco);
+    const highLightHandler = setJsxHighlight(editorRef.current!, monaco);
     return () => {
       typeof highLightHandler === "function" && highLightHandler();
     };
@@ -281,7 +266,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
               message: `${message}`,
               severity: 3,
             }));
-          monaco.editor.setModelMarkers(model, "ESlint", markers);
+          monaco.editor.setModelMarkers(model!, "ESlint", markers);
         }
       }
     },
@@ -303,9 +288,9 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   );
 
   const onChange = useCallback(
-    (value: string | undefined, e: ModelContentChangedEvent) => {
+    (value: string | undefined, e: ModelContentChangedEvent | null) => {
       markerEditor(value);
-      typeof _props.onChange === "function" && _props.onChange(value, e);
+      typeof _props.onChange === "function" && _props.onChange(value, e!);
     },
     [_props.onChange]
   );
@@ -323,4 +308,4 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   );
 });
 
-export { Coder, type editor, Theme };
+export { Coder, type StandaloneCodeEditor as editor, Theme, useMonaco };

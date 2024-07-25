@@ -115,18 +115,24 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
 
   const transform = async () => {
     try {
-      const ret = await ref.current.transform({semantic: true});
+      const ret = await ref.current.transform({ semantic: true });
       console.log(ret);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   const babel = async () => {
-    if(!ref?.current) return;
+    if (!ref?.current) return;
     const ret = await ref.current.compile();
-    console.log(ret)
-  }
+    console.log(ret);
+  };
+
+  const warning = async () => {
+    if (!ref?.current) return;
+    const ret = await ref.current.getSemanticDiagnostics();
+    console.log(ret);
+  };
 
   return (
     <>
@@ -198,6 +204,9 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
       </Tabs>
       <Button onClick={transform}>transform</Button>
       <Button onClick={babel}>babel</Button>
+      <Button type="dashed" onClick={warning}>
+        warning
+      </Button>
     </>
   );
 });

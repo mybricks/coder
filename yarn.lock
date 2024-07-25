@@ -2658,15 +2658,15 @@ minimist@^1.2.6:
   resolved "https://npm.corp.kuaishou.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
+monaco-editor@^0.50.0:
+  version "0.50.0"
+  resolved "https://npm.corp.kuaishou.com/monaco-editor/-/monaco-editor-0.50.0.tgz#44e62b124c8aed224e1d310bbbe6ffd6d5122413"
+  integrity sha512-8CclLCmrRRh+sul7C08BmPBP3P8wVWfBHomsTcndxg5NRCEPfu/mc2AGU8k37ajjDVXcXFc12ORAMUkmk+lkFA==
+
 monaco-jsx-syntax-highlight@^1.2.0:
   version "1.2.0"
   resolved "https://npm.corp.kuaishou.com/monaco-jsx-syntax-highlight/-/monaco-jsx-syntax-highlight-1.2.0.tgz#cc2e69fa9918693a4f1ceb18b972f662a51c454b"
   integrity sha512-sKzfmNMxLp3Dcwndz0F/EdP3rqe+Z6FbDPazj+/ByNbqoXWkzgb/ocat8h3vpiTwPPiDtSHidT0BFMvLkMtG8A==
-
-monaco-types@^0.1.0:
-  version "0.1.0"
-  resolved "https://npm.corp.kuaishou.com/monaco-types/-/monaco-types-0.1.0.tgz#3a3066aba499cb5923cd60efc736f3f14a169e10"
-  integrity sha512-aWK7SN9hAqNYi0WosPoMjenMeXJjwCxDibOqWffyQ/qXdzB/86xshGQobRferfmNz7BSNQ8GB0MD0oby9/5fTQ==
 
 ms@2.1.2:
   version "2.1.2"
