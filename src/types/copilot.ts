@@ -5,5 +5,5 @@ export type CopilotResult = Array<{
 
 export type CopilotOptions = {
   language: string;
-  getCompletions: () => Promise<CopilotResult>;
+  request: Request
 };

@@ -23,7 +23,6 @@ import type {
 } from "../types";
 import { JsxTheme, Theme } from "./jsxTheme";
 import "./index.css";
-import { registerCopilot } from "./copilot";
 
 export interface CoderProps extends EditorProps {
   extraLib?: string;
@@ -68,7 +67,6 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     eslint,
     theme,
     babel,
-    path,
   } = _props;
   const lang = language ?? defaultLanguage;
 
@@ -159,14 +157,6 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   }, [loaderConfig]);
 
   versionLog();
-
-  // useEffect(() => {
-  //   if (!monaco || !editorRef.current) return;
-  //   const dispose = registerCopilot(monaco, editorRef.current, { language: lang });
-  //   return () => {
-  //     dispose();
-  //   };
-  // }, [monaco, editorRef.current, lang]);
 
   useEffect(() => {
     if (
