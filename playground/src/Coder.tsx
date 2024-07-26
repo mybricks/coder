@@ -155,9 +155,9 @@ export default forwardRef<any, HandlerType>(
           "",
           {
             headers: {
-              "x-dmo-provider": "kwaipilot",
-              "x-dmo-username": "tangxiaoxin",
-              authorization: "Bearer mbjuOzymwpWZEO",
+              "x-dmo-provider": "",
+              "x-dmo-username": "",
+              authorization: "Bearer ",
               "Content-Type": "application/json",
             },
           }
