@@ -152,7 +152,7 @@ export default forwardRef<any, HandlerType>(
       const dispose = registerCopilot(monaco, editor, {
         language: "typescript",
         request: new Request(
-          "https://ai-gateway.corp.kuaishou.com/v2/code/completions",
+          "",
           {
             headers: {
               "x-dmo-provider": "kwaipilot",
