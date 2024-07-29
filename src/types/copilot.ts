@@ -1,3 +1,4 @@
+import { type EditorInlineCompletion } from "./editor";
 export enum LanguageMapToSuffix {
   typescript = ".ts",
   javascript = ".js",
@@ -24,11 +25,19 @@ export type CopilotParams = Partial<{
 
 export type CopilotResult = Array<{
   code: string;
-  insertText?: string;
+  insertText: string;
   extra?: { modelVersion: string; modelType: string };
+}>;
+
+export type CbParams = Partial<{
+  codeBeforeCursor: string;
+  codeAfterCursor: string;
+  completion: EditorInlineCompletion;
 }>;
 
 export type CopilotOptions = {
   language: LanguageType;
   request: Request;
+  onAcceptCompletion?: (params: CbParams) => void;
+  onFreeCompletion?: (params: CbParams) => void;
 };

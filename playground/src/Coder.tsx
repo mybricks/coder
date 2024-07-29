@@ -108,61 +108,29 @@ export default forwardRef<any, HandlerType>(
 
     const [open, setOpen] = useState<boolean>(false);
 
-    const getCompletions = useCallback(async ({ codeBeforeCursor }) => {
-      return fetch("/copilot/v2/code/completions", {
-        method: "POST",
-        headers: {
-          "x-dmo-provider": "kwaipilot",
-          "Content-Type": "application/json",
-          "x-dmo-username": "tangxiaoxin",
-          authorization: "Bearer mbjuOzymwpWZEO",
-        },
-        body: JSON.stringify({
-          path: "index.ts",
-          codeBeforeCursor,
-          stream: false,
-        }),
-      })
-        .then(async (res) => {
-          const ret = await res.json();
-          console.log(ret);
-          return ret.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      // return new Promise((resolve) => {
-      //   setTimeout(() => {
-      //     resolve([
-      //       {
-      //         code: `export const getServerSideProps = async () => {
-      //       console.log("Dashboard getServerSideProps");
-      //       return {
-      //         props: {},
-      //       };
-      //     };`,
-      //       },
-      //     ]);
-      //   }, 100);
-      // });
-    }, []);
 
     useEffect(() => {
       if (!monaco || !editor) return;
       const dispose = registerCopilot(monaco, editor, {
         language: "typescript",
         request: new Request(
-          "https://ai-gateway.corp.kuaishou.com/v2/code/completions",
+          "",
           {
             method: "POST",
             headers: {
-              "x-dmo-provider": "kwaipilot",
-              "x-dmo-username": "tangxiaoxin",
-              authorization: "Bearer mbjuOzymwpWZEO",
+              "x-dmo-provider": "",
+              "x-dmo-username": "",
+              authorization: "Bearer ",
               "Content-Type": "application/json",
             },
           }
         ),
+        onAcceptCompletion(params) {
+            console.log('-----accept------',params)
+        },
+        onFreeCompletion(params) {
+            console.log('-----free------',params)
+        },
       });
       return () => {
         dispose();

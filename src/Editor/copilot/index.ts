@@ -10,6 +10,8 @@ import type {
   CopilotOptions,
   CopilotResult,
   CopilotParams,
+  EditorInlineCompletion,
+  CbParams,
 } from "../../types";
 import { debounce } from "../../util";
 import {
@@ -17,7 +19,6 @@ import {
   getFileName,
   getCursorTextInAround,
 } from "./common";
-import { languages } from "monaco-editor";
 import { getFormatter } from "./format";
 import CompletionCache from "./cache";
 
@@ -30,9 +31,7 @@ class CopilotCompleter implements InlineCompletionProvider {
     private readonly monaco: Monaco,
     private readonly editor: StandaloneCodeEditor,
     private readonly options: CopilotOptions,
-    private readonly onCompletionShow: (
-      item: languages.InlineCompletion
-    ) => void
+    private readonly onCompletionShow: (params: CbParams) => void
   ) {
     this.getCompletions = debounce(
       ({ codeBeforeCursor, codeAfterCursor }: CopilotParams) => {
@@ -76,39 +75,70 @@ class CopilotCompleter implements InlineCompletionProvider {
     if (token.isCancellationRequested || acceptCompletion) {
       return createInlineCompletionResult([]);
     }
+    const range = new this.monaco.Range(
+      position.lineNumber,
+      position.column,
+      position.lineNumber,
+      position.column
+    );
+    const { codeBeforeCursor, codeAfterCursor } = getCursorTextInAround(
+      model,
+      position
+    );
+    const cache = new CompletionCache<CopilotResult>(10);
+    const cacheKey = { range, textBeforeCursorInline: codeBeforeCursor };
+    const cachedCompletions = cache.getCompletion(cacheKey);
+    if (cachedCompletions?.length) {
+      return createInlineCompletionResult(cachedCompletions);
+    }
     try {
-      const { codeBeforeCursor, codeAfterCursor } = getCursorTextInAround(
-        model,
-        position
-      );
       const completions = await this.getCompletions({
         codeBeforeCursor,
         codeAfterCursor,
       });
-      const range = new this.monaco.Range(
-        position.lineNumber,
-        position.column,
-        position.lineNumber,
-        position.column
-      );
+
       const format = getFormatter(model, position, range);
-      const result = createInlineCompletionResult(format(completions ?? []));
-      console.log("------result------", result);
-      return result;
+      const inlineCompletions = createInlineCompletionResult(
+        format(completions ?? [])
+      );
+      //@ts-ignore
+      cache.setCompletion(cacheKey, inlineCompletions);
+      return inlineCompletions;
     } catch (error) {
       console.error(error);
       return createInlineCompletionResult([]);
     }
   }
   freeInlineCompletions(completions: EditorInlineCompletionsResult) {
-    // console.log(completions);
+    if(acceptCompletion) return;
+    const model = this.editor.getModel();
+    const position = this.editor.getPosition();
+    const { codeBeforeCursor, codeAfterCursor } = getCursorTextInAround(
+      model!,
+      position!
+    );
+    this.options.onFreeCompletion?.({
+      codeAfterCursor,
+      codeBeforeCursor,
+      completion: completions.items[0],
+    });
   }
   handleItemDidShow(
-    completions: languages.InlineCompletions<languages.InlineCompletion>,
-    item: languages.InlineCompletion,
+    completions: EditorInlineCompletionsResult,
+    item: EditorInlineCompletion,
     updatedInsertText: string
   ): void {
-    this.onCompletionShow(item);
+    const model = this.editor.getModel();
+    const position = this.editor.getPosition();
+    const { codeBeforeCursor, codeAfterCursor } = getCursorTextInAround(
+      model!,
+      position!
+    );
+    this.onCompletionShow({
+      codeBeforeCursor,
+      codeAfterCursor,
+      completion: item,
+    });
   }
 }
 
@@ -117,9 +147,11 @@ export const registerCopilot = (
   editor: StandaloneCodeEditor,
   options: CopilotOptions
 ) => {
-  let completionShow = false;
-  const onCompletionShow = (item: languages.InlineCompletion) => {
+  let completionShow = false,
+    showCompletion!: CbParams;
+  const onCompletionShow = (p: CbParams) => {
     completionShow = true;
+    showCompletion = p;
   };
   const inlineCompletionsProvider =
     monaco.languages.registerInlineCompletionsProvider(
@@ -134,6 +166,7 @@ export const registerCopilot = (
     ) {
       completionShow = false;
       acceptCompletion = true;
+      options.onAcceptCompletion?.(showCompletion);
     } else {
       acceptCompletion = false;
     }

@@ -80,7 +80,7 @@ export const getFormatter = (
   return (completions: CopilotResult) => {
     return completions.map((it) => ({
       insertText: formatter.format(it.code),
-      range: formatter.computeRange(),
+      range,
     }));
   };
 };
