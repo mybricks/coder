@@ -152,12 +152,13 @@ export default forwardRef<any, HandlerType>(
       const dispose = registerCopilot(monaco, editor, {
         language: "typescript",
         request: new Request(
-          "",
+          "https://ai-gateway.corp.kuaishou.com/v2/code/completions",
           {
+            method: "POST",
             headers: {
-              "x-dmo-provider": "",
-              "x-dmo-username": "",
-              authorization: "Bearer ",
+              "x-dmo-provider": "kwaipilot",
+              "x-dmo-username": "tangxiaoxin",
+              authorization: "Bearer mbjuOzymwpWZEO",
               "Content-Type": "application/json",
             },
           }

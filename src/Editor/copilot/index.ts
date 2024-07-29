@@ -13,6 +13,7 @@ import type {
 import { debounce } from "../../util";
 import { createInlineCompletionResult } from "./common";
 import { languages } from "monaco-editor";
+import { getFormatter } from "./format";
 
 let acceptCompletion = false;
 
@@ -38,8 +39,7 @@ class CopilotCompleter implements InlineCompletionProvider {
           this.controller.abort();
         }
         this.controller = new AbortController();
-        return fetch(request.url, {
-          ...request,
+        return fetch(request, {
           signal: this.controller.signal,
           body: JSON.stringify({
             path: "index.ts",
@@ -55,8 +55,10 @@ class CopilotCompleter implements InlineCompletionProvider {
             }
             throw Error(res.statusText);
           })
-          .catch((err) => {
-            console.error(err);
+          .catch((error) => {
+            if (error.name !== "AbortError") {
+              console.error(error);
+            }
           })
           .finally(() => {
             this.controller = null;
@@ -74,29 +76,20 @@ class CopilotCompleter implements InlineCompletionProvider {
       return createInlineCompletionResult([]);
     }
     const text = model.getValue();
-    const range = new this.monaco.Range(
-      position.lineNumber,
-      position.column,
-      position.lineNumber,
-      position.column
-    );
-    const completions = await this.getCompletions({ codeBeforeCursor: text });
-    console.log("---------", completions);
-    return {
-      items: [
-        {
-          insertText: {
-            snippet: `export const getServerSideProps = async () => {
-            console.log("Dashboard getServerSideProps");
-            return {
-              props: {},
-            };
-          };`,
-          },
-          range,
-        },
-      ],
-    };
+    try {
+      const completions = await this.getCompletions({ codeBeforeCursor: text });
+      const range = new this.monaco.Range(
+        position.lineNumber,
+        position.column,
+        position.lineNumber,
+        position.column
+      );
+      const format = getFormatter(model, position, range);
+      return createInlineCompletionResult(format(completions ?? []));
+    } catch (error) {
+      console.error(error);
+      return createInlineCompletionResult([]);
+    }
   }
   freeInlineCompletions(completions: EditorInlineCompletionsResult) {
     // console.log(completions);

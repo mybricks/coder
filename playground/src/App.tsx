@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { Switch } from "antd";
 import styles from "./App.module.less";
 import Editor from "./Coder";

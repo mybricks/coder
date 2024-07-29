@@ -1,5 +1,6 @@
 export type CopilotResult = Array<{
   code: string;
+  insertText?: string;
   extra?: { modelVersion: string; modelType: string };
 }>;
 
