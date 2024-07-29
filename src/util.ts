@@ -133,3 +133,16 @@ export const debounce = <F extends (...args: any[]) => Promise<any>>(
     });
   };
 };
+
+export const singleton = <T extends Object>(className: T) => {
+  let ins: T;
+  return new Proxy(className, {
+    construct(target, arg) {
+      if (ins) {
+        return ins;
+      }
+      //@ts-ignore
+      return (ins = new target(...arg));
+    },
+  });
+};

@@ -9,40 +9,41 @@ import type {
   EditorInlineCompletionsResult,
   CopilotOptions,
   CopilotResult,
+  CopilotParams,
 } from "../../types";
 import { debounce } from "../../util";
-import { createInlineCompletionResult } from "./common";
+import {
+  createInlineCompletionResult,
+  getFileName,
+  getCursorTextInAround,
+} from "./common";
 import { languages } from "monaco-editor";
 import { getFormatter } from "./format";
+import CompletionCache from "./cache";
 
 let acceptCompletion = false;
 
 class CopilotCompleter implements InlineCompletionProvider {
-  getCompletions: (args: {
-    codeBeforeCursor: string;
-  }) => Promise<CopilotResult>;
+  getCompletions: (args: CopilotParams) => Promise<CopilotResult>;
   private controller!: AbortController | null;
   constructor(
     private readonly monaco: Monaco,
     private readonly editor: StandaloneCodeEditor,
-    private readonly request: CopilotOptions["request"],
+    private readonly options: CopilotOptions,
     private readonly onCompletionShow: (
       item: languages.InlineCompletion
     ) => void
   ) {
     this.getCompletions = debounce(
-      ({
-        codeBeforeCursor,
-        codeAfterCursor,
-      }: Partial<{ codeBeforeCursor: string; codeAfterCursor: string }>) => {
+      ({ codeBeforeCursor, codeAfterCursor }: CopilotParams) => {
         if (this.controller) {
           this.controller.abort();
         }
         this.controller = new AbortController();
-        return fetch(request, {
+        return fetch(options.request, {
           signal: this.controller.signal,
           body: JSON.stringify({
-            path: "index.ts",
+            path: getFileName(options.language),
             codeBeforeCursor,
             codeAfterCursor,
             stream: false,
@@ -75,9 +76,15 @@ class CopilotCompleter implements InlineCompletionProvider {
     if (token.isCancellationRequested || acceptCompletion) {
       return createInlineCompletionResult([]);
     }
-    const text = model.getValue();
     try {
-      const completions = await this.getCompletions({ codeBeforeCursor: text });
+      const { codeBeforeCursor, codeAfterCursor } = getCursorTextInAround(
+        model,
+        position
+      );
+      const completions = await this.getCompletions({
+        codeBeforeCursor,
+        codeAfterCursor,
+      });
       const range = new this.monaco.Range(
         position.lineNumber,
         position.column,
@@ -85,7 +92,9 @@ class CopilotCompleter implements InlineCompletionProvider {
         position.column
       );
       const format = getFormatter(model, position, range);
-      return createInlineCompletionResult(format(completions ?? []));
+      const result = createInlineCompletionResult(format(completions ?? []));
+      console.log("------result------", result);
+      return result;
     } catch (error) {
       console.error(error);
       return createInlineCompletionResult([]);
@@ -115,7 +124,7 @@ export const registerCopilot = (
   const inlineCompletionsProvider =
     monaco.languages.registerInlineCompletionsProvider(
       options.language,
-      new CopilotCompleter(monaco, editor, options.request, onCompletionShow)
+      new CopilotCompleter(monaco, editor, options, onCompletionShow)
     );
   editor.onKeyDown((e) => {
     if (

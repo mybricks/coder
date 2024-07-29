@@ -22,10 +22,6 @@ class FormatterCompletion {
     return this;
   }
 
-  private normalize(text: string) {
-    return text.trim() ?? "";
-  }
-
   private removeInvalidLineBreaks() {
     this.formattedCompletion = this.formattedCompletion.trimEnd();
     return this;
