@@ -126,10 +126,10 @@ export default forwardRef<any, HandlerType>(
           }
         ),
         onAcceptCompletion(params) {
-            console.log('-----accept------',params)
+            console.log('accept',params)
         },
         onFreeCompletion(params) {
-            console.log('-----free------',params)
+            console.log('free',params)
         },
       });
       return () => {

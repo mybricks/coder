@@ -85,12 +85,6 @@ class CopilotCompleter implements InlineCompletionProvider {
       model,
       position
     );
-    const cache = new CompletionCache<CopilotResult>(10);
-    const cacheKey = { range, textBeforeCursorInline: codeBeforeCursor };
-    const cachedCompletions = cache.getCompletion(cacheKey);
-    if (cachedCompletions?.length) {
-      return createInlineCompletionResult(cachedCompletions);
-    }
     try {
       const completions = await this.getCompletions({
         codeBeforeCursor,
@@ -101,8 +95,6 @@ class CopilotCompleter implements InlineCompletionProvider {
       const inlineCompletions = createInlineCompletionResult(
         format(completions ?? [])
       );
-      //@ts-ignore
-      cache.setCompletion(cacheKey, inlineCompletions);
       return inlineCompletions;
     } catch (error) {
       console.error(error);
@@ -110,7 +102,7 @@ class CopilotCompleter implements InlineCompletionProvider {
     }
   }
   freeInlineCompletions(completions: EditorInlineCompletionsResult) {
-    if(acceptCompletion) return;
+    if (acceptCompletion || !completions.items.length) return;
     const model = this.editor.getModel();
     const position = this.editor.getPosition();
     const { codeBeforeCursor, codeAfterCursor } = getCursorTextInAround(
