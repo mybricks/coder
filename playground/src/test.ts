@@ -29,12 +29,12 @@ const request = (task) => {
 };
 
 const task = () => {
-  return fetch("https://ai-gateway.corp.kuaishou.com/v2/code/completions", {
+  return fetch("", {
     method: "POST",
     headers: {
-      "x-dmo-provider": "kwaipilot",
-      "x-dmo-username": "tangxiaoxin",
-      authorization: "Bearer mbjuOzymwpWZEO",
+      "x-dmo-provider": "",
+      "x-dmo-username": "",
+      authorization: "",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
