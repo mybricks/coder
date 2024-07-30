@@ -250,7 +250,7 @@ interface CoderProps extends EditorProps {
   }>;
   comment?: Partial<{
     value: string;
-     /**
+    /**
      * Comment Editor height
      * @default 100%
      */
@@ -266,6 +266,40 @@ interface CoderProps extends EditorProps {
   children?: React.ReactElement;
   wrapperClassName?: string;
 }
+```
+
+## AI
+
+```ts
+import { registerCopilot } from "@mybricks/coder";
+
+useEffect(() => {
+  if (!monaco || !editor) return;
+  const dispose = registerCopilot(monaco, editor, {
+    language: "typescript",
+    request: new Request(
+      "ai代码续写服务接口",
+      {
+        method: "POST",
+        headers: {
+          "x-dmo-provider": "大模型",
+          "x-dmo-username": "用户名",
+          authorization: "鉴权",
+          "Content-Type": "application/json",
+        },
+      }
+    ),
+    onAcceptCompletion(params) {
+      console.log("accept", params);
+    },
+    onFreeCompletion(params) {
+      console.log("free", params);
+    },
+  });
+  return () => {
+    dispose();
+  };
+}, [monaco, editor]);
 ```
 
 ## Playground

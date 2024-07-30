@@ -113,3 +113,36 @@ export const getLinter = async (eslint: string | undefined) => {
 export const executeChain = (fns: Array<() => void>) => {
   fns.reduce((chain, fn) => chain.then(fn), Promise.resolve());
 };
+
+export const debounce = <F extends (...args: any[]) => Promise<any>>(
+  fn: F,
+  delay: number = 200
+) => {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  return (...args: Parameters<F>): Promise<any> => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    return new Promise((resolve, reject) => {
+      timeoutId = setTimeout(() => {
+        timeoutId = null;
+        fn(...args)
+          .then(resolve)
+          .catch(reject);
+      }, delay);
+    });
+  };
+};
+
+export const singleton = <T extends Object>(className: T) => {
+  let ins: T;
+  return new Proxy(className, {
+    construct(target, arg) {
+      if (ins) {
+        return ins;
+      }
+      //@ts-ignore
+      return (ins = new target(...arg));
+    },
+  });
+};

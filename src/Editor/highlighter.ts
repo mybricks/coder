@@ -1,11 +1,11 @@
 import type { Monaco } from "@monaco-editor/react";
-import type { editor } from "monaco-types";
+import type { StandaloneCodeEditor } from "../types";
 import {
   MonacoJsxSyntaxHighlight,
   getWorker,
 } from "monaco-jsx-syntax-highlight";
 
-export const setJsxHighlight = (editor: editor, monaco: Monaco) => {
+export const setJsxHighlight = (editor: StandaloneCodeEditor, monaco: Monaco) => {
   const monacoJsxSyntaxHighlight = new MonacoJsxSyntaxHighlight(
     getWorker(),
     monaco

@@ -1,6 +1,18 @@
-import { forwardRef, useEffect, useReducer, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { Button, Tabs } from "antd";
-import Editor, { Icon } from "../../src";
+import Editor, {
+  Icon,
+  registerCopilot,
+  type HandlerType,
+  Monaco,
+  editor,
+} from "../../src";
 import css from "./App.module.less";
 
 const items = [
@@ -74,103 +86,125 @@ const reducer = (state: any, action: { type: string; value: any }) => {
   }
 };
 
-export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
-  const [state, dispatch] = useReducer(reducer, { items, tab: "ts" });
+export default forwardRef<any, HandlerType>(
+  ({ theme = "vs-dark", onPreview }, ref) => {
+    const [state, dispatch] = useReducer(reducer, { items, tab: "ts" });
+    const [editor, setEditor] = useState<editor>();
+    const [monaco, setMonaco] = useState<Monaco>();
 
-  const onChange = (value: string | undefined, e: any) => {
-    console.log("----onChange------");
-    dispatch({ type: "onChange", value });
-  };
+    const onChange = (value: string | undefined, e: any) => {
+      console.log("----onChange------");
+      dispatch({ type: "onChange", value });
+    };
 
-  const onTabChange = (activeKey: string) => {
-    dispatch({ type: "onTabChange", value: activeKey });
-  };
+    const onTabChange = (activeKey: string) => {
+      dispatch({ type: "onTabChange", value: activeKey });
+    };
 
-  const onBlur = (editor) => {
-    console.log("blur");
-    dispatch({ type: "onChange", value: editor.getValue() });
-  };
+    const onBlur = (editor) => {
+      console.log("blur");
+      dispatch({ type: "onChange", value: editor.getValue() });
+    };
 
-  const [open, setOpen] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    setTimeout(async () => {
-      if (ref!.current!.monaco) {
-        const ret = await ref.current.transform();
+
+    useEffect(() => {
+      if (!monaco || !editor) return;
+      const dispose = registerCopilot(monaco, editor, {
+        language: "typescript",
+        request: new Request(
+          "",
+          {
+            method: "POST",
+            headers: {
+              "x-dmo-provider": "",
+              "x-dmo-username": "",
+              authorization: "Bearer ",
+              "Content-Type": "application/json",
+            },
+          }
+        ),
+        onAcceptCompletion(params) {
+            console.log('accept',params)
+        },
+        onFreeCompletion(params) {
+            console.log('free',params)
+        },
+      });
+      return () => {
+        dispose();
+      };
+    }, [monaco, editor]);
+
+    const transform = async () => {
+      try {
+        const ret = await ref.current.transform({ semantic: true });
         console.log(ret);
-        // const model = ref.current.editor.getModel("index.ts");
-        // const uri = model.uri.toString()
-        // const worker =
-        //   ref!.current!.monaco.languages.typescript.getTypeScriptWorker;
-        // worker(uri).then((serviceWorker) => {
-        //   serviceWorker().then((res) => {
-        //     res.getEmitOutput(uri).then((code) => {
-        //       console.log(code);
-        //     });
-        //   });
-        // });
+      } catch (error) {
+        console.log(error);
       }
-    }, 100);
-  }, []);
+    };
 
-  const transform = async () => {
-    try {
-      const ret = await ref.current.transform({semantic: true});
+    const babel = async () => {
+      if (!ref?.current) return;
+      const ret = await ref.current.compile();
       console.log(ret);
-    } catch (error) {
-      console.log(error)
-    }
-  };
+    };
 
-  const babel = async () => {
-    if(!ref?.current) return;
-    const ret = await ref.current.compile();
-    console.log(ret)
-  }
+    const warning = async () => {
+      if (!ref?.current) return;
+      const ret = await ref.current.getSemanticDiagnostics();
+      console.log(ret);
+    };
 
-  return (
-    <>
-      <Tabs
-        style={{ width: "50%" }}
-        tabPosition="left"
-        onChange={onTabChange}
-        destroyInactiveTabPane
-      >
-        {state.items.map(({ label, key, ...rest }) => (
-          <Tabs.TabPane tab={label} key={key} style={{ height: 800 }}>
-            <Editor
-              key={key}
-              ref={ref}
-              {...rest}
-              // onChange={onChange}
-              // height={800}
-              theme={theme}
-              onBlur={onBlur}
-              modal={{
-                inside: true,
-                maskClosable: true,
-              }}
-              format={true}
-              toolbar={
-                <>
-                  <Icon
-                    name="format"
-                    onClick={() => {
-                      ref.current.format();
-                    }}
-                  />
-                  {rest.isTsx && (
+    return (
+      <>
+        <Tabs
+          style={{ width: "50%" }}
+          tabPosition="left"
+          onChange={onTabChange}
+          destroyInactiveTabPane
+        >
+          {state.items.map(({ label, key, ...rest }) => (
+            <Tabs.TabPane tab={label} key={key} style={{ height: 800 }}>
+              <Editor
+                key={key}
+                ref={ref}
+                {...rest}
+                // onChange={onChange}
+                // height={800}
+                theme={theme}
+                onBlur={onBlur}
+                onMount={(editor, monaco) => {
+                  setEditor(editor);
+                  setMonaco(monaco);
+                }}
+                modal={{
+                  inside: true,
+                  maskClosable: true,
+                }}
+                format={true}
+                toolbar={
+                  <>
                     <Icon
-                      name="preview"
+                      name="format"
                       onClick={() => {
-                        onPreview();
+                        ref.current.format();
                       }}
                     />
-                  )}
-                </>
-              }
-              comment={{
-                value: `/**
+                    {rest.isTsx && (
+                      <Icon
+                        name="preview"
+                        onClick={() => {
+                          onPreview();
+                        }}
+                      />
+                    )}
+                  </>
+                }
+                comment={{
+                  value: `/**
               * @parma inputs: any[] 输入项
               * @parma outputs: any[] 输出项
               *
@@ -190,14 +224,18 @@ export default forwardRef(({ theme = "vs-dark", onPreview }, ref) => {
               *   // output2(inputValue1); 
               * }
               */`,
-                className: css.comment,
-              }}
-            />
-          </Tabs.TabPane>
-        ))}
-      </Tabs>
-      <Button onClick={transform}>transform</Button>
-      <Button onClick={babel}>babel</Button>
-    </>
-  );
-});
+                  className: css.comment,
+                }}
+              />
+            </Tabs.TabPane>
+          ))}
+        </Tabs>
+        <Button onClick={transform}>transform</Button>
+        <Button onClick={babel}>babel</Button>
+        <Button type="dashed" onClick={warning}>
+          warning
+        </Button>
+      </>
+    );
+  }
+);
