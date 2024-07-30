@@ -5,6 +5,7 @@
     "declaration": true,
     "skipLibCheck": true,
     "jsx": "react",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "baseUrl": "./",
