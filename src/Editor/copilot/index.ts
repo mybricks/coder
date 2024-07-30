@@ -18,6 +18,7 @@ import {
   createInlineCompletionResult,
   getFileName,
   getCursorTextInAround,
+  isValidCompletions,
 } from "./common";
 import { getFormatter } from "./format";
 import CompletionCache from "./cache";
@@ -102,7 +103,7 @@ class CopilotCompleter implements InlineCompletionProvider {
     }
   }
   freeInlineCompletions(completions: EditorInlineCompletionsResult) {
-    if (acceptCompletion || !completions.items.length) return;
+    if (acceptCompletion || !isValidCompletions(completions)) return;
     const model = this.editor.getModel();
     const position = this.editor.getPosition();
     const { codeBeforeCursor, codeAfterCursor } = getCursorTextInAround(

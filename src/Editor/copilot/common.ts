@@ -43,3 +43,11 @@ export const getFileName = (language: LanguageType) => {
     LanguageMapToSuffix[language.toLocaleLowerCase() as LanguageType]
   }`;
 };
+
+export const isValidCompletions = (
+  completions: EditorInlineCompletionsResult
+) => {
+  if (completions.items.length === 0) return false;
+  if (!completions.items[0].insertText) return false;
+  return true;
+};
