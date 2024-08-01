@@ -2,6 +2,13 @@ import { type EditorInlineCompletion } from "./editor";
 export enum LanguageMapToSuffix {
   typescript = ".ts",
   javascript = ".js",
+  html = ".html",
+  css = ".css",
+  markdown = ".md",
+  plaintext = ".txt",
+  json = ".json",
+  xml = ".xml",
+  sql = ".sql",
   python = ".py",
   java = ".java",
   kotlin = ".kt",

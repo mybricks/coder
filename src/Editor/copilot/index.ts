@@ -19,6 +19,7 @@ import {
   getFileName,
   getCursorTextInAround,
   isValidCompletions,
+  getBody,
 } from "./common";
 import { getFormatter } from "./format";
 import CompletionCache from "./cache";
@@ -34,6 +35,8 @@ class CopilotCompleter implements InlineCompletionProvider {
     private readonly options: CopilotOptions,
     private readonly onCompletionShow: (params: CbParams) => void
   ) {
+    const path = getFileName(options.language);
+    const body = getBody(options.request);
     this.getCompletions = debounce(
       ({ codeBeforeCursor, codeAfterCursor }: CopilotParams) => {
         if (this.controller) {
@@ -43,10 +46,11 @@ class CopilotCompleter implements InlineCompletionProvider {
         return fetch(options.request, {
           signal: this.controller.signal,
           body: JSON.stringify({
-            path: getFileName(options.language),
+            path,
             codeBeforeCursor,
             codeAfterCursor,
             stream: false,
+            ...body,
           }),
         })
           .then(async (res) => {

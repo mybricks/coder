@@ -51,3 +51,14 @@ export const isValidCompletions = (
   if (!completions.items[0].insertText) return false;
   return true;
 };
+
+export const getBody = (request: Request) => {
+  return request.body
+    ?.getReader()
+    .read()
+    .then(({ done, value }) => {
+      if (done) return;
+      const body = JSON.parse(new TextDecoder().decode(value));
+      return body;
+    });
+};
