@@ -45,6 +45,7 @@ export type CbParams = Partial<{
 export type CopilotOptions = {
   language: LanguageType;
   request: Request;
+  getCompletions?: (res: Response) => Promise<CopilotResult>;
   onAcceptCompletion?: (params: CbParams) => void;
   onFreeCompletion?: (params: CbParams) => void;
 };

@@ -27,7 +27,7 @@ import CompletionCache from "./cache";
 let acceptCompletion = false;
 
 class CopilotCompleter implements InlineCompletionProvider {
-  getCompletions: (args: CopilotParams) => Promise<CopilotResult>;
+  fetchCompletions: (args: CopilotParams) => Promise<CopilotResult>;
   private controller!: AbortController | null;
   constructor(
     private readonly monaco: Monaco,
@@ -36,8 +36,17 @@ class CopilotCompleter implements InlineCompletionProvider {
     private readonly onCompletionShow: (params: CbParams) => void
   ) {
     const path = getFileName(options.language);
-    const body = getBody(options.request);
-    this.getCompletions = debounce(
+    const body = getBody(options.request) ?? {};
+    const getCompletions =
+      options.getCompletions ??
+      (async (res) => {
+        if (res.ok) {
+          const { data: completions } = await res.json();
+          return completions;
+        }
+        throw Error(res.statusText);
+      });
+    this.fetchCompletions = debounce(
       ({ codeBeforeCursor, codeAfterCursor }: CopilotParams) => {
         if (this.controller) {
           this.controller.abort();
@@ -53,13 +62,7 @@ class CopilotCompleter implements InlineCompletionProvider {
             ...body,
           }),
         })
-          .then(async (res) => {
-            if (res.ok) {
-              const { data: completions } = await res.json();
-              return completions;
-            }
-            throw Error(res.statusText);
-          })
+          .then(getCompletions)
           .catch((error) => {
             if (error.name !== "AbortError") {
               console.error(error);
@@ -91,7 +94,7 @@ class CopilotCompleter implements InlineCompletionProvider {
       position
     );
     try {
-      const completions = await this.getCompletions({
+      const completions = await this.fetchCompletions({
         codeBeforeCursor,
         codeAfterCursor,
       });

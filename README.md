@@ -277,18 +277,21 @@ useEffect(() => {
   if (!monaco || !editor) return;
   const dispose = registerCopilot(monaco, editor, {
     language: "typescript",
-    request: new Request(
-      "ai代码续写服务接口",
-      {
-        method: "POST",
-        headers: {
-          "x-dmo-provider": "大模型",
-          "x-dmo-username": "用户名",
-          authorization: "鉴权",
-          "Content-Type": "application/json",
-        },
-      }
-    ),
+    request: new Request("ai代码续写服务接口", {
+      method: "POST",
+      headers: {
+        "x-dmo-provider": "大模型",
+        "x-dmo-username": "用户名",
+        authorization: "鉴权",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        //...自定义请求参数
+      }),
+    }),
+    getCompletions(res) {
+      //自定义response处理
+    },
     onAcceptCompletion(params) {
       console.log("accept", params);
     },
