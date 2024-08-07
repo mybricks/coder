@@ -147,16 +147,16 @@ export default forwardRef<any, HandlerType>(
       const dispose = registerInteraction(monaco, editor, {
         language: "typescript",
         request: new Request(
-          "https://ai-gateway.corp.kuaishou.com/v2/chat/completions",
+          "",
           {
             method: "POST",
             headers: {
-              "x-dmo-provider": "kwaipilot",
-              authorization: "Bearer mbjuOzymwpWZEO",
+              "x-dmo-provider": "",
+              authorization: "Bearer ",
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              model: "kwaipilot-32k",
+              model: "",
               stream: true,
               temperature: 0.1,
             }),
