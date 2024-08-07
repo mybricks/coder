@@ -12,6 +12,7 @@ import Editor, {
   type HandlerType,
   Monaco,
   editor,
+  registerInteraction,
 } from "../../src";
 import css from "./App.module.less";
 
@@ -21,15 +22,24 @@ const items = [
     key: "ts",
     language: "typescript",
     path: "index.ts",
-    value: `type IO = {
-      inputs: Array<Function>
-      outputs: Array<Function>
-    }
-    ({ outputs, inputs }: IO) => {
-      const [ inputValue0 ] = inputs;
-      const [ output0 ] = outputs;
-      output0(inputValue0);
-    }
+    value: `class PageModel {
+  num = 1
+
+  updateNum (): void {
+    this.num = ++this.num
+  }
+  getNum (): number {
+    return this.num
+  }
+
+
+}
+
+function updateNum () {
+  return new Promise((resolve, reject) => {
+    resolve(1)
+  });
+}
     `,
   },
   {
@@ -108,29 +118,50 @@ export default forwardRef<any, HandlerType>(
 
     const [open, setOpen] = useState<boolean>(false);
 
-
     useEffect(() => {
       if (!monaco || !editor) return;
       const dispose = registerCopilot(monaco, editor, {
         language: "typescript",
         request: new Request(
-          "",
+          "https://ai-gateway.corp.kuaishou.com/v2/code/completions",
           {
             method: "POST",
             headers: {
-              "x-dmo-provider": "",
-              "x-dmo-username": "",
-              authorization: "Bearer ",
+              "x-dmo-provider": "kwaipilot",
+              "x-dmo-username": "tangxiaoxin",
+              authorization: "Bearer mbjuOzymwpWZEO",
               "Content-Type": "application/json",
             },
           }
         ),
-        onAcceptCompletion(params) {
-            console.log('accept',params)
-        },
-        onFreeCompletion(params) {
-            console.log('free',params)
-        },
+        onAcceptCompletion(params) {},
+        onFreeCompletion(params) {},
+      });
+      return () => {
+        dispose();
+      };
+    }, [monaco, editor]);
+
+    useEffect(() => {
+      if (!monaco || !editor) return;
+      const dispose = registerInteraction(monaco, editor, {
+        language: "typescript",
+        request: new Request(
+          "https://ai-gateway.corp.kuaishou.com/v2/chat/completions",
+          {
+            method: "POST",
+            headers: {
+              "x-dmo-provider": "kwaipilot",
+              authorization: "Bearer mbjuOzymwpWZEO",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: "kwaipilot-32k",
+              stream: true,
+              temperature: 0.1,
+            }),
+          }
+        ),
       });
       return () => {
         dispose();

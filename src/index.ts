@@ -7,3 +7,4 @@ export { Icon };
 export * from "./Editor/copilot";
 export * from "./types";
 export default Editor;
+export * from "./Editor/interaction";

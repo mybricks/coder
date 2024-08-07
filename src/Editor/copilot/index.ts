@@ -13,13 +13,12 @@ import type {
   EditorInlineCompletion,
   CbParams,
 } from "../../types";
-import { debounce } from "../../util";
+import { debounceAsync, getBody } from "../../util";
 import {
   createInlineCompletionResult,
   getFileName,
   getCursorTextInAround,
   isValidCompletions,
-  getBody,
 } from "./common";
 import { getFormatter } from "./format";
 import CompletionCache from "./cache";
@@ -28,6 +27,7 @@ let acceptCompletion = false;
 
 class CopilotCompleter implements InlineCompletionProvider {
   fetchCompletions: (args: CopilotParams) => Promise<CopilotResult>;
+  private body!: Record<string, any>;
   private controller!: AbortController | null;
   constructor(
     private readonly monaco: Monaco,
@@ -36,7 +36,6 @@ class CopilotCompleter implements InlineCompletionProvider {
     private readonly onCompletionShow: (params: CbParams) => void
   ) {
     const path = getFileName(options.language);
-    const body = getBody(options.request) ?? {};
     const getCompletions =
       options.getCompletions ??
       (async (res) => {
@@ -46,8 +45,10 @@ class CopilotCompleter implements InlineCompletionProvider {
         }
         throw Error(res.statusText);
       });
-    this.fetchCompletions = debounce(
-      ({ codeBeforeCursor, codeAfterCursor }: CopilotParams) => {
+    this.fetchCompletions = debounceAsync(
+      async ({ codeBeforeCursor, codeAfterCursor }: CopilotParams) => {
+        const body = this.body ?? (await getBody(options.request)) ?? {};
+        this.body = body;
         if (this.controller) {
           this.controller.abort();
         }
@@ -158,7 +159,7 @@ export const registerCopilot = (
       options.language,
       new CopilotCompleter(monaco, editor, options, onCompletionShow)
     );
-  editor.onKeyDown((e) => {
+  const subscription = editor.onKeyDown((e) => {
     if (
       completionShow &&
       (e.keyCode === monaco.KeyCode.Tab ||
@@ -173,5 +174,6 @@ export const registerCopilot = (
   });
   return () => {
     inlineCompletionsProvider.dispose();
+    subscription.dispose();
   };
 };

@@ -36,8 +36,12 @@
   "dependencies": {
     "@astii/dialog": "0.0.15",
     "@astii/resizable": "0.0.7",
+    "@babel/parser": "^7.25.3",
+    "@microsoft/fetch-event-source": "^2.0.1",
     "@monaco-editor/react": "^4.6.0",
-    "monaco-jsx-syntax-highlight": "^1.2.0"
+    "ast-types": "^0.14.2",
+    "monaco-jsx-syntax-highlight": "^1.2.0",
+    "react-markdown": "^9.0.1"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0"

@@ -14,6 +14,8 @@ export type EditorInlineCompletionsResult =
 export type ModelContentChangedEvent = monaco.editor.IModelContentChangedEvent;
 export type InlineCompletionProvider =
   monaco.languages.InlineCompletionsProvider;
+export type CodeLensProvider = monaco.languages.CodeLensProvider;
 export type Diagnostic = monaco.languages.typescript.Diagnostic;
 export type EmitOutput = monaco.languages.typescript.EmitOutput;
 export type EventType = keyof monaco.editor.ICodeEditor;
+export type CodeLens = monaco.languages.CodeLens;

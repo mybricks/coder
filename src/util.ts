@@ -110,11 +110,13 @@ export const getLinter = async (eslint: string | undefined) => {
   return new Linter();
 };
 
-export const executeChain = (fns: Array<() => void>) => {
-  fns.reduce((chain, fn) => chain.then(fn), Promise.resolve());
+export const executeChain = <F extends (...args: any[]) => any>(
+  fns: Array<F>
+) => {
+  return fns.reduce((chain, fn) => chain.then(fn), Promise.resolve());
 };
 
-export const debounce = <F extends (...args: any[]) => Promise<any>>(
+export const debounceAsync = <F extends (...args: any[]) => Promise<any>>(
   fn: F,
   delay: number = 200
 ) => {
@@ -134,6 +136,23 @@ export const debounce = <F extends (...args: any[]) => Promise<any>>(
   };
 };
 
+export const debounce = <F extends (...args: any[]) => any>(
+  fn: F,
+  delay: number = 200,
+  callback?: (params: ReturnType<F>) => void
+) => {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  return (...args: Parameters<F>): void => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      timeoutId = null;
+      callback!(fn(...args));
+    }, delay);
+  };
+};
+
 export const singleton = <T extends Object>(className: T) => {
   let ins: T;
   return new Proxy(className, {
@@ -145,4 +164,23 @@ export const singleton = <T extends Object>(className: T) => {
       return (ins = new target(...arg));
     },
   });
+};
+
+export const getBody = (request: Request) => {
+  return request.body
+    ?.getReader()
+    .read()
+    .then(({ done, value }) => {
+      if (done) return;
+      const body = JSON.parse(new TextDecoder().decode(value));
+      return body;
+    });
+};
+
+export const getHeaders = (request: Request) => {
+  const headers: Record<string, any> = {};
+  for (const [key, value] of request.headers.entries()) {
+    headers[key] = value;
+  }
+  return headers;
 };
