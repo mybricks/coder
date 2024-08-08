@@ -47,7 +47,7 @@ export function merge<T extends Object>(target: T, source: T): T {
   return targetObject;
 }
 
-const safeParse = (str: string) => {
+export const safeParse = (str: string) => {
   try {
     return JSON.parse(str);
   } catch (e) {
@@ -184,3 +184,16 @@ export const getHeaders = (request: Request) => {
   }
   return headers;
 };
+
+export class Deferred<T extends any> {
+  public readonly promise: Promise<T>;
+  public resolve!: (value: T) => void;
+  public reject!: (err: Event) => void;
+
+  public constructor() {
+    this.promise = new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
+  }
+}

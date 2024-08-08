@@ -1,0 +1,70 @@
+:root {
+  --coder-chat-popup-height: 500px;
+  --coder-chat-popup-background-color: #fff;
+  --coder-chat-popup-arrow-size: 16px;
+  --coder-chat-popup-arrow-path: path(
+    "M 0 8 A 4 4 0 0 0 2.82842712474619 6.82842712474619 L 6.585786437626905 3.0710678118654755 A 2 2 0 0 1 9.414213562373096 3.0710678118654755 L 13.17157287525381 6.82842712474619 A 4 4 0 0 0 16 8 Z"
+  );
+  --coder-chat-popup-shadow: 0 0 6px #aaa;
+}
+.coder-chat-popover {
+  position: fixed;
+  padding: 12px 24px;
+  border-radius: 6px;
+  box-shadow: var(--coder-chat-popup-shadow);
+  z-index: 1002;
+  background-color: var(--coder-chat-popup-background-color);
+  transition: all 0.2s;
+  height: fit-content;
+  .coder-chat-popover-title{
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+  }
+  .coder-chat-popover-arrow {
+    position: absolute;
+    display: block;
+    pointer-events: none;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+    left: 50%;
+    top: -10px;
+    z-index: 1;
+    transform: translateY(-50%) translateX(-100%) rotate(-90deg);
+    &::before {
+      position: absolute;
+      bottom: 0;
+      inset-inline-start: 0;
+      width: var(--coder-chat-popup-arrow-size);
+      height: calc(var(--coder-chat-popup-arrow-size) / 2);
+      background: var(--coder-chat-popup-background-color);
+      clip-path: var(--coder-chat-popup-arrow-path);
+      content: "";
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      width: calc(var(--coder-chat-popup-arrow-size) / 2);
+      height: calc(var(--coder-chat-popup-arrow-size) / 2);
+      bottom: 0;
+      inset-inline: 0;
+      margin: auto;
+      border-radius: 0 0 2px 0;
+      transform: translateY(50%) rotate(-135deg);
+      box-shadow: var(--coder-chat-popup-shadow);
+      z-index: 0;
+      background: transparent;
+    }
+  }
+  .coder-chat-popover-content {
+    height: var(--coder-chat-popup-height);
+    overflow-y: auto;
+  }
+  .coder-chat-popover-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    cursor: pointer;
+  }
+}

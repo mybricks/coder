@@ -123,13 +123,13 @@ export default forwardRef<any, HandlerType>(
       const dispose = registerCopilot(monaco, editor, {
         language: "typescript",
         request: new Request(
-          "https://ai-gateway.corp.kuaishou.com/v2/code/completions",
+          "",
           {
             method: "POST",
             headers: {
-              "x-dmo-provider": "kwaipilot",
-              "x-dmo-username": "tangxiaoxin",
-              authorization: "Bearer mbjuOzymwpWZEO",
+              "x-dmo-provider": "",
+              "x-dmo-username": "",
+              authorization: "Bearer ",
               "Content-Type": "application/json",
             },
           }
@@ -146,6 +146,7 @@ export default forwardRef<any, HandlerType>(
       if (!monaco || !editor) return;
       const dispose = registerInteraction(monaco, editor, {
         language: "typescript",
+        path: 'index.ts',
         request: new Request(
           "",
           {

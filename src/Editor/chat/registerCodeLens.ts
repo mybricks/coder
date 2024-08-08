@@ -4,7 +4,7 @@ import {
   EditorCancellationToken,
   CodeLensProvider,
   Monaco,
-  InteractionType,
+  ChatType,
   CodeLens,
   ASTLocation,
   onCommandExecute,
@@ -26,8 +26,8 @@ class CopilotCodeLensProvider implements CodeLensProvider {
       parsePosition,
       this.computeRangeValue.bind(this),
       this.createCodeLens.bind(this),
-    ]).then(({ codeLens, dispose }: any) => {
-      this.lenses = codeLens;
+    ]).then(({ lenses, dispose }: any) => {
+      this.lenses = lenses;
       this.dispose = dispose;
     });
   }
@@ -47,9 +47,9 @@ class CopilotCodeLensProvider implements CodeLensProvider {
   }
   private createCodeLens(astLocations: ASTLocation[]) {
     const cacheCommands: Array<() => void> = [];
-    const codeLens = astLocations.reduce((pre, loc, index) => {
+    const lenses = astLocations.reduce((pre, loc, index) => {
       const { commands, dispose } = this.registerCommands((key) => {
-        this.onCommandExecute(key as keyof typeof InteractionType, loc);
+        this.onCommandExecute(key as keyof typeof ChatType, loc);
       }, index);
       cacheCommands.push(dispose);
       return pre.concat(
@@ -63,7 +63,7 @@ class CopilotCodeLensProvider implements CodeLensProvider {
       dispose: () => {
         cacheCommands.forEach((dispose) => dispose());
       },
-      codeLens,
+      lenses,
     };
   }
 
@@ -86,7 +86,7 @@ class CopilotCodeLensProvider implements CodeLensProvider {
   }
   private registerCommands(handle: (key: string) => void, index: number) {
     const cacheCommands: Array<() => void> = [];
-    const commands = Object.keys(InteractionType).map((key, _) => {
+    const commands = Object.keys(ChatType).map((key, _) => {
       const commandId = `${key}_${index}`;
       const { dispose } = this.monaco.editor.registerCommand(commandId, () =>
         handle(key)
@@ -94,7 +94,7 @@ class CopilotCodeLensProvider implements CodeLensProvider {
       cacheCommands.push(dispose);
       return {
         id: commandId,
-        title: InteractionType[key as keyof typeof InteractionType],
+        title: ChatType[key as keyof typeof ChatType],
       };
     });
     return {
