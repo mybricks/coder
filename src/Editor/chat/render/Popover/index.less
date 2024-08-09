@@ -1,5 +1,4 @@
 :root {
-  --coder-chat-popup-height: 500px;
   --coder-chat-popup-background-color: #fff;
   --coder-chat-popup-arrow-size: 16px;
   --coder-chat-popup-arrow-path: path(
@@ -9,14 +8,14 @@
 }
 .coder-chat-popover {
   position: fixed;
-  padding: 12px 24px;
+  padding: 12px;
   border-radius: 6px;
   box-shadow: var(--coder-chat-popup-shadow);
-  z-index: 1002;
+  z-index: 10000;
   background-color: var(--coder-chat-popup-background-color);
   transition: all 0.2s;
   height: fit-content;
-  .coder-chat-popover-title{
+  .coder-chat-popover-title {
     font-size: 16px;
     font-weight: 600;
     margin: 0 0 0.5rem 0;
@@ -56,10 +55,6 @@
       z-index: 0;
       background: transparent;
     }
-  }
-  .coder-chat-popover-content {
-    height: var(--coder-chat-popup-height);
-    overflow-y: auto;
   }
   .coder-chat-popover-close {
     position: absolute;

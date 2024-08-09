@@ -9,7 +9,10 @@
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "baseUrl": "./",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "compileOnSave": true
 }

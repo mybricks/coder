@@ -12,7 +12,7 @@ import Editor, {
   type HandlerType,
   Monaco,
   editor,
-  registerInteraction,
+  registerChat,
 } from "../../src";
 import css from "./App.module.less";
 
@@ -22,8 +22,15 @@ const items = [
     key: "ts",
     language: "typescript",
     path: "index.ts",
-    value: `class PageModel {
+    value: `type Util = {
+  dayjs():void
+}
+
+class PageModel {
+  util: Util
   num = 1
+
+  age = this.util!.dayjs()
 
   updateNum (): void {
     this.num = ++this.num
@@ -31,14 +38,6 @@ const items = [
   getNum (): number {
     return this.num
   }
-
-
-}
-
-function updateNum () {
-  return new Promise((resolve, reject) => {
-    resolve(1)
-  });
 }
     `,
   },
@@ -144,7 +143,7 @@ export default forwardRef<any, HandlerType>(
 
     useEffect(() => {
       if (!monaco || !editor) return;
-      const dispose = registerInteraction(monaco, editor, {
+      const dispose = registerChat(monaco, editor, {
         language: "typescript",
         path: 'index.ts',
         request: new Request(

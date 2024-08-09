@@ -11,7 +11,7 @@ import Chat from "./render";
 import { prompts } from "./prompt";
 import "./index.css";
 
-export const registerInteraction = (
+export const registerChat = (
   monaco: Monaco,
   editor: StandaloneCodeEditor,
   options: ChatOptions

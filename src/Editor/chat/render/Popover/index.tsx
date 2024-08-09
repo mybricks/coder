@@ -5,6 +5,8 @@ import React, {
   JSXElementConstructor,
   useCallback,
   useLayoutEffect,
+  useEffect,
+  useRef,
 } from "react";
 import Dialog from "@astii/dialog";
 import "./index.less";
@@ -33,36 +35,49 @@ const Popover = ({
 }: PopoverProps) => {
   const [position, setPosition] = useState<Position>();
   const [arrowPosition, setArrowPosition] = useState<Position>();
+  const popoverRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     calcPosition();
-  }, [width]);
+  }, []);
 
-  const calcPosition = useCallback(() => {
-    const root = document.querySelector(":root") as HTMLElement;
-    const height = root.style.getPropertyValue("--coder-chat-popup-height");
-    const eleHeight = height ? parseFloat(height) : 500;
-    const {
-      top: triggerTop,
-      left: triggerLeft,
-      width: triggerWidth,
-      height: triggerHeight,
-    } = rect;
-    const top = Math.max(
-      0,
-      Math.min(
-        document.body.clientHeight - eleHeight,
-        triggerTop - eleHeight / 2
-      )
-    );
-    const arrowTop = triggerTop - top + triggerHeight / 2;
-    setPosition({ left: triggerLeft + triggerWidth + 20, top });
-    setArrowPosition({ left: 0, top: arrowTop });
-  }, [width, rect]);
+  useEffect(() => {
+    if (popoverRef.current) {
+      const observable = new MutationObserver(() => {
+        const rect = popoverRef.current!.getBoundingClientRect();
+        calcPosition(rect.height);
+      });
+      observable.observe(popoverRef.current, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
+    }
+  }, []);
+
+  const calcPosition = useCallback(
+    (height = 40) => {
+      const {
+        top: triggerTop,
+        left: triggerLeft,
+        width: triggerWidth,
+        height: triggerHeight,
+      } = rect;
+      const top = Math.max(
+        0,
+        Math.min(document.body.clientHeight - height, triggerTop - height / 2)
+      );
+      const arrowTop = triggerTop - top + triggerHeight / 2;
+      setPosition({ left: triggerLeft + triggerWidth + 20, top });
+      setArrowPosition({ left: 0, top: arrowTop });
+    },
+    [rect]
+  );
   return (
     <div
       style={{ width, ...position, right: 0, bottom: 0 }}
       className="coder-chat-popover"
+      ref={popoverRef}
     >
       <div
         className={"coder-chat-popover-arrow"}
