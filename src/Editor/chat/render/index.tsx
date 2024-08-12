@@ -10,20 +10,21 @@ class Chat {
   public chatType!: keyof typeof ChatType;
   public prompts!: PromptType[];
   constructor(private readonly options: ChatOptions) {
-    this.root = createRoot(document.getElementById("chat-container")!);
+    this.root =
+      this.root ?? createRoot(document.getElementById("chat-container")!);
   }
 
-  private onClose() {
+  private unmount() {
     this.root.render(null);
   }
   public render(rect: DOMRect) {
-    this.root.render(null);
+    this.unmount();
     requestAnimationFrame(() => {
       this.root.render(
         <Popover
           rect={rect}
           title={ChatType[this.chatType]}
-          onClose={this.onClose.bind(this)}
+          onClose={this.unmount.bind(this)}
         >
           <MarkdownRender options={this.options} prompts={this.prompts} />
         </Popover>

@@ -270,6 +270,8 @@ interface CoderProps extends EditorProps {
 
 ## AI
 
+### Copilot
+
 ```ts
 import { registerCopilot } from "@mybricks/coder";
 
@@ -298,6 +300,42 @@ useEffect(() => {
     onFreeCompletion(params) {
       console.log("free", params);
     },
+  });
+  return () => {
+    dispose();
+  };
+}, [monaco, editor]);
+```
+
+### Chat
+
+```ts
+import { registerChat } from "@mybricks/coder";
+
+useEffect(() => {
+  if (!monaco || !editor) return;
+  const dispose = registerChat(monaco, editor, {
+    language: "typescript",
+    path: "index.ts", //唯一标识
+    request: new Request("", {
+      method: "POST",
+      headers: {
+        "x-dmo-provider": "",
+        authorization: "Bearer ",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "",
+        stream: true,
+        temperature: 0.1,
+      }),
+    }),
+    onAccept() {
+
+    },
+    onFree() {
+      
+    }
   });
   return () => {
     dispose();
