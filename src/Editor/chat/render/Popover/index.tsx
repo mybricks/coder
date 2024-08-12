@@ -8,10 +8,8 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import Dialog from "@astii/dialog";
+import Icon from "../Icon";
 import "./index.less";
-
-const Icon = Dialog.Icon;
 
 export interface PopoverProps {
   width?: CSSProperties["width"];
@@ -69,19 +67,24 @@ const Popover = ({
       );
       const arrowTop = triggerTop - top + triggerHeight / 2;
       setPosition({ left: triggerLeft + triggerWidth + 20, top });
-      setArrowPosition({ left: 0, top: arrowTop });
+      setArrowPosition({ left: -16, top: arrowTop - 8 });
     },
     [rect]
   );
   return (
     <div
-      style={{ width, ...position, right: 0, bottom: 0 }}
+      style={{
+        width,
+        transform: `translate(${position?.left}px, ${position?.top}px)`,
+      }}
       className="coder-chat-popover"
       ref={popoverRef}
     >
       <div
         className={"coder-chat-popover-arrow"}
-        style={{ ...arrowPosition }}
+        style={{
+          transform: `translate(${arrowPosition?.left}px, ${arrowPosition?.top}px) rotate(-90deg)`,
+        }}
       />
       <Icon
         name="close"

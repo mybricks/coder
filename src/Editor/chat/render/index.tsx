@@ -14,8 +14,15 @@ class Chat {
       this.root ?? createRoot(document.getElementById("chat-container")!);
   }
 
+  private isMounted() {
+    return !!document.getElementById("chat-container")?.childNodes.length;
+  }
+
   private unmount() {
     this.root.render(null);
+    if (this.isMounted()) {
+      this.options.onFree!();
+    }
   }
   public render(rect: DOMRect) {
     this.unmount();

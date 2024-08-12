@@ -5,7 +5,7 @@ export type ChatOptions = {
   duration?: number;
   path: string;
   request: Request;
-  onAccept?(): void;
+  onAccept?(code?: string): void;
   onFree?(): void;
 };
 

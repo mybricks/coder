@@ -12,6 +12,7 @@ import {
 } from "@microsoft/fetch-event-source";
 import { getBody, getHeaders, safeParse } from "../../../../util";
 import { ChatOptions, PromptType } from "../../../../types";
+import Icon from "../Icon";
 import "./index.less";
 
 export interface MarkdownRenderProps {
@@ -106,13 +107,31 @@ const MarkdownRender = memo(({ options, prompts }: MarkdownRenderProps) => {
             code({ node, inline, className, children, ...props }) {
               const match = /language-(\w+)/.exec(className || "");
               return !inline && match ? (
-                <SyntaxHighlighter
-                  children={String(children).replace(/\n$/, "")}
-                  style={SyntaxHighlightTheme}
-                  language={match[1]}
-                  PreTag="div"
-                  {...props}
-                />
+                <div className="coder-chat-markdown-code">
+                  <div className="coder-chat-markdown-code-language">
+                    <span>{match[1]}</span>
+                    <Icon
+                      name="copy"
+                      className="coder-chat-markdown-code-icon"
+                      onClick={() => options.onAccept!(String(children))}
+                    />
+                  </div>
+                  <SyntaxHighlighter
+                    children={String(children).replace(/\n$/, "")}
+                    customStyle={{
+                      margin: 0,
+                      borderBottomLeftRadius: 4,
+                      borderBottomRightRadius: 4,
+                    }}
+                    showLineNumbers={true}
+                    showInlineLineNumbers={true}
+                    style={SyntaxHighlightTheme}
+                    language={match[1]}
+                    lineNumberStyle={{ minWidth: "2rem" }}
+                    PreTag={"div"}
+                    {...props}
+                  />
+                </div>
               ) : (
                 <code className={className} {...props}>
                   {children}

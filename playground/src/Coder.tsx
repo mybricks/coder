@@ -122,13 +122,13 @@ export default forwardRef<any, HandlerType>(
       const dispose = registerCopilot(monaco, editor, {
         language: "typescript",
         request: new Request(
-          "",
+          "https://ai-gateway.corp.kuaishou.com/v2/code/completions",
           {
             method: "POST",
             headers: {
-              "x-dmo-provider": "",
-              "x-dmo-username": "",
-              authorization: "Bearer ",
+              "x-dmo-provider": "kwaipilot",
+              "x-dmo-username": "tangxiaoxin",
+              authorization: "Bearer mbjuOzymwpWZEO",
               "Content-Type": "application/json",
             },
           }
@@ -147,21 +147,27 @@ export default forwardRef<any, HandlerType>(
         language: "typescript",
         path: 'index.ts',
         request: new Request(
-          "",
+          "https://ai-gateway.corp.kuaishou.com/v2/chat/completions",
           {
             method: "POST",
             headers: {
-              "x-dmo-provider": "",
-              authorization: "Bearer ",
+              "x-dmo-provider": "kwaipilot",
+              authorization: "Bearer mbjuOzymwpWZEO",
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              model: "",
+              model: "kwaipilot-32k",
               stream: true,
               temperature: 0.1,
             }),
           }
         ),
+        onAccept(code: string) {
+          console.log('----accept---', code)
+        },
+        onFree() {
+          console.log('----free---')
+        }
       });
       return () => {
         dispose();
