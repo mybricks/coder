@@ -21,7 +21,7 @@ export const registerChat = (
     `div[data-uri="file:\/\/\/${path}"]`
   ) as HTMLElement;
   const chat = new Chat(options);
-  const deferred = new Deferred<boolean>();
+  let deferred = new Deferred<boolean>();
   const onCommandExecute = (key: keyof typeof ChatType, loc: ASTLocation) => {
     chat.chatType = key;
     chat.prompts = [
@@ -36,6 +36,7 @@ export const registerChat = (
     const widgetId = target.parentElement!.getAttribute("widgetid");
     if (widgetId?.startsWith("codelens.widget")) {
       await deferred.promise;
+      deferred = new Deferred<boolean>();
       const rect = target.getBoundingClientRect();
       chat.render(rect);
     }
