@@ -109,7 +109,7 @@ const MarkdownRender = memo(({ options, prompts }: MarkdownRenderProps) => {
               return !inline && match ? (
                 <div className="coder-chat-markdown-code">
                   <div className="coder-chat-markdown-code-language">
-                    <span>{match[1]}</span>
+                    <span>{options.language ?? match[1]}</span>
                     <Icon
                       name="copy"
                       className="coder-chat-markdown-code-icon"

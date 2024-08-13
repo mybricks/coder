@@ -22,23 +22,19 @@ const items = [
     key: "ts",
     language: "typescript",
     path: "index.ts",
-    value: `type Util = {
-  dayjs():void
-}
+    value: `class PageModel {
 
-class PageModel {
-  util: Util
+  age: any
+
   num = 1
-
-  age = this.util!.dayjs()
 
   updateNum (): void {
     this.num = ++this.num
   }
-  getNum (): number {
-    return this.num
-  }
+
+  name = 'tangxiaoxin'
 }
+
     `,
   },
   {

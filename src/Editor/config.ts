@@ -24,7 +24,7 @@ const ConfigMap = {
       noSyntaxValidation: false,
     });
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.ES2015,
+      target: monaco.languages.typescript.ScriptTarget.ESNext,
       allowNonTsExtensions: true,
       noImplicitAny: false,
       noImplicitThis: false,
@@ -46,6 +46,8 @@ const ConfigMap = {
       jsxFactory: "React.createElement",
       reactNamespace: "React",
       declaration: true,
+      preservePropertyNames: true,
+      allowUninitializedVariables: true
     });
   },
 };
