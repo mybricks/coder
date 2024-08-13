@@ -10,7 +10,7 @@ import {
   EventSourceMessage,
   fetchEventSource,
 } from "@microsoft/fetch-event-source";
-import { getBody, getHeaders, safeParse } from "../../../../util";
+import { getBody, getHeaders, safeParse, clipBoard } from "../../../../util";
 import { ChatOptions, PromptType } from "../../../../types";
 import Icon from "../Icon";
 import "./index.less";
@@ -98,6 +98,11 @@ const MarkdownRender = memo(({ options, prompts }: MarkdownRenderProps) => {
     };
   }, [prompts, options]);
 
+  const onAccept = useCallback((code: string) => {
+    clipBoard(code);
+    options.onAccept!(code);
+  }, []);
+
   return (
     <div ref={ref} className="coder-chat-markdown">
       {ReactMarkdown && SyntaxHighlighter && (
@@ -113,7 +118,7 @@ const MarkdownRender = memo(({ options, prompts }: MarkdownRenderProps) => {
                     <Icon
                       name="copy"
                       className="coder-chat-markdown-code-icon"
-                      onClick={() => options.onAccept!(String(children))}
+                      onClick={() => onAccept(String(children))}
                     />
                   </div>
                   <SyntaxHighlighter
