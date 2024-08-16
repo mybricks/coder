@@ -1,17 +1,16 @@
 import React from "react";
 import { ChatOptions, ChatType, PromptType } from "../../../types";
 import { singleton } from "../../../util";
-import { createRoot, Root } from "react-dom/client";
+import { render } from "react-dom";
 import Popover from "./Popover";
 import MarkdownRender from "./Markdown";
 
 class Chat {
-  private root!: Root;
+  private container!: HTMLElement;
   public chatType!: keyof typeof ChatType;
   public prompts!: PromptType[];
   constructor(private readonly options: ChatOptions) {
-    this.root =
-      this.root ?? createRoot(document.getElementById("chat-container")!);
+    this.container = document.getElementById("chat-container")!;
   }
 
   private isMounted() {
@@ -19,7 +18,8 @@ class Chat {
   }
 
   private unmount() {
-    this.root.render(null);
+    //@ts-ignore
+    render(null, this.container);
     if (this.isMounted()) {
       this.options.onFree!();
     }
@@ -27,14 +27,15 @@ class Chat {
   public render(rect: DOMRect) {
     this.unmount();
     requestAnimationFrame(() => {
-      this.root.render(
+      render(
         <Popover
           rect={rect}
           title={ChatType[this.chatType]}
           onClose={this.unmount.bind(this)}
         >
           <MarkdownRender options={this.options} prompts={this.prompts} />
-        </Popover>
+        </Popover>,
+        this.container
       );
     });
   }

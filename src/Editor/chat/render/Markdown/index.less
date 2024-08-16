@@ -18,8 +18,24 @@
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
     }
-    .coder-chat-markdown-code-icon {
+    .coder-chat-markdown-code-copy {
       color: #fff;
+    }
+    .coder-chat-markdown-code-success {
+      &:hover {
+        transform: scale(1);
+      }
+      svg {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        line-height: 1;
+        &:hover {
+          path {
+            fill: rgba(26, 250, 41, 1);
+          }
+        }
+      }
     }
   }
 }

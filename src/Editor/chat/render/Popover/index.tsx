@@ -1,8 +1,6 @@
 import React, {
   useState,
   CSSProperties,
-  type ReactElement,
-  JSXElementConstructor,
   useCallback,
   useLayoutEffect,
   useEffect,
@@ -15,7 +13,7 @@ export interface PopoverProps {
   width?: CSSProperties["width"];
   title?: string;
   rect: DOMRect;
-  children?: ReactElement<any, string | JSXElementConstructor<any>>;
+  children: JSX.Element;
   onClose?: () => void;
 }
 

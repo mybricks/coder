@@ -3,7 +3,6 @@ import React, {
   useState,
   useCallback,
   useRef,
-  memo,
   useLayoutEffect,
 } from "react";
 import {
@@ -22,7 +21,7 @@ export interface MarkdownRenderProps {
 
 let requestBodyCache: Record<string, any>;
 
-const MarkdownRender = memo(({ options, prompts }: MarkdownRenderProps) => {
+const MarkdownRender = ({ options, prompts }: MarkdownRenderProps) => {
   const [ReactMarkdown, setReactMarkdown] = useState<any>();
   const [SyntaxHighlighter, setSyntaxHighlighter] = useState<any>();
   const [SyntaxHighlightTheme, setSyntaxHighlightTheme] = useState<{
@@ -117,7 +116,7 @@ const MarkdownRender = memo(({ options, prompts }: MarkdownRenderProps) => {
                     <span>{options.language ?? match[1]}</span>
                     <Icon
                       name="copy"
-                      className="coder-chat-markdown-code-icon"
+                      className="coder-chat-markdown-code-copy"
                       onClick={() => onAccept(String(children))}
                     />
                   </div>
@@ -150,6 +149,6 @@ const MarkdownRender = memo(({ options, prompts }: MarkdownRenderProps) => {
       )}
     </div>
   );
-});
+};
 
 export default MarkdownRender;
