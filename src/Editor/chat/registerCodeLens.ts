@@ -16,11 +16,13 @@ import { executeChain } from "../../util";
 class CopilotCodeLensProvider implements CodeLensProvider {
   private lenses!: CodeLens[];
   public dispose!: () => void;
+  private uniqueUri!: string;
   constructor(
     private readonly monaco: Monaco,
     private readonly editor: StandaloneCodeEditor,
     private readonly onCommandExecute: onCommandExecute
   ) {
+    this.uniqueUri = editor.getModel()?.uri.toString() ?? "";
     executeChain([
       () => editor.getModel()?.getValue(),
       parsePosition,
@@ -32,6 +34,13 @@ class CopilotCodeLensProvider implements CodeLensProvider {
     });
   }
   provideCodeLenses(model: EditorModel, token: EditorCancellationToken) {
+    const uri = model.uri.toString();
+    if(this.uniqueUri!== uri) {
+      return {
+        lenses: [],
+        dispose() {},
+      };
+    };
     return {
       lenses: this.lenses,
       dispose() {},

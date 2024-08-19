@@ -67,6 +67,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     eslint,
     theme,
     babel,
+    path
   } = _props;
   const lang = language ?? defaultLanguage;
 
@@ -166,14 +167,14 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
       return;
     const setCompilerOptions = getConfigSetter(lang as Language);
     setCompilerOptions(monaco, isTsx);
-    const libUri = "ts:filename/facts.d.ts";
+    const libUri = `node_modules/@types/${path}`;
     if (extraLib) {
       monaco.languages.typescript.typescriptDefaults.addExtraLib(
         extraLib,
         libUri
       );
     }
-  }, [monaco, extraLib, lang, isTsx]);
+  }, [monaco, extraLib, lang, isTsx, path]);
 
   useEffect(() => {
     if (!monaco || !isMounted || !isTsx) return;

@@ -21,7 +21,7 @@ export const DefaultCoderOptions = {
   theme: "vs-dark",
   width: "100%",
   height: "100%",
-  path: "file:///index.tsx",
+  path: "file:///index.ts",
   options: DefaultEditorOptions,
   loaderConfig: {
     paths: {

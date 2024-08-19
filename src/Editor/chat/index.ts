@@ -16,9 +16,10 @@ export const registerChat = (
   editor: StandaloneCodeEditor,
   options: ChatOptions
 ) => {
-  const { duration = 2000, path } = options;
+  const { duration = 2000 } = options;
+  const path = editor.getModel()?.uri.toString()
   const insDom = document.querySelector(
-    `div[data-uri="file:\/\/\/${path}"]`
+    `div[data-uri="${path}"]`
   ) as HTMLElement;
   const chat = new Chat(options);
   let deferred = new Deferred<boolean>();

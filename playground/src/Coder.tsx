@@ -15,6 +15,7 @@ import Editor, {
   registerChat,
 } from "../../src";
 import css from "./App.module.less";
+import Second from './Second'
 
 const items = [
   {
@@ -141,7 +142,6 @@ export default forwardRef<any, HandlerType>(
       if (!monaco || !editor) return;
       const dispose = registerChat(monaco, editor, {
         language: "typescript",
-        path: 'index.ts',
         request: new Request(
           "",
           {
@@ -217,7 +217,6 @@ export default forwardRef<any, HandlerType>(
                   inside: true,
                   maskClosable: true,
                 }}
-                format={true}
                 toolbar={
                   <>
                     <Icon
@@ -260,6 +259,7 @@ export default forwardRef<any, HandlerType>(
                   className: css.comment,
                 }}
               />
+              <Second/>
             </Tabs.TabPane>
           ))}
         </Tabs>

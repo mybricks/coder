@@ -316,7 +316,6 @@ useEffect(() => {
   if (!monaco || !editor) return;
   const dispose = registerChat(monaco, editor, {
     language: "typescript",
-    path: "index.ts", //唯一标识
     request: new Request("", {
       method: "POST",
       headers: {

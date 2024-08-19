@@ -3,7 +3,6 @@ import { type EditorRange } from "./editor";
 export type ChatOptions = {
   language: LanguageType;
   duration?: number;
-  path: string;
   request: Request;
   onAccept?(code?: string): void;
   onFree?(): void;

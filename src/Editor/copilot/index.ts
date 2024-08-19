@@ -29,12 +29,14 @@ class CopilotCompleter implements InlineCompletionProvider {
   fetchCompletions: (args: CopilotParams) => Promise<CopilotResult>;
   private body!: Record<string, any>;
   private controller!: AbortController | null;
+  private uniqueUri!: string;
   constructor(
     private readonly monaco: Monaco,
     private readonly editor: StandaloneCodeEditor,
     private readonly options: CopilotOptions,
     private readonly onCompletionShow: (params: CbParams) => void
   ) {
+    this.uniqueUri = editor.getModel()?.uri.toString() ?? "";
     const path = getFileName(options.language);
     const getCompletions =
       options.getCompletions ??
@@ -81,6 +83,8 @@ class CopilotCompleter implements InlineCompletionProvider {
     context: EditorInlineCompletionContext,
     token: EditorCancellationToken
   ) {
+    const uri = model.uri.toString();
+    if(this.uniqueUri!== uri) return;
     if (token.isCancellationRequested || acceptCompletion) {
       return createInlineCompletionResult([]);
     }
