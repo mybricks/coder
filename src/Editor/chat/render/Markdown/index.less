@@ -1,14 +1,27 @@
 .coder-chat-markdown {
   position: relative;
-  padding: 0 12px;
+  padding: 4px 12px;
   height: fit-content;
   max-height: 80vh;
   overflow-y: auto;
   border-radius: 6px;
   background-color: rgba(241, 240, 240, 0.45);
-  * {
+  &:not(code) * {
     font-size: 14px;
     box-sizing: content-box;
+    padding: initial;
+  }
+  ol,
+  ul,
+  dl {
+    padding: 0 0 0 40px !important;
+    margin-block-start: 1em !important;
+    margin-block-end: 1em !important;
+  }
+  p,
+  pre {
+    margin-block-start: 1em !important;
+    margin-block-end: 1em !important;
   }
   .coder-chat-markdown-code {
     border-radius: 4px;
@@ -30,7 +43,7 @@
         line-height: 1;
         &:hover {
           path {
-            fill: rgba(66, 102, 247, .85);
+            fill: rgba(66, 102, 247, 0.85);
           }
         }
       }
