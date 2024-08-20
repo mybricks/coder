@@ -43,7 +43,12 @@ const MarkdownRender = ({ options, prompts }: MarkdownRenderProps) => {
       requestBodyCache = body;
       return fetchEventSource(options.request, {
         headers: getHeaders(options.request),
-        body: JSON.stringify({ ...body, messages: prompts }),
+        body: JSON.stringify({
+          stream: true,
+          temperature: 0.1,
+          ...body,
+          messages: prompts,
+        }),
         onmessage(event: EventSourceMessage) {
           if (event.data !== "[DONE]") {
             const data = safeParse(event.data);
@@ -126,6 +131,7 @@ const MarkdownRender = ({ options, prompts }: MarkdownRenderProps) => {
                       margin: 0,
                       borderBottomLeftRadius: 4,
                       borderBottomRightRadius: 4,
+                      fontSize: 12
                     }}
                     showLineNumbers={true}
                     showInlineLineNumbers={true}

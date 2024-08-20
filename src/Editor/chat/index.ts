@@ -17,7 +17,7 @@ export const registerChat = (
   options: ChatOptions
 ) => {
   const { duration = 2000 } = options;
-  const path = editor.getModel()?.uri.toString()
+  const path = editor.getModel()?.uri.toString();
   const insDom = document.querySelector(
     `div[data-uri="${path}"]`
   ) as HTMLElement;
@@ -62,5 +62,6 @@ export const registerChat = (
     dispose();
     subscription.dispose();
     insDom?.removeEventListener("click", insClickHandler);
+    chat.dispose();
   };
 };

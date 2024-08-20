@@ -10,11 +10,14 @@ class Chat {
   public chatType!: keyof typeof ChatType;
   public prompts!: PromptType[];
   constructor(private readonly options: ChatOptions) {
-    this.container = document.getElementById("chat-container")!;
+    const container = document.createElement("div");
+    container.id = "editor-chat-container";
+    document.body.appendChild(container);
+    this.container = container;
   }
 
   private isMounted() {
-    return !!document.getElementById("chat-container")?.childNodes.length;
+    return !!this.container?.childNodes.length;
   }
 
   private unmount() {
@@ -38,6 +41,9 @@ class Chat {
         this.container
       );
     });
+  }
+  public dispose() {
+    document.body.removeChild(this.container);
   }
 }
 

@@ -289,7 +289,6 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   return (
     <>
       <div data-element-type="themeTag" ref={themeTagRef} />
-      <div id="chat-container"></div>
       <Editor
         {..._props}
         onMount={onMount}
