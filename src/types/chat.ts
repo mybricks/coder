@@ -5,7 +5,11 @@ export type ChatOptions = {
   duration?: number;
   request: Request;
   onAccept?(code?: string): void;
-  onFree?(): void;
+  onChat?(params: {
+    type: keyof typeof ChatType;
+    code?: string;
+    answer?: string;
+  }): void;
 };
 
 export enum ChatType {
@@ -36,4 +40,4 @@ export type onCommandExecute = (
 export type PromptType = {
   content?: string;
   role: "user" | "assistant";
-}
+};

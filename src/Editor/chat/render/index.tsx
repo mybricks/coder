@@ -16,27 +16,34 @@ class Chat {
     this.container = container;
   }
 
-  private isMounted() {
-    return !!this.container?.childNodes.length;
+  private onComplete(answer?: string) {
+    return this.options.onChat?.({
+      type: this.chatType,
+      code: this.prompts[0].content,
+      answer,
+    });
   }
 
   private unmount() {
-    //@ts-ignore
-    render(null, this.container);
-    if (this.isMounted()) {
-      this.options.onFree!();
-    }
+    requestAnimationFrame(() => {
+      //@ts-ignore
+      render(null, this.container);
+    });
   }
   public render(rect: DOMRect) {
     this.unmount();
-    requestAnimationFrame(() => {
+    requestIdleCallback(() => {
       render(
         <Popover
           rect={rect}
           title={ChatType[this.chatType]}
           onClose={this.unmount.bind(this)}
         >
-          <MarkdownRender options={this.options} prompts={this.prompts} />
+          <MarkdownRender
+            options={this.options}
+            prompts={this.prompts}
+            onComplete={this.onComplete.bind(this)}
+          />
         </Popover>,
         this.container
       );

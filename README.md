@@ -325,16 +325,14 @@ useEffect(() => {
       },
       body: JSON.stringify({
         model: "",
-        stream: true,
-        temperature: 0.1,
       }),
     }),
-    onAccept() {
-
+    onAccept(code: string) {
+      //采纳调优代码
     },
-    onFree() {
-      
-    }
+    onChat(params: { type: string; code?: string; answer?: string }) {
+      //对话成功
+    },
   });
   return () => {
     dispose();

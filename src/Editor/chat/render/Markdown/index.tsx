@@ -17,11 +17,16 @@ import "./index.less";
 export interface MarkdownRenderProps {
   options: ChatOptions;
   prompts: PromptType[];
+  onComplete?: (answer?: string) => void;
 }
 
 let requestBodyCache: Record<string, any>;
 
-const MarkdownRender = ({ options, prompts }: MarkdownRenderProps) => {
+const MarkdownRender = ({
+  options,
+  prompts,
+  onComplete,
+}: MarkdownRenderProps) => {
   const [ReactMarkdown, setReactMarkdown] = useState<any>();
   const [SyntaxHighlighter, setSyntaxHighlighter] = useState<any>();
   const [SyntaxHighlightTheme, setSyntaxHighlightTheme] = useState<{
@@ -29,6 +34,7 @@ const MarkdownRender = ({ options, prompts }: MarkdownRenderProps) => {
   }>();
   const [markdown, setMarkdown] = useState("");
   const ref = useRef<HTMLDivElement>(null);
+  const answerRef = useRef<string>("");
   const fetchChats = useCallback(
     async ({
       prompts,
@@ -59,7 +65,11 @@ const MarkdownRender = ({ options, prompts }: MarkdownRenderProps) => {
               ""
             );
             setMarkdown((prev) => prev + text);
+            answerRef.current = answerRef.current + text;
             requestAnimationFrame(scrollToBottom);
+          } else {
+            onComplete!(answerRef.current);
+            answerRef.current = "";
           }
         },
         onerror(err) {
@@ -131,7 +141,7 @@ const MarkdownRender = ({ options, prompts }: MarkdownRenderProps) => {
                       margin: 0,
                       borderBottomLeftRadius: 4,
                       borderBottomRightRadius: 4,
-                      fontSize: 12
+                      fontSize: 12,
                     }}
                     showLineNumbers={true}
                     showInlineLineNumbers={true}

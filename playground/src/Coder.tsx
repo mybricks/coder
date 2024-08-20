@@ -161,8 +161,8 @@ export default forwardRef<any, HandlerType>(
         onAccept(code: string) {
           console.log('----accept---', code)
         },
-        onFree() {
-          console.log('----free---')
+        onChat(params) {
+          console.log('----free---', params)
         }
       });
       return () => {
