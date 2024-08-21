@@ -45,10 +45,11 @@ const MarkdownRender = ({
       options: ChatOptions;
       controller: AbortController;
     }) => {
-      const body = requestBodyCache ?? (await getBody(options.request)) ?? {};
+      const request = options.request.clone();
+      const body = requestBodyCache ?? (await getBody(request)) ?? {};
       requestBodyCache = body;
-      return fetchEventSource(options.request.clone(), {
-        headers: getHeaders(options.request),
+      return fetchEventSource(request, {
+        headers: getHeaders(request),
         body: JSON.stringify({
           stream: true,
           temperature: 0.1,

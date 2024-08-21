@@ -49,13 +49,14 @@ class CopilotCompleter implements InlineCompletionProvider {
       });
     this.fetchCompletions = debounceAsync(
       async ({ codeBeforeCursor, codeAfterCursor }: CopilotParams) => {
-        const body = this.body ?? (await getBody(options.request)) ?? {};
+        const request = options.request.clone();
+        const body = this.body ?? (await getBody(request)) ?? {};
         this.body = body;
         if (this.controller) {
           this.controller.abort();
         }
         this.controller = new AbortController();
-        return fetch(options.request.clone(), {
+        return fetch(request, {
           signal: this.controller.signal,
           body: JSON.stringify({
             path,
