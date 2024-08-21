@@ -47,7 +47,7 @@ const MarkdownRender = ({
     }) => {
       const body = requestBodyCache ?? (await getBody(options.request)) ?? {};
       requestBodyCache = body;
-      return fetchEventSource(options.request, {
+      return fetchEventSource(options.request.clone(), {
         headers: getHeaders(options.request),
         body: JSON.stringify({
           stream: true,

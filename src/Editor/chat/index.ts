@@ -16,7 +16,7 @@ export const registerChat = (
   editor: StandaloneCodeEditor,
   options: ChatOptions
 ) => {
-  const { duration = 2000 } = options;
+  const { duration = 3000 } = options;
   const path = editor.getModel()?.uri.toString();
   const insDom = document.querySelector(
     `div[data-uri="${path}"]`

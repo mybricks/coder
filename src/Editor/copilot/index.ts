@@ -55,7 +55,7 @@ class CopilotCompleter implements InlineCompletionProvider {
           this.controller.abort();
         }
         this.controller = new AbortController();
-        return fetch(options.request, {
+        return fetch(options.request.clone(), {
           signal: this.controller.signal,
           body: JSON.stringify({
             path,
