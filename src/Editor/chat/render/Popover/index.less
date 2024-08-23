@@ -16,6 +16,25 @@
   transition: all 0.15s;
   height: fit-content;
   inset: 0;
+  background: linear-gradient(0deg, #5ddcff, #3c67e3 43%, #4e00c2);
+  color: #fff;
+  &::before{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    border-radius: inherit;
+    z-index: -1;
+    filter: blur(14px);
+  }
+  &::after{
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: #191c29;
+    border-radius: inherit;
+    z-index: -1;
+  }
   .coder-chat-popover-title {
     font-size: 16px;
     font-weight: 500;
