@@ -107,7 +107,7 @@ const MarkdownRender = ({
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchChats({ prompts, options, controller });
+    // fetchChats({ prompts, options, controller });
     return () => {
       controller.abort();
     };
@@ -164,6 +164,10 @@ const MarkdownRender = ({
           {!!markdown ? markdown : "努力生成中..."}
         </ReactMarkdown>
       )}
+      <div>
+        <Icon name="accept" />
+        <Icon name="refresh" />
+      </div>
     </div>
   );
 };

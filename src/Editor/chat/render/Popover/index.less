@@ -18,17 +18,17 @@
   inset: 0;
   background: linear-gradient(0deg, #5ddcff, #3c67e3 43%, #4e00c2);
   color: #fff;
-  &::before{
-    content: '';
+  &::before {
+    content: "";
     position: absolute;
     inset: 0;
     background: inherit;
     border-radius: inherit;
     z-index: -1;
-    filter: blur(14px);
+    filter: blur(12px);
   }
-  &::after{
-    content: '';
+  &::after {
+    content: "";
     position: absolute;
     inset: 2px;
     background: #191c29;
@@ -39,7 +39,7 @@
     font-size: 16px;
     font-weight: 500;
     margin: 0 0 0.5rem 0;
-    color: rgba(0, 0, 0, 0.80);
+    mix-blend-mode: difference;
   }
   .coder-chat-popover-arrow {
     position: absolute;
@@ -57,7 +57,7 @@
       inset-inline-start: 0;
       width: var(--coder-chat-popup-arrow-size);
       height: calc(var(--coder-chat-popup-arrow-size) / 2);
-      background: var(--coder-chat-popup-background-color);
+      background: transparent;
       clip-path: var(--coder-chat-popup-arrow-path);
       content: "";
     }
@@ -81,5 +81,6 @@
     top: 14px;
     right: 14px;
     cursor: pointer;
+    z-index: 1;
   }
 }

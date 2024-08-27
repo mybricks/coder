@@ -15,7 +15,6 @@ import Editor, {
   registerChat,
 } from "../../src";
 import css from "./App.module.less";
-import Second from './Second'
 
 const items = [
   {
@@ -259,7 +258,6 @@ export default forwardRef<any, HandlerType>(
                   className: css.comment,
                 }}
               />
-              <Second/>
             </Tabs.TabPane>
           ))}
         </Tabs>
