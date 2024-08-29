@@ -133,7 +133,7 @@ export default ({
   return (
     <span
       style={style}
-      className={`${styles['"coder-chat-icon"']} ${className ?? ""}`}
+      className={`${styles["coder-chat-icon"]} ${className ?? ""}`}
       onClick={onClick}
       {...attributes}
       {...props}
