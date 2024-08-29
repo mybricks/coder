@@ -1,0 +1,67 @@
+.coder-chat-icon {
+  display: inline-block;
+  color: inherit;
+  font-style: normal;
+  text-align: center;
+  text-transform: none;
+  vertical-align: -0.125em;
+  -webkit-font-smoothing: antialiased;
+  cursor: pointer;
+  svg {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 1;
+  }
+}
+
+[data-coder-tooltip] {
+  position: relative;
+  display: inline-block;
+  overflow: unset;
+}
+
+[data-coder-tooltip]::before,
+[data-coder-tooltip]::after {
+  position: absolute;
+  visibility: visible;
+  opacity: 0;
+  z-index: 202481200;
+  pointer-events: none;
+  transition: 0.2s;
+}
+
+[data-coder-tooltip]::before {
+  content: "";
+  border: 5px solid transparent;
+  border-top-color: #fff;
+  transform: rotate(180deg);
+  left: 5px;
+  bottom: -6px;
+}
+
+[data-coder-tooltip]::after {
+  content: attr(data-coder-tooltip);
+  background: #fff;
+  color: #565656;
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-shadow: 0 0 -6px rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+  left: calc(-50% - 5px);
+  bottom: calc(-100% - 11px);
+  font-size: 14px;
+}
+
+[data-coder-tooltip]:hover::before,
+[data-coder-tooltip]:hover::after {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition-delay: 0.15s;
+  transition-delay: 0.15s;
+}
+
+[data-coder-tooltip=""]::before,
+[data-coder-tooltip=""]::after {
+  display: none !important;
+}
