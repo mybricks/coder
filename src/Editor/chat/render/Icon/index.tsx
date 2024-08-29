@@ -1,5 +1,5 @@
 import React, { CSSProperties, useMemo } from "react";
-import "./index.less";
+import styles from "./index.module.less";
 
 const icons = {
   close: (
@@ -126,14 +126,14 @@ export default ({
   const attributes = useMemo(() => {
     const attrs: Record<string, any> = {};
     if (tooltip) {
-      attrs["data-tip"] = tooltip;
+      attrs["data-coder-tooltip"] = tooltip;
     }
     return attrs;
   }, [tooltip]);
   return (
     <span
       style={style}
-      className={`${"coder-chat-icon"} ${className ?? ""}`}
+      className={`${styles['"coder-chat-icon"']} ${className ?? ""}`}
       onClick={onClick}
       {...attributes}
       {...props}

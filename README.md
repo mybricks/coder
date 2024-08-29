@@ -307,7 +307,7 @@ useEffect(() => {
 }, [monaco, editor]);
 ```
 
-#### copilot Options
+#### Options
 
 ```ts
 type CopilotOptions = {
@@ -346,7 +346,7 @@ useEffect(() => {
 }, [monaco, editor]);
 ```
 
-#### chat Options
+#### Options
 
 ```ts
 type ChatOptions = {
