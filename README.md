@@ -307,6 +307,18 @@ useEffect(() => {
 }, [monaco, editor]);
 ```
 
+#### copilot Options
+
+```ts
+type CopilotOptions = {
+  language: LanguageType;
+  request: Request;
+  getCompletions?: (res: Response) => Promise<CopilotResult>;
+  onAcceptCompletion?: (params: CbParams) => void;
+  onFreeCompletion?: (params: CbParams) => void;
+};
+```
+
 ### Chat
 
 ```ts
@@ -327,17 +339,30 @@ useEffect(() => {
         model: "",
       }),
     }),
-    onAccept(code: string) {
-      //采纳调优代码
-    },
-    onChat(params: { type: string; code?: string; answer?: string }) {
-      //对话成功
-    },
-  });
+  } as ChatOptions);
   return () => {
     dispose();
   };
 }, [monaco, editor]);
+```
+
+#### chat Options
+
+```ts
+type ChatOptions = {
+  language: LanguageType;
+  duration?: number;
+  request: Request;
+  onCopy?(content?: string): void;
+  onAgree?(): void;
+  onOppose?(): void;
+  onCodeCopy?(code?: string): void;
+  onChat?(params: {
+    type: keyof typeof ChatType;
+    code?: string;
+    answer?: string;
+  }): void;
+};
 ```
 
 ## Playground

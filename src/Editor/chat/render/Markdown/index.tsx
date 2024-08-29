@@ -33,8 +33,10 @@ const MarkdownRender = ({
     [key: string]: React.CSSProperties;
   }>();
   const [markdown, setMarkdown] = useState("");
+  const [finish, setFinish] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
   const answerRef = useRef<string>("");
+  const fetchControllerRef = useRef<AbortController | null>();
   const fetchChats = useCallback(
     async ({
       prompts,
@@ -70,7 +72,7 @@ const MarkdownRender = ({
             requestAnimationFrame(scrollToBottom);
           } else {
             onComplete!(answerRef.current);
-            answerRef.current = "";
+            setFinish(true);
           }
         },
         onerror(err) {
@@ -106,69 +108,143 @@ const MarkdownRender = ({
   }, []);
 
   useEffect(() => {
-    const controller = new AbortController();
-    // fetchChats({ prompts, options, controller });
+    fetchControllerRef.current = new AbortController();
+    fetchChats({ prompts, options, controller: fetchControllerRef.current });
     return () => {
-      controller.abort();
+      cancelSpeak();
+      fetchControllerRef.current!.abort();
+      answerRef.current = "";
     };
   }, [prompts, options]);
 
-  const onAccept = useCallback((code: string) => {
-    clipBoard(code);
-    options.onAccept!(code);
+  const onCopy = useCallback(() => {
+    clipBoard(answerRef.current);
+  }, []);
+
+  const onCodeCopy = useCallback(
+    (code: string) => {
+      clipBoard(code);
+      typeof options.onCodeCopy === "function" && options.onCodeCopy(code);
+    },
+    [options.onCodeCopy]
+  );
+
+  const onAgree = useCallback(() => {
+    typeof options.onAgree === "function" && options.onAgree();
+  }, [options.onAgree]);
+
+  const onOppose = useCallback(() => {
+    typeof options.onOppose === "function" && options.onOppose();
+  }, [options.onOppose]);
+
+  const onRefresh = useCallback(() => {
+    setMarkdown("");
+    cancelSpeak();
+    setFinish(false);
+    fetchControllerRef.current = new AbortController();
+    fetchChats({ prompts, options, controller: fetchControllerRef.current });
+  }, []);
+
+  const onSpeak = useCallback(() => {
+    if (window.speechSynthesis) {
+      cancelSpeak();
+      window.speechSynthesis.speak(
+        new SpeechSynthesisUtterance(answerRef.current)
+      );
+    }
+  }, []);
+
+  const cancelSpeak = useCallback(() => {
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+    }
   }, []);
 
   return (
-    <div ref={ref} className="coder-chat-markdown">
-      {ReactMarkdown && SyntaxHighlighter && (
-        <ReactMarkdown
-          components={{
-            //@ts-ignore
-            code({ node, inline, className, children, ...props }) {
-              const match = /language-(\w+)/.exec(className || "");
-              return !inline && match ? (
-                <div className="coder-chat-markdown-code">
-                  <div className="coder-chat-markdown-code-language">
-                    <span>{options.language ?? match[1]}</span>
-                    <Icon
-                      name="copy"
-                      className="coder-chat-markdown-code-copy"
-                      onClick={() => onAccept(String(children))}
+    <>
+      <div ref={ref} className="coder-chat-markdown">
+        {ReactMarkdown && SyntaxHighlighter && (
+          <ReactMarkdown
+            components={{
+              //@ts-ignore
+              code({ node, inline, className, children, ...props }) {
+                const match = /language-(\w+)/.exec(className || "");
+                return !inline && match ? (
+                  <div className="coder-chat-markdown-code">
+                    <div className="coder-chat-markdown-code-language">
+                      <span>{options.language ?? match[1]}</span>
+                      <Icon
+                        name="copy"
+                        tooltip="复制"
+                        className="coder-chat-markdown-code-copy"
+                        onClick={() => onCodeCopy(String(children))}
+                      />
+                    </div>
+                    <SyntaxHighlighter
+                      children={String(children).replace(/\n$/, "")}
+                      customStyle={{
+                        margin: 0,
+                        borderBottomLeftRadius: 4,
+                        borderBottomRightRadius: 4,
+                        fontSize: 12,
+                      }}
+                      showLineNumbers={true}
+                      showInlineLineNumbers={true}
+                      style={SyntaxHighlightTheme}
+                      language={match[1]}
+                      lineNumberStyle={{ minWidth: "2rem" }}
+                      PreTag={"div"}
+                      {...props}
                     />
                   </div>
-                  <SyntaxHighlighter
-                    children={String(children).replace(/\n$/, "")}
-                    customStyle={{
-                      margin: 0,
-                      borderBottomLeftRadius: 4,
-                      borderBottomRightRadius: 4,
-                      fontSize: 12,
-                    }}
-                    showLineNumbers={true}
-                    showInlineLineNumbers={true}
-                    style={SyntaxHighlightTheme}
-                    language={match[1]}
-                    lineNumberStyle={{ minWidth: "2rem" }}
-                    PreTag={"div"}
-                    {...props}
-                  />
-                </div>
-              ) : (
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              );
-            },
-          }}
-        >
-          {!!markdown ? markdown : "努力生成中..."}
-        </ReactMarkdown>
-      )}
-      <div>
-        <Icon name="accept" />
-        <Icon name="refresh" />
+                ) : (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                );
+              },
+            }}
+          >
+            {!!markdown ? markdown : "努力生成中..."}
+          </ReactMarkdown>
+        )}
       </div>
-    </div>
+      <div
+        className={"coder-chat-toolbar"}
+        style={{ display: finish ? "flex" : "none" }}
+      >
+        <Icon
+          name="speak"
+          tooltip="朗读"
+          className="coder-chat-toolbar-icon"
+          onClick={onSpeak}
+        />
+        <Icon
+          name="copy"
+          tooltip="复制"
+          className="coder-chat-toolbar-icon"
+          onClick={onCopy}
+        />
+        <Icon
+          name="accept"
+          tooltip="赞一下"
+          className="coder-chat-toolbar-icon"
+          onClick={onAgree}
+        />
+        <Icon
+          name="reject"
+          tooltip="踩一下"
+          className="coder-chat-toolbar-icon"
+          onClick={onOppose}
+        />
+        <Icon
+          name="refresh"
+          tooltip="重新生成"
+          className="coder-chat-toolbar-icon"
+          onClick={onRefresh}
+        />
+      </div>
+    </>
   );
 };
 

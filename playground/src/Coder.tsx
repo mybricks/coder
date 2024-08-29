@@ -157,12 +157,21 @@ export default forwardRef<any, HandlerType>(
             }),
           }
         ),
-        onAccept(code: string) {
-          console.log('----accept---', code)
+        onCodeCopy(code: string) {
+          console.log("----accept---", code);
         },
         onChat(params) {
-          console.log('----free---', params)
-        }
+          console.log("----chat---", params);
+        },
+        onAgree() {
+          console.log("--------agree---");
+        },
+        onCopy(content: string) {
+          console.log("------onCopy---", content);
+        },
+        onOppose() {
+          console.log("--------oppose---");
+        },
       });
       return () => {
         dispose();

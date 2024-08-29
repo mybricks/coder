@@ -34,6 +34,8 @@
       padding: 8px 12px;
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
+      position: relative;
+      z-index: 1;
     }
     .coder-chat-markdown-code-copy {
       svg {
@@ -45,6 +47,23 @@
           path {
             fill: rgba(66, 102, 247, 0.85);
           }
+        }
+      }
+    }
+  }
+}
+.coder-chat-toolbar {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 8px;
+  padding: 4px;
+  .coder-chat-toolbar-icon {
+    svg {
+      &:hover {
+        path {
+          fill: rgba(66, 102, 247, 0.85);
         }
       }
     }

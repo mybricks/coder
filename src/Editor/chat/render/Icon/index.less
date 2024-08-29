@@ -2,25 +2,66 @@
   display: inline-block;
   color: inherit;
   font-style: normal;
-  line-height: 0;
   text-align: center;
   text-transform: none;
   vertical-align: -0.125em;
   -webkit-font-smoothing: antialiased;
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.2);
-    transition: all 0.35s;
-  }
+  cursor: pointer;
   svg {
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     line-height: 1;
-    &:hover {
-      path {
-        fill: rgba(250, 100, 0, 1);
-      }
-    }
   }
+}
+
+[data-tip] {
+  position: relative;
+  display: inline-block;
+  overflow: unset;
+}
+
+[data-tip]::before,
+[data-tip]::after {
+  position: absolute;
+  visibility: visible;
+  opacity: 0;
+  z-index: 202481200;
+  pointer-events: none;
+  transition: 0.2s;
+}
+
+[data-tip]::before {
+  content: "";
+  border: 5px solid transparent;
+  border-top-color: #fff;
+  transform: rotate(180deg);
+  left: 5px;
+  bottom: -6px;
+}
+
+[data-tip]::after {
+  content: attr(data-tip);
+  background: #fff;
+  color: #565656;
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-shadow: 0 0 -6px rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+  left: calc(-50% - 5px);
+  bottom: calc(-100% - 11px);
+  font-size: 14px;
+}
+
+[data-tip]:hover::before,
+[data-tip]:hover::after {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition-delay: 0.15s;
+  transition-delay: 0.15s;
+}
+
+[data-tip=""]::before,
+[data-tip=""]::after {
+  display: none !important;
 }

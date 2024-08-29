@@ -4,7 +4,10 @@ export type ChatOptions = {
   language: LanguageType;
   duration?: number;
   request: Request;
-  onAccept?(code?: string): void;
+  onCopy?(content?: string): void;
+  onAgree?(): void;
+  onOppose?(): void;
+  onCodeCopy?(code?: string): void;
   onChat?(params: {
     type: keyof typeof ChatType;
     code?: string;
