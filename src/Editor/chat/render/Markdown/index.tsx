@@ -109,7 +109,7 @@ const MarkdownRender = ({
 
   useEffect(() => {
     fetchControllerRef.current = new AbortController();
-    // fetchChats({ prompts, options, controller: fetchControllerRef.current });
+    fetchChats({ prompts, options, controller: fetchControllerRef.current });
     return () => {
       cancelSpeak();
       fetchControllerRef.current!.abort();
