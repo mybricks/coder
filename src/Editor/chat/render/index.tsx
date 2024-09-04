@@ -16,11 +16,12 @@ class Chat {
     this.container = container;
   }
 
-  private onComplete(answer?: string) {
+  private onComplete(answer?: string, duration?: number) {
     return this.options.onChat?.({
       type: this.chatType,
       code: this.prompts[0].content,
       answer,
+      duration
     });
   }
 

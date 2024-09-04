@@ -17,7 +17,7 @@ import "./index.less";
 export interface MarkdownRenderProps {
   options: ChatOptions;
   prompts: PromptType[];
-  onComplete?: (answer?: string) => void;
+  onComplete?: (answer?: string, duration?: number) => void;
 }
 
 let requestBodyCache: Record<string, any>;
@@ -50,6 +50,7 @@ const MarkdownRender = ({
       const request = options.request.clone();
       const body = requestBodyCache ?? (await getBody(request)) ?? {};
       requestBodyCache = body;
+      const requestStart = Date.now();
       return fetchEventSource(request, {
         headers: getHeaders(request),
         body: JSON.stringify({
@@ -71,7 +72,8 @@ const MarkdownRender = ({
             answerRef.current = answerRef.current + text;
             requestAnimationFrame(scrollToBottom);
           } else {
-            onComplete!(answerRef.current);
+            const duration = Date.now() - requestStart;
+            onComplete!(answerRef.current, duration);
             setFinish(true);
           }
         },
@@ -95,7 +97,7 @@ const MarkdownRender = ({
 
   useLayoutEffect(() => {
     (async () => {
-      const [{ default: ReactMarkdown }, { Prism }, { materialDark }] =
+      const [{ default: ReactMarkdown }, { Prism }, { vscDarkPlus }] =
         await Promise.all([
           import("react-markdown"),
           import("react-syntax-highlighter"),
@@ -103,7 +105,7 @@ const MarkdownRender = ({
         ]);
       setReactMarkdown(() => ReactMarkdown);
       setSyntaxHighlighter(() => Prism);
-      setSyntaxHighlightTheme(materialDark);
+      setSyntaxHighlightTheme(vscDarkPlus);
     })();
   }, []);
 
@@ -187,6 +189,7 @@ const MarkdownRender = ({
                         borderBottomLeftRadius: 4,
                         borderBottomRightRadius: 4,
                         fontSize: 12,
+                        backgroundColor: "rgba(40, 40, 40, 0.85)",
                       }}
                       showLineNumbers={true}
                       showInlineLineNumbers={true}

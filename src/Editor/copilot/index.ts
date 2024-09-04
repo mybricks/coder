@@ -30,6 +30,7 @@ class CopilotCompleter implements InlineCompletionProvider {
   private body!: Record<string, any>;
   private controller!: AbortController | null;
   private uniqueUri!: string;
+  private requestDuration!: number;
   constructor(
     private readonly monaco: Monaco,
     private readonly editor: StandaloneCodeEditor,
@@ -56,6 +57,7 @@ class CopilotCompleter implements InlineCompletionProvider {
           this.controller.abort();
         }
         this.controller = new AbortController();
+        const requestStart = Date.now();
         return fetch(request, {
           signal: this.controller.signal,
           body: JSON.stringify({
@@ -74,6 +76,7 @@ class CopilotCompleter implements InlineCompletionProvider {
           })
           .finally(() => {
             this.controller = null;
+            this.requestDuration = Date.now() - requestStart;
           });
       }
     );
@@ -85,7 +88,7 @@ class CopilotCompleter implements InlineCompletionProvider {
     token: EditorCancellationToken
   ) {
     const uri = model.uri.toString();
-    if(this.uniqueUri!== uri) return;
+    if (this.uniqueUri !== uri) return;
     if (token.isCancellationRequested || acceptCompletion) {
       return createInlineCompletionResult([]);
     }
@@ -127,6 +130,7 @@ class CopilotCompleter implements InlineCompletionProvider {
       codeAfterCursor,
       codeBeforeCursor,
       completion: completions.items[0],
+      duration: this.requestDuration
     });
   }
   handleItemDidShow(
@@ -144,6 +148,7 @@ class CopilotCompleter implements InlineCompletionProvider {
       codeBeforeCursor,
       codeAfterCursor,
       completion: item,
+      duration: this.requestDuration,
     });
   }
 }

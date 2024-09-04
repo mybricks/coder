@@ -40,6 +40,7 @@ export type CbParams = Partial<{
   codeBeforeCursor: string;
   codeAfterCursor: string;
   completion: EditorInlineCompletion;
+  duration?: number;
 }>;
 
 export type CopilotOptions = {

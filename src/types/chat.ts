@@ -12,12 +12,14 @@ export type ChatOptions = {
     type: keyof typeof ChatType;
     code?: string;
     answer?: string;
+    duration?: number;
   }): void;
 };
 
 export enum ChatType {
   CODE_EXPLANATION = "代码解释",
   CODE_OPTIMIZATION = "调优建议",
+  CODE_COMMENT = "代码注释",
 }
 
 export type ASTPosition = {
