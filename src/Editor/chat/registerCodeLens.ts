@@ -11,12 +11,13 @@ import {
 } from "../../types";
 import { languages, IEvent } from "monaco-editor";
 import { parsePosition } from "./parsePosition";
-import { executeChain } from "../../util";
+import { executeChain, Deferred } from "../../util";
 
 class CopilotCodeLensProvider implements CodeLensProvider {
-  private lenses!: CodeLens[];
-  public dispose!: () => void;
+  private lenses: CodeLens[] = [];
+  public dispose: () => void = () => {};
   private uniqueUri!: string;
+  private deferred: Deferred<boolean> = new Deferred();
   constructor(
     private readonly monaco: Monaco,
     private readonly editor: StandaloneCodeEditor,
@@ -28,19 +29,26 @@ class CopilotCodeLensProvider implements CodeLensProvider {
       parsePosition,
       this.computeRangeValue.bind(this),
       this.createCodeLens.bind(this),
-    ]).then(({ lenses, dispose }: any) => {
-      this.lenses = lenses;
-      this.dispose = dispose;
-    });
+    ])
+      .then(({ lenses, dispose }: any) => {
+        this.lenses = lenses;
+        this.dispose = dispose;
+        this.deferred.resolve(true);
+      })
+      .catch((err) => {
+        console.error(err);
+        this.deferred.reject(err);
+      });
   }
-  provideCodeLenses(model: EditorModel, token: EditorCancellationToken) {
+  async provideCodeLenses(model: EditorModel, token: EditorCancellationToken) {
     const uri = model.uri.toString();
-    if(this.uniqueUri!== uri) {
+    if (this.uniqueUri !== uri) {
       return {
         lenses: [],
         dispose() {},
       };
-    };
+    }
+    await this.deferred.promise;
     return {
       lenses: this.lenses,
       dispose() {},
