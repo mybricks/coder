@@ -53,6 +53,7 @@ export type HandlerType = {
     options?: Partial<{ ignores: string[]; semantic: boolean }>
   ): Promise<EmitOutput["outputFiles"] | Diagnostic[]>;
   getSemanticDiagnostics(): Promise<Diagnostic[]>;
+  anchorDiagnostic(diagnostic: Diagnostic): void;
 };
 
 const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
@@ -140,11 +141,13 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
         const semantics = await client.getSemanticDiagnostics(uri);
         return semantics;
       },
-      async anchorCodeFromDiagnostic(diagnostic: Diagnostic) {
+      async anchorDiagnostic(diagnostic: Diagnostic) {
         const value = editorRef.current?.getValue();
         if (!monaco || !value || !diagnostic) return;
         const { start = 0, length = 0 } = diagnostic;
-        let current = 0, lineNumber = 1, column = 0;
+        let current = 0,
+          lineNumber = 1,
+          column = 0;
         while (current++ < start) {
           column++;
           if (value[current] === "\n") {
@@ -160,6 +163,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
         );
         editorRef.current?.focus();
         editorRef.current?.revealRangeInCenter(range);
+        editorRef.current?.setPosition(new monaco.Position(lineNumber, column));
       },
     }),
     [monaco, lang, isMounted, _props, editorRef.current]
