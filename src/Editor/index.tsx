@@ -67,7 +67,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     eslint,
     theme,
     babel,
-    path
+    path,
   } = _props;
   const lang = language ?? defaultLanguage;
 
@@ -139,6 +139,27 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
         const uri = model!.uri.toString();
         const semantics = await client.getSemanticDiagnostics(uri);
         return semantics;
+      },
+      async anchorCodeFromDiagnostic(diagnostic: Diagnostic) {
+        const value = editorRef.current?.getValue();
+        if (!monaco || !value || !diagnostic) return;
+        const { start = 0, length = 0 } = diagnostic;
+        let current = 0, lineNumber = 1, column = 0;
+        while (current++ < start) {
+          column++;
+          if (value[current] === "\n") {
+            lineNumber++;
+            column = 0;
+          }
+        }
+        const range = new monaco.Range(
+          lineNumber + 1,
+          column,
+          lineNumber + 1,
+          column + length
+        );
+        editorRef.current?.focus();
+        editorRef.current?.revealRangeInCenter(range);
       },
     }),
     [monaco, lang, isMounted, _props, editorRef.current]
