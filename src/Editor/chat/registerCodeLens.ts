@@ -15,7 +15,7 @@ import { executeChain, Deferred } from "../../util";
 
 class CopilotCodeLensProvider implements CodeLensProvider {
   private lenses: CodeLens[] = [];
-  public dispose: () => void = () => {};
+  public dispose: () => Promise<void> = () => Promise.resolve();
   private uniqueUri!: string;
   private deferred: Deferred<boolean> = new Deferred();
   constructor(
@@ -33,25 +33,28 @@ class CopilotCodeLensProvider implements CodeLensProvider {
       .then(({ lenses, dispose }: any) => {
         this.lenses = lenses;
         this.dispose = dispose;
-        this.deferred.resolve(true);
       })
       .catch((err) => {
-        console.error(err);
-        this.deferred.reject(err);
+        this.lenses = [];
+        this.dispose = () => Promise.resolve();
+      })
+      .finally(() => {
+        this.deferred.resolve(true);
       });
   }
   async provideCodeLenses(model: EditorModel, token: EditorCancellationToken) {
     const uri = model.uri.toString();
+    const dispose = () => {};
     if (this.uniqueUri !== uri) {
       return {
         lenses: [],
-        dispose() {},
+        dispose,
       };
     }
     await this.deferred.promise;
     return {
       lenses: this.lenses,
-      dispose() {},
+      dispose,
     };
   }
   onDidChange?: IEvent<this>;
@@ -77,9 +80,7 @@ class CopilotCodeLensProvider implements CodeLensProvider {
       );
     }, [] as any[]);
     return {
-      dispose: () => {
-        cacheCommands.forEach((dispose) => dispose());
-      },
+      dispose: () => Promise.all(cacheCommands.map((dispose) => dispose())),
       lenses,
     };
   }
@@ -115,9 +116,7 @@ class CopilotCodeLensProvider implements CodeLensProvider {
       };
     });
     return {
-      dispose: () => {
-        cacheCommands.forEach((dispose) => dispose());
-      },
+      dispose: () => Promise.all(cacheCommands.map((dispose) => dispose())),
       commands,
     };
   }
@@ -137,8 +136,8 @@ export const registerCodeLens = (
     "typescript",
     provider
   );
-  return () => {
+  return async () => {
     disposable.dispose();
-    provider.dispose();
+    await provider.dispose();
   };
 };

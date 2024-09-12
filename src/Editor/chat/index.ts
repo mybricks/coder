@@ -51,9 +51,9 @@ export const registerChat = (
       dispose = disposeCodeLens;
     }
   );
-  const subscription = editor.onDidChangeModelContent(() => {
+  const subscription = editor.onDidChangeModelContent(async () => {
     if (dispose) {
-      dispose();
+      await dispose();
     }
     delayRegister(monaco, editor, onCommandExecute);
   });

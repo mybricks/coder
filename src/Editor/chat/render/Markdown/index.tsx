@@ -197,6 +197,7 @@ const MarkdownRender = ({
                       language={match[1]}
                       lineNumberStyle={{ minWidth: "2rem" }}
                       PreTag={"div"}
+                      wrapLongLines={true}
                       {...props}
                     />
                   </div>

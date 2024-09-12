@@ -1,9 +1,21 @@
 import { ASTLocation } from "../../types";
 
+let loadParser = () =>
+  import("@babel/parser").then(({ parse }) => {
+    loadParser = () => Promise.resolve(parse);
+    return parse;
+  });
+
+let loadAstTypes = () =>
+  import("ast-types").then(({ visit }) => {
+    loadAstTypes = () => Promise.resolve(visit);
+    return visit;
+  });
+
 export const parsePosition = (text?: string) => {
   if (!text) return [];
-  return Promise.all([import("@babel/parser"), import("ast-types")])
-    .then(([{ parse }, { visit }]) => {
+  return Promise.all([loadParser(), loadAstTypes()])
+    .then(([parse, visit]) => {
       try {
         const ast = parse(text, {
           sourceType: "module",
@@ -26,7 +38,6 @@ export const parsePosition = (text?: string) => {
         });
         return codeLocs.filter((it) => !!it);
       } catch (error) {
-        console.warn(error);
         return [];
       }
     })
