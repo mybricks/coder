@@ -21,7 +21,7 @@ class Chat {
       type: this.chatType,
       code: this.prompts[0].content,
       answer,
-      duration
+      duration,
     });
   }
 
@@ -51,7 +51,8 @@ class Chat {
     });
   }
   public dispose() {
-    document.body.removeChild(this.container);
+    if (document.body.contains(this.container!))
+      document.body.removeChild(this.container!);
   }
 }
 

@@ -90,7 +90,7 @@ class CopilotCompleter implements InlineCompletionProvider {
   ) {
     const uri = model.uri.toString();
     if (this.uniqueUri !== uri) return;
-    if (token.isCancellationRequested || acceptCompletion) {
+    if (token.isCancellationRequested) {
       return createInlineCompletionResult([]);
     }
     const range = new this.monaco.Range(
