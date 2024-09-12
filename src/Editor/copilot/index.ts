@@ -27,6 +27,7 @@ let acceptCompletion = false;
 
 class CopilotCompleter implements InlineCompletionProvider {
   fetchCompletions: (args: CopilotParams) => Promise<CopilotResult>;
+  private request!: Request;
   private body!: Record<string, any>;
   private controller!: AbortController | null;
   private uniqueUri!: string;
@@ -38,6 +39,7 @@ class CopilotCompleter implements InlineCompletionProvider {
     private readonly onCompletionShow: (params: CbParams) => void
   ) {
     this.uniqueUri = editor.getModel()?.uri.toString() ?? "";
+    this.request = options.request.clone();
     const path = getFileName(options.language);
     const getCompletions =
       options.getCompletions ??
@@ -50,15 +52,14 @@ class CopilotCompleter implements InlineCompletionProvider {
       });
     this.fetchCompletions = debounceAsync(
       async ({ codeBeforeCursor, codeAfterCursor }: CopilotParams) => {
-        const request = options.request.clone();
-        const body = this.body ?? (await getBody(request)) ?? {};
+        const body = this.body ?? (await getBody(this.request)) ?? {};
         this.body = body;
         if (this.controller) {
           this.controller.abort();
         }
         this.controller = new AbortController();
         const requestStart = Date.now();
-        return fetch(request, {
+        return fetch(this.request, {
           signal: this.controller.signal,
           body: JSON.stringify({
             path,
@@ -130,7 +131,7 @@ class CopilotCompleter implements InlineCompletionProvider {
       codeAfterCursor,
       codeBeforeCursor,
       completion: completions.items[0],
-      duration: this.requestDuration
+      duration: this.requestDuration,
     });
   }
   handleItemDidShow(
