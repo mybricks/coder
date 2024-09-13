@@ -3,6 +3,7 @@ import type {
   EditorPosition,
   EditorRange,
   EditorInlineCompletionsResult,
+  EditorInlineCompletion,
 } from "../../types";
 import { singleton } from "../../util";
 
@@ -94,4 +95,35 @@ class CompletionCache {
   }
 }
 
-export default singleton(CompletionCache);
+class CompletionLRU<T extends EditorInlineCompletion["insertText"]> {
+  maxSize: number;
+  dataMap: Map<T, T>;
+  constructor(maxSize: number) {
+    this.maxSize = maxSize;
+    this.dataMap = new Map<T, T>();
+  }
+  get(k: T) {
+    const val = this.dataMap.get(k);
+    if (val) {
+      this.dataMap.delete(k);
+      this.dataMap.set(k, val);
+    }
+    return val;
+  }
+  set(k: T, val: T) {
+    if (this.dataMap.has(k)) {
+      this.dataMap.delete(k);
+    }
+    this.dataMap.set(k, val);
+    if (this.maxSize < this.dataMap.size) {
+      const deleteKey = this.dataMap.keys().next().value;
+      this.dataMap.delete(deleteKey);
+    }
+  }
+}
+
+const SingleCompletionCache = singleton(CompletionCache);
+
+const SingleCompletionLRU = singleton(CompletionLRU);
+
+export { SingleCompletionCache, SingleCompletionLRU };

@@ -21,9 +21,10 @@ import {
   isValidCompletions,
 } from "./common";
 import { getFormatter } from "./format";
-import CompletionCache from "./cache";
+import { SingleCompletionCache, SingleCompletionLRU } from "./cache";
 
 let acceptCompletion = false;
+const completionLRU = new SingleCompletionLRU(10);
 
 class CopilotCompleter implements InlineCompletionProvider {
   fetchCompletions: (args: CopilotParams) => Promise<CopilotResult>;
@@ -120,7 +121,14 @@ class CopilotCompleter implements InlineCompletionProvider {
     }
   }
   freeInlineCompletions(completions: EditorInlineCompletionsResult) {
-    if (acceptCompletion || !isValidCompletions(completions)) return;
+    const insertText = completions.items[0].insertText;
+    if (
+      acceptCompletion ||
+      !isValidCompletions(completions) ||
+      completionLRU.get(insertText)
+    )
+      return;
+    completionLRU.set(insertText, insertText);
     const model = this.editor.getModel();
     const position = this.editor.getPosition();
     const { codeBeforeCursor, codeAfterCursor } = getCursorTextInAround(
