@@ -121,7 +121,7 @@ class CopilotCompleter implements InlineCompletionProvider {
     }
   }
   freeInlineCompletions(completions: EditorInlineCompletionsResult) {
-    const insertText = completions.items[0].insertText;
+    const insertText = completions.items![0]?.insertText;
     if (
       acceptCompletion ||
       !isValidCompletions(completions) ||
