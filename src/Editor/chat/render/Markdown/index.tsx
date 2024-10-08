@@ -12,6 +12,7 @@ import {
 import { getBody, getHeaders, safeParse, clipBoard } from "../../../../util";
 import { ChatOptions, PromptType } from "../../../../types";
 import Icon from "../Icon";
+import ChatToolBar from "../Toolbar";
 import "./index.less";
 
 export interface MarkdownRenderProps {
@@ -121,7 +122,8 @@ const MarkdownRender = ({
 
   const onCopy = useCallback(() => {
     clipBoard(answerRef.current);
-  }, []);
+    typeof options.onCopy === "function" && options.onCopy(answerRef.current);
+  }, [options.onCopy]);
 
   const onCodeCopy = useCallback(
     (code: string) => {
@@ -213,41 +215,15 @@ const MarkdownRender = ({
           </ReactMarkdown>
         )}
       </div>
-      <div
-        className={"coder-chat-toolbar"}
-        style={{ display: finish ? "flex" : "none" }}
-      >
-        <Icon
-          name="speak"
-          tooltip="朗读"
-          className="coder-chat-toolbar-icon"
-          onClick={onSpeak}
-        />
-        <Icon
-          name="copy"
-          tooltip="复制"
-          className="coder-chat-toolbar-icon"
-          onClick={onCopy}
-        />
-        <Icon
-          name="accept"
-          tooltip="赞一下"
-          className="coder-chat-toolbar-icon"
-          onClick={onAgree}
-        />
-        <Icon
-          name="reject"
-          tooltip="踩一下"
-          className="coder-chat-toolbar-icon"
-          onClick={onOppose}
-        />
-        <Icon
-          name="refresh"
-          tooltip="重新生成"
-          className="coder-chat-toolbar-icon"
-          onClick={onRefresh}
-        />
-      </div>
+      <ChatToolBar
+        visible={finish}
+        tools={options.tools}
+        onSpeak={onSpeak}
+        onCopy={onCopy}
+        onAgree={onAgree}
+        onOppose={onOppose}
+        onRefresh={onRefresh}
+      />
     </>
   );
 };

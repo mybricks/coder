@@ -19,3 +19,4 @@ export type Diagnostic = monaco.languages.typescript.Diagnostic;
 export type EmitOutput = monaco.languages.typescript.EmitOutput;
 export type EventType = keyof monaco.editor.ICodeEditor;
 export type CodeLens = monaco.languages.CodeLens;
+export type IDisposable = monaco.IDisposable;

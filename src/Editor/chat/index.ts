@@ -8,27 +8,35 @@ import type {
 import { debounce, Deferred } from "../../util";
 import { registerCodeLens } from "./registerCodeLens";
 import Chat from "./render";
-import { prompts } from "./prompt";
+import { createPrompts } from "./prompt";
 import "./index.css";
+
+const getCode = (editor: StandaloneCodeEditor) => {
+  const model = editor.getModel();
+  const lines = model?.getLineCount();
+  const value = model?.getValue();
+  return {
+    lines,
+    value: value?.trim(),
+  };
+};
 
 export const registerChat = (
   monaco: Monaco,
   editor: StandaloneCodeEditor,
   options: ChatOptions
 ) => {
-  const { duration = 3000 } = options;
+  const { duration = 200 } = options;
   const path = editor.getModel()?.uri.toString();
   const insDom = document.querySelector(
     `div[data-uri="${path}"]`
   ) as HTMLElement;
   const chat = new Chat(options);
   let deferred = new Deferred<boolean>();
+  let { lines: lastLines, value: lastValue } = getCode(editor);
   const onCommandExecute = (key: keyof typeof ChatType, loc: ASTLocation) => {
     chat.chatType = key;
-    chat.prompts = [
-      { role: "user", content: loc.value },
-      { role: "user", content: prompts[key].content },
-    ];
+    chat.prompts = createPrompts(key, loc);
     deferred.resolve(true);
   };
 
@@ -43,23 +51,17 @@ export const registerChat = (
     }
   };
 
-  let dispose = registerCodeLens(monaco, editor, onCommandExecute);
-  const delayRegister = debounce(
-    registerCodeLens,
-    duration,
-    (disposeCodeLens) => {
-      dispose = disposeCodeLens;
-    }
-  );
-  const subscription = editor.onDidChangeModelContent(async () => {
-    if (dispose) {
-      await dispose();
-    }
+  registerCodeLens(monaco, editor, onCommandExecute);
+  const delayRegister = debounce(registerCodeLens, duration);
+  const subscription = editor.onDidChangeModelContent(async (e) => {
+    const { lines, value } = getCode(editor);
+    if (lines === lastLines || lastValue === value) return;
+    lastLines = lines;
+    lastValue = value;
     delayRegister(monaco, editor, onCommandExecute);
   });
   insDom?.addEventListener("click", insClickHandler);
   return () => {
-    dispose();
     subscription.dispose();
     insDom?.removeEventListener("click", insClickHandler);
     chat.dispose();

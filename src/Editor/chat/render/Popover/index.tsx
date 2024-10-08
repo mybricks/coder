@@ -23,7 +23,7 @@ type Position = Partial<{
 }>;
 
 const Popover = ({
-  width = 600,
+  width = 800,
   title,
   rect,
   onClose,

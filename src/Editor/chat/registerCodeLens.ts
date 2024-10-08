@@ -8,6 +8,7 @@ import {
   CodeLens,
   ASTLocation,
   onCommandExecute,
+  IDisposable,
 } from "../../types";
 import { languages, IEvent } from "monaco-editor";
 import { parsePosition } from "./parsePosition";
@@ -122,22 +123,18 @@ class CopilotCodeLensProvider implements CodeLensProvider {
   }
 }
 
-export const registerCodeLens = (
+let provider: CopilotCodeLensProvider, disposable: IDisposable;
+
+export const registerCodeLens = async (
   monaco: Monaco,
   editor: StandaloneCodeEditor,
   onCommandExecute: onCommandExecute
 ) => {
-  const provider = new CopilotCodeLensProvider(
-    monaco,
-    editor,
-    onCommandExecute
-  );
-  const disposable = monaco.languages.registerCodeLensProvider(
+  if (disposable) disposable.dispose();
+  if (provider) await provider.dispose();
+  provider = new CopilotCodeLensProvider(monaco, editor, onCommandExecute);
+  disposable = monaco.languages.registerCodeLensProvider(
     "typescript",
     provider
   );
-  return async () => {
-    disposable.dispose();
-    await provider.dispose();
-  };
 };

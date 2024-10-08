@@ -1,9 +1,11 @@
 import { type LanguageType } from "./copilot";
 import { type EditorRange } from "./editor";
+
 export type ChatOptions = {
   language: LanguageType;
   duration?: number;
   request: Request;
+  tools?: (keyof typeof TOOL_TYPE)[];
   onCopy?(content?: string): void;
   onAgree?(): void;
   onOppose?(): void;
@@ -15,6 +17,14 @@ export type ChatOptions = {
     duration?: number;
   }): void;
 };
+
+export enum TOOL_TYPE {
+  SPEAK = "SPEAK",
+  COPY = "COPY",
+  AGREE = "AGREE",
+  OPPOSE = "OPPOSE",
+  REFRESH = "REFRESH",
+}
 
 export enum ChatType {
   CODE_EXPLANATION = "代码解释",
@@ -42,7 +52,12 @@ export type onCommandExecute = (
   loc: ASTLocation
 ) => void;
 
+export enum Role {
+  USER = "user",
+  ASSISTANT = "assistant",
+}
+
 export type PromptType = {
   content?: string;
-  role: "user" | "assistant";
+  role: Role;
 };
