@@ -1,15 +1,15 @@
-import {
+import type {
   StandaloneCodeEditor,
   EditorModel,
   EditorCancellationToken,
   CodeLensProvider,
   Monaco,
-  ChatType,
   CodeLens,
   ASTLocation,
   onCommandExecute,
   IDisposable,
 } from "../../types";
+import { ChatType } from "../../types";
 import { languages, IEvent } from "monaco-editor";
 import { parsePosition } from "./parsePosition";
 import { executeChain, Deferred } from "../../util";

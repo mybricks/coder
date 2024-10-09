@@ -339,6 +339,7 @@ useEffect(() => {
         model: "",
       }),
     }),
+    tools: ["SPEAK", "COPY", "REFRESH"],
   } as ChatOptions);
   return () => {
     dispose();
