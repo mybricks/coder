@@ -1,6 +1,6 @@
 {
   "name": "@mybricks/coder",
-  "version": "0.0.80",
+  "version": "0.0.81",
   "description": "coder base on monaco-editor",
   "main": "dist/lib/index.js",
   "module": "dist/esm/index.js",
@@ -48,8 +48,8 @@
     "react-syntax-highlighter": "^15.5.0"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "repository": "https://github.com/mybricks/coder.git",
   "homepage": "https://github.com/mybricks/coder"

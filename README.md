@@ -353,6 +353,7 @@ type ChatOptions = {
   language: LanguageType;
   duration?: number;
   request: Request;
+  tools?: (keyof typeof TOOL_TYPE)[];
   onCopy?(content?: string): void;
   onAgree?(): void;
   onOppose?(): void;

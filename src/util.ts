@@ -148,7 +148,8 @@ export const debounce = <F extends (...args: any[]) => any>(
     }
     timeoutId = setTimeout(() => {
       timeoutId = null;
-      callback!(fn(...args));
+      const ret = fn(...args);
+      callback?.(ret);
     }, delay);
   };
 };
