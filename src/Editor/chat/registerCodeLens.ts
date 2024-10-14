@@ -68,15 +68,16 @@ class CopilotCodeLensProvider implements CodeLensProvider {
   }
   private createCodeLens(astLocations: ASTLocation[]) {
     const cacheCommands: Array<() => void> = [];
-    const lenses = astLocations.reduce((pre, loc, index) => {
-      const { commands, dispose } = this.registerCommands((key) => {
+    const lenses = astLocations.reduce((pre, loc) => {
+      const { commands, dispose } = this.registerCommands(loc, (key) => {
         this.onCommandExecute(key as keyof typeof ChatType, loc);
-      }, index);
+      });
       cacheCommands.push(dispose);
       return pre.concat(
         commands.map((command) => ({
           range: loc.range,
           command,
+          id: command.id
         }))
       );
     }, [] as any[]);
@@ -103,10 +104,10 @@ class CopilotCodeLensProvider implements CodeLensProvider {
       };
     });
   }
-  private registerCommands(handle: (key: string) => void, index: number) {
+  private registerCommands(loc: ASTLocation, handle: (key: string) => void) {
     const cacheCommands: Array<() => void> = [];
     const commands = Object.keys(ChatType).map((key, _) => {
-      const commandId = `${key}_${index}`;
+      const commandId = `${loc.identifierName}_${key}`;
       const { dispose } = this.monaco.editor.registerCommand(commandId, () =>
         handle(key)
       );

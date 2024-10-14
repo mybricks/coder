@@ -24,15 +24,31 @@ export const parsePosition = (text?: string) => {
         const codeLocs: Array<ASTLocation | undefined | null> = [];
         visit(ast, {
           visitClassDeclaration(path) {
-            codeLocs.push(path.node.loc);
+            if (path.node.loc) {
+              codeLocs.push({
+                ...path.node.loc,
+                identifierName: path.node.id?.name,
+              });
+            }
             this.traverse(path);
           },
           visitClassMethod(path) {
-            codeLocs.push(path.node.loc);
+            if (path.node.loc) {
+              codeLocs.push({
+                ...path.node.loc,
+                //@ts-ignore
+                identifierName: path.node.key?.name,
+              });
+            }
             this.traverse(path);
           },
           visitFunction(path) {
-            codeLocs.push(path.node.loc);
+            if (path.node.loc) {
+              codeLocs.push({
+                ...path.node.loc,
+                identifierName: path.node.id?.name,
+              });
+            }
             this.traverse(path);
           },
         });
