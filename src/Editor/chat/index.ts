@@ -11,29 +11,18 @@ import Chat from "./render";
 import { createPrompts } from "./prompt";
 import "./index.css";
 
-const getCode = (editor: StandaloneCodeEditor) => {
-  const model = editor.getModel();
-  const lines = model?.getLineCount();
-  const value = model?.getValue();
-  return {
-    lines,
-    value: value?.trim(),
-  };
-};
-
 export const registerChat = (
   monaco: Monaco,
   editor: StandaloneCodeEditor,
   options: ChatOptions
 ) => {
-  const { duration = 200 } = options;
+  const { duration = 300 } = options;
   const path = editor.getModel()?.uri.toString();
   const insDom = document.querySelector(
     `div[data-uri="${path}"]`
   ) as HTMLElement;
   const chat = new Chat(options);
   let deferred = new Deferred<boolean>();
-  let { lines: lastLines, value: lastValue } = getCode(editor);
   const onCommandExecute = (key: keyof typeof ChatType, loc: ASTLocation) => {
     chat.chatType = key;
     chat.prompts = createPrompts(key, loc);
@@ -50,14 +39,9 @@ export const registerChat = (
       chat.render(rect);
     }
   };
-
-  registerCodeLens(monaco, editor, onCommandExecute);
   const delayRegister = debounce(registerCodeLens, duration);
-  const subscription = editor.onDidChangeModelContent(async (e) => {
-    const { lines, value } = getCode(editor);
-    if (lines === lastLines || lastValue === value) return;
-    lastLines = lines;
-    lastValue = value;
+  delayRegister(monaco, editor, onCommandExecute);
+  const subscription = editor.onDidChangeModelContent(() => {
     delayRegister(monaco, editor, onCommandExecute);
   });
   insDom?.addEventListener("click", insClickHandler);
