@@ -13,7 +13,7 @@ import type {
   EditorInlineCompletion,
   CbParams,
 } from "../../types";
-import { debounceAsync, getBody } from "../../util";
+import { debounceAsync, getBody, singleton } from "../../util";
 import {
   createInlineCompletionResult,
   getFileName,
@@ -40,7 +40,7 @@ class CopilotCompleter implements InlineCompletionProvider {
     private readonly onCompletionShow: (params: CbParams) => void
   ) {
     this.uniqueUri = editor.getModel()?.uri.toString() ?? "";
-    this.request = options.request.clone();
+    this.request = this.request ?? options.request.clone();
     const path = getFileName(options.language);
     const getCompletions =
       options.getCompletions ??
@@ -162,6 +162,8 @@ class CopilotCompleter implements InlineCompletionProvider {
   }
 }
 
+const SingleCopilotCompleter = singleton(CopilotCompleter);
+
 export const registerCopilot = (
   monaco: Monaco,
   editor: StandaloneCodeEditor,
@@ -176,7 +178,7 @@ export const registerCopilot = (
   const inlineCompletionsProvider =
     monaco.languages.registerInlineCompletionsProvider(
       options.language,
-      new CopilotCompleter(monaco, editor, options, onCompletionShow)
+      new SingleCopilotCompleter(monaco, editor, options, onCompletionShow)
     );
   const subscription = editor.onKeyDown((e) => {
     if (

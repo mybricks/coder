@@ -21,7 +21,7 @@ export interface MarkdownRenderProps {
   onComplete?: (answer?: string, duration?: number) => void;
 }
 
-let requestBodyCache: Record<string, any>;
+let requestCache: Request, requestBodyCache: Record<string, any>;
 
 const MarkdownRender = ({
   options,
@@ -48,16 +48,16 @@ const MarkdownRender = ({
       options: ChatOptions;
       controller: AbortController;
     }) => {
-      const request = options.request.clone();
-      const body = requestBodyCache ?? (await getBody(request)) ?? {};
-      requestBodyCache = body;
+      requestCache = requestCache ?? options.request.clone();
+      requestBodyCache =
+        requestBodyCache ?? (await getBody(requestCache)) ?? {};
       const requestStart = Date.now();
-      return fetchEventSource(request, {
-        headers: getHeaders(request),
+      return fetchEventSource(requestCache, {
+        headers: getHeaders(requestCache),
         body: JSON.stringify({
           stream: true,
           temperature: 0.1,
-          ...body,
+          ...requestBodyCache,
           messages: prompts,
         }),
         onmessage(event: EventSourceMessage) {
@@ -150,8 +150,7 @@ const MarkdownRender = ({
   }, []);
 
   const onSpeak = useCallback(() => {
-    if (window.speechSynthesis) {
-      cancelSpeak();
+    if (window.speechSynthesis && !window.speechSynthesis.speaking) {
       window.speechSynthesis.speak(
         new SpeechSynthesisUtterance(answerRef.current)
       );
