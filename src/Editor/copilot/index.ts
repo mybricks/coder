@@ -13,7 +13,7 @@ import type {
   EditorInlineCompletion,
   CbParams,
 } from "../../types";
-import { debounceAsync, getBody, singleton } from "../../util";
+import { debounceAsync, getBody, singleton, Deferred } from "../../util";
 import {
   createInlineCompletionResult,
   getFileName,
@@ -40,7 +40,13 @@ class CopilotCompleter implements InlineCompletionProvider {
     private readonly onCompletionShow: (params: CbParams) => void
   ) {
     this.uniqueUri = editor.getModel()?.uri.toString() ?? "";
-    this.request = this.request ?? options.request.clone();
+    this.request = new Request(options.request);
+    const deferred = new Deferred<boolean>();
+    (async () => {
+      this.body = await getBody(this.request.clone())?.finally(() => {
+        deferred.resolve(true);
+      });
+    })();
     const path = getFileName(options.language);
     const getCompletions =
       options.getCompletions ??
@@ -53,21 +59,20 @@ class CopilotCompleter implements InlineCompletionProvider {
       });
     this.fetchCompletions = debounceAsync(
       async ({ codeBeforeCursor, codeAfterCursor }: CopilotParams) => {
-        const body = this.body ?? (await getBody(this.request)) ?? {};
-        this.body = body;
+        await deferred.promise;
         if (this.controller) {
           this.controller.abort();
         }
         this.controller = new AbortController();
         const requestStart = Date.now();
-        return fetch(this.request, {
+        return fetch(this.request.clone(), {
           signal: this.controller.signal,
           body: JSON.stringify({
             path,
             codeBeforeCursor,
             codeAfterCursor,
             stream: false,
-            ...body,
+            ...(this.body ?? {}),
           }),
         })
           .then(getCompletions)

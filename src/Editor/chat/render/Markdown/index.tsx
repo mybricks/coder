@@ -48,12 +48,13 @@ const MarkdownRender = ({
       options: ChatOptions;
       controller: AbortController;
     }) => {
-      requestCache = requestCache ?? options.request.clone();
+      requestCache = requestCache ?? new Request(options.request);
       requestBodyCache =
-        requestBodyCache ?? (await getBody(requestCache)) ?? {};
+        requestBodyCache ?? (await getBody(requestCache.clone())) ?? {};
       const requestStart = Date.now();
-      return fetchEventSource(requestCache, {
-        headers: getHeaders(requestCache),
+      setFinish(false);
+      return fetchEventSource(requestCache.clone(), {
+        headers: getHeaders(requestCache.clone()),
         body: JSON.stringify({
           stream: true,
           temperature: 0.1,
@@ -74,12 +75,18 @@ const MarkdownRender = ({
             requestAnimationFrame(scrollToBottom);
           } else {
             const duration = Date.now() - requestStart;
-            onComplete!(answerRef.current, duration);
+            try {
+              onComplete!(answerRef.current, duration);
+            } catch (error) {
+              console.error(error);
+            }
             setFinish(true);
           }
         },
         onerror(err) {
           console.error(err);
+          controller.abort();
+          setFinish(true);
         },
         signal: controller.signal,
       });
@@ -144,7 +151,6 @@ const MarkdownRender = ({
   const onRefresh = useCallback(() => {
     setMarkdown("");
     cancelSpeak();
-    setFinish(false);
     fetchControllerRef.current = new AbortController();
     fetchChats({ prompts, options, controller: fetchControllerRef.current });
   }, []);
