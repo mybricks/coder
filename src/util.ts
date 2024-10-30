@@ -168,6 +168,7 @@ export const singleton = <T extends Object>(className: T) => {
 };
 
 export const getBody = (request: Request) => {
+  if(!request.body) return Promise.resolve({});
   return request.body
     ?.getReader()
     .read()
