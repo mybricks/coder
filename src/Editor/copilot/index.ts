@@ -13,7 +13,7 @@ import type {
   EditorInlineCompletion,
   CbParams,
 } from "../../types";
-import { debounceAsync, getBody, singleton, Deferred } from "../../util";
+import { debounceAsync, getBody, Deferred } from "../../util";
 import {
   createInlineCompletionResult,
   getFileName,
@@ -167,8 +167,6 @@ class CopilotCompleter implements InlineCompletionProvider {
   }
 }
 
-const SingleCopilotCompleter = singleton(CopilotCompleter);
-
 export const registerCopilot = (
   monaco: Monaco,
   editor: StandaloneCodeEditor,
@@ -183,7 +181,7 @@ export const registerCopilot = (
   const inlineCompletionsProvider =
     monaco.languages.registerInlineCompletionsProvider(
       options.language,
-      new SingleCopilotCompleter(monaco, editor, options, onCompletionShow)
+      new CopilotCompleter(monaco, editor, options, onCompletionShow)
     );
   const subscription = editor.onKeyDown((e) => {
     if (
