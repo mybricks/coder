@@ -3,19 +3,18 @@
   --coder-chat-popup-arrow-path: path(
     "M 0 8 A 4 4 0 0 0 2.82842712474619 6.82842712474619 L 6.585786437626905 3.0710678118654755 A 2 2 0 0 1 9.414213562373096 3.0710678118654755 L 13.17157287525381 6.82842712474619 A 4 4 0 0 0 16 8 Z"
   );
-  --coder-chat-popup-shadow: 0 0 6px #aaa;
 }
 .coder-chat-popover {
   position: fixed;
-  padding: 12px;
+  padding: 24px;
   border-radius: 6px;
-  box-shadow: var(--coder-chat-popup-shadow);
   z-index: 20240820;
   transition: all 0.15s;
   height: fit-content;
   inset: 0;
-  background: linear-gradient(0deg, #5ddcff, #3c67e3 43%, #4e00c2);
+  background: linear-gradient(135deg, #0236a7, #036857 70%, #014f2f);
   color: #fff;
+  font-weight: 500;
   &::before {
     content: "";
     position: absolute;
@@ -23,21 +22,18 @@
     background: inherit;
     border-radius: inherit;
     z-index: -1;
-    filter: blur(12px);
+    filter: blur(8px);
   }
   &::after {
     content: "";
     position: absolute;
     inset: 2px;
-    background: #191c29;
     border-radius: inherit;
     z-index: -1;
   }
   .coder-chat-popover-title {
     font-size: 16px;
-    font-weight: 500;
     margin: 0 0 0.5rem 0;
-    mix-blend-mode: difference;
     color: #fff;
   }
   .coder-chat-popover-arrow {
@@ -56,7 +52,7 @@
       inset-inline-start: 0;
       width: var(--coder-chat-popup-arrow-size);
       height: calc(var(--coder-chat-popup-arrow-size) / 2);
-      background: rgba(97, 7, 231, 0.45);
+      background: #0236a7;
       clip-path: var(--coder-chat-popup-arrow-path);
       content: "";
     }
@@ -70,7 +66,6 @@
       margin: auto;
       border-radius: 0 0 2px 0;
       transform: translateY(50%) rotate(-135deg);
-      box-shadow: var(--coder-chat-popup-shadow);
       z-index: 0;
       background: transparent;
     }
@@ -84,6 +79,9 @@
     svg {
       width: 20px;
       height: 20px;
+      path {
+        fill: #fff;
+      }
       &:hover {
         path {
           fill: rgb(250, 54, 0);

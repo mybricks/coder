@@ -193,8 +193,8 @@ const MarkdownRender = ({
                       children={String(children).replace(/\n$/, "")}
                       customStyle={{
                         margin: 0,
-                        borderBottomLeftRadius: 4,
-                        borderBottomRightRadius: 4,
+                        borderBottomLeftRadius: 6,
+                        borderBottomRightRadius: 6,
                         fontSize: 12,
                         backgroundColor: "rgba(40, 40, 40, 0.85)",
                       }}
