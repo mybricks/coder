@@ -1,7 +1,7 @@
-import React, { useMemo, memo } from "react";
+import React, { useMemo, memo, useState, useCallback } from "react";
 import Icon from "../Icon";
-import { TOOL_TYPE } from '../../../../types/chat'
-import "./index.less";
+import { TOOL_TYPE } from "../../../../types/chat";
+import { useTimeout } from "../../hooks";
 
 export interface ToolbarProps {
   visible: boolean;
@@ -23,6 +23,21 @@ const ChatToolbar = memo(
     onRefresh,
     onSpeak,
   }: ToolbarProps) => {
+    const [copied, setCopied] = useState<boolean>();
+
+    useTimeout(
+      () => {
+        setCopied(false);
+      },
+      2000,
+      [copied]
+    );
+
+    const copyHandler = useCallback(() => {
+      onCopy?.();
+      setCopied(true);
+    }, [onCopy]);
+
     const Tools = useMemo(() => {
       const content = [];
       if (tools?.includes(TOOL_TYPE.SPEAK)) {
@@ -38,13 +53,17 @@ const ChatToolbar = memo(
       }
       if (tools?.includes(TOOL_TYPE.COPY)) {
         content.push(
-          <Icon
-            name="copy"
-            key={"copy"}
-            tooltip="复制"
-            className="coder-chat-toolbar-icon"
-            onClick={onCopy}
-          />
+          copied ? (
+            <Icon name="success" key={"copy-success"} />
+          ) : (
+            <Icon
+              name="copy"
+              key={"copy"}
+              tooltip="复制"
+              className="coder-chat-toolbar-icon"
+              onClick={copyHandler}
+            />
+          )
         );
       }
       if (tools?.includes(TOOL_TYPE.AGREE)) {
@@ -81,7 +100,7 @@ const ChatToolbar = memo(
         );
       }
       return content;
-    }, [tools]);
+    }, [tools, copied, onRefresh, onSpeak, copyHandler]);
 
     return (
       <div

@@ -11,8 +11,8 @@ import {
 } from "@microsoft/fetch-event-source";
 import { getBody, getHeaders, safeParse, clipBoard } from "../../../../util";
 import { ChatOptions, PromptType } from "../../../../types";
-import Icon from "../Icon";
-import ChatToolBar from "../Toolbar";
+import ChatToolBar from "./toolbar";
+import Title from "./title";
 import "./index.less";
 
 export interface MarkdownRenderProps {
@@ -180,15 +180,10 @@ const MarkdownRender = ({
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
                   <div className="coder-chat-markdown-code">
-                    <div className="coder-chat-markdown-code-language">
-                      <span>{options.language ?? match[1]}</span>
-                      <Icon
-                        name="copy"
-                        tooltip="复制"
-                        className="coder-chat-markdown-code-copy"
-                        onClick={() => onCodeCopy(String(children))}
-                      />
-                    </div>
+                    <Title
+                      language={options.language ?? match[1]}
+                      onCopy={() => onCodeCopy(String(children))}
+                    />
                     <SyntaxHighlighter
                       children={String(children).replace(/\n$/, "")}
                       customStyle={{
