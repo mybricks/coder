@@ -210,6 +210,9 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
   }, [monaco, isTsx, isMounted]);
 
   useEffect(() => {
+    if (!isTsx) {
+      return;
+    }
     const goal = themeTagRef.current!.nextElementSibling!.querySelector(
       ".jsx-editor"
     ) as HTMLElement;
@@ -218,7 +221,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     for (const [key, value] of Object.entries(themeVariable)) {
       goal.style.setProperty(key, value as string);
     }
-  }, [theme]);
+  }, [theme, isTsx]);
 
   const onMount = (editor: StandaloneCodeEditor, monaco: Monaco) => {
     setMounted(true);
