@@ -35,6 +35,8 @@ const ConfigMap = {
       noUnusedParameters: false,
       noImplicitReturns: false,
       noLib: false,
+      // 支持类属性语法
+      useDefineForClassFields: true,
       jsx: isTsx
         ? monaco.languages.typescript.JsxEmit.ReactJSX
         : monaco.languages.typescript.JsxEmit.None,
