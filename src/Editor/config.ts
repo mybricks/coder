@@ -24,7 +24,7 @@ const ConfigMap = {
       noSyntaxValidation: false,
     });
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.ESNext,
+      target: monaco.languages.typescript.ScriptTarget.ES2020,
       allowNonTsExtensions: true,
       noImplicitAny: false,
       noImplicitThis: false,
@@ -40,7 +40,7 @@ const ConfigMap = {
       jsx: isTsx
         ? monaco.languages.typescript.JsxEmit.ReactJSX
         : monaco.languages.typescript.JsxEmit.None,
-      lib: ["es2020", "dom", "DOM.Iterable"],
+      lib: ["es2022", "dom", "DOM.Iterable"],
       module: monaco.languages.typescript.ModuleKind.ESNext,
       skipLibCheck: true,
       esModuleInterop: true,
