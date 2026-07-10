@@ -10,6 +10,7 @@ import React, {
 import { loader, Editor, EditorProps, useMonaco } from "@monaco-editor/react";
 import { getConfigSetter, Language, getTransformOptions } from "./config";
 import { setJsxHighlight } from "./highlighter";
+import type { Config as JsxHighlightConfig } from "monaco-jsx-syntax-highlight";
 import { DefaultCoderOptions } from "./options";
 import { merge, getLinter, getBabel, versionLog } from "../util";
 import type { TransformOptions } from "@babel/core";
@@ -36,6 +37,8 @@ export interface CoderProps extends EditorProps {
     src?: string;
     config?: Record<string, any>;
   };
+  /** Config passed directly to MonacoJsxSyntaxHighlight. See monaco-jsx-syntax-highlight for available options. */
+  jsxHighlight?: JsxHighlightConfig;
   babel?: {
     standalone?: string;
     options?: TransformOptions;
@@ -66,6 +69,7 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
     isTsx,
     loaderConfig,
     eslint,
+    jsxHighlight,
     theme,
     babel,
     path,
@@ -203,7 +207,11 @@ const Coder = forwardRef<HandlerType, CoderProps>((props: CoderProps, ref) => {
 
   useEffect(() => {
     if (!monaco || !isMounted || !isTsx) return;
-    const highLightHandler = setJsxHighlight(editorRef.current!, monaco);
+    const highLightHandler = setJsxHighlight(
+      editorRef.current!,
+      monaco,
+      jsxHighlight,
+    );
     return () => {
       typeof highLightHandler === "function" && highLightHandler();
     };
